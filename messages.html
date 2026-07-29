@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ru" id="htmlRoot">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mangoria — Сообщения</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&family=Dela+Gothic+One&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/messages.css"/>
+</head>
+<body>
+
+<!-- ══════════════════ NAVBAR (стандартный) ══════════════════ -->
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-inner">
+
+      <a class="navbar-brand" href="index.html">
+        <span class="brand-icon"><i class="fa-solid fa-torii-gate"></i></span>
+        Mang<span class="brand-oni">oria</span>
+      </a>
+
+      <button class="navbar-toggler-custom" id="navToggle"><i class="fa fa-bars"></i></button>
+
+      <div class="nav-center" id="navCenter">
+        <div class="nav-type-switcher">
+          <a href="index.html#catalog" class="nav-type-btn active"><i class="fa fa-image"></i><span data-i18n="nav_manga">Манга</span></a>
+          <a href="index.html#ranobe"  class="nav-type-btn"><i class="fa fa-book"></i><span data-i18n="nav_ranobe">Ранобэ</span></a>
+        </div>
+        <div class="nav-item-custom"><a href="catalog.html" class="nav-link-custom"><i class="fa fa-compass"></i><span data-i18n="nav_catalog">Каталог</span></a></div>
+        <div class="nav-item-custom"><a href="#" class="nav-link-custom"><i class="fa fa-layer-group"></i><span data-i18n="nav_genres">Жанры</span></a></div>
+        <div class="nav-item-custom"><a href="#" class="nav-link-custom"><i class="fa fa-star"></i><span data-i18n="nav_rating">Рейтинг</span></a></div>
+        <div class="nav-item-custom"><a href="#" class="nav-link-custom"><i class="fa fa-users"></i><span data-i18n="nav_authors">Авторы</span></a></div>
+        <div class="nav-item-custom"><a href="#" class="nav-link-custom"><i class="fa fa-fire"></i><span data-i18n="nav_new">Новинки</span></a></div>
+      </div>
+
+      <div class="nav-right" id="navRight">
+        <div class="lang-dropdown" id="langDropdownWrap">
+          <button class="lang-dropdown-btn" id="langDropdownBtn">
+            <i class="fa fa-globe"></i><span id="langDropdownLabel">РУ</span>
+            <i class="fa fa-chevron-down lang-chevron"></i>
+          </button>
+          <div class="lang-dropdown-menu" id="langDropdownMenu">
+            <button class="lang-option" data-lang="uk"><span class="lang-flag">🇺🇦</span><span class="lang-name">Українська</span><span class="lang-code">УК</span></button>
+            <button class="lang-option active" data-lang="ru"><span class="lang-flag">🇷🇺</span><span class="lang-name">Русский</span><span class="lang-code">РУ</span></button>
+            <button class="lang-option" data-lang="en"><span class="lang-flag">🇬🇧</span><span class="lang-name">English</span><span class="lang-code">EN</span></button>
+          </div>
+        </div>
+        <button class="nav-icon-btn nav-search-btn" data-action="search"><i class="fa fa-search"></i></button>
+        <!-- Уведомления и профиль вставит navbar.js -->
+        <a href="publish.html" class="btn-publish ms-1"><i class="fa fa-upload"></i><span data-i18n="nav_publish">Публиковать</span></a>
+      </div>
+
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════ MESSENGER ══════════════════ -->
+<div class="messenger-wrap">
+  <div class="container h-100">
+    <div class="messenger">
+
+      <!-- ══ ЛЕВАЯ ПАНЕЛЬ: Диалоги ══ -->
+      <div class="dialogs-panel" id="dialogsPanel">
+
+        <div class="dp-header">
+          <div class="dp-title">
+            Сообщения
+            <button class="dp-new-btn" title="Новый диалог" onclick="showNewDialog()">
+              <i class="fa fa-pen-to-square"></i>
+            </button>
+          </div>
+          <div class="dp-search">
+            <i class="fa fa-search dp-search-icon"></i>
+            <input type="text" class="dp-search-input" placeholder="Поиск по диалогам…"
+              id="dialogSearch" oninput="filterDialogs(this.value)"/>
+          </div>
+        </div>
+
+        <div class="dp-list" id="dialogList">
+
+          <div class="dialog-item active" data-id="1" onclick="openDialog(1)">
+            <div class="di-ava">
+              <div class="di-ava-img"><img src="img/avatar/ava_1.jpg" alt=""/></div>
+              <div class="di-online"></div>
+            </div>
+            <div class="di-info">
+              <div class="di-row1"><span class="di-name">VoidWriter</span><span class="di-time">10:19</span></div>
+              <div class="di-row2"><span class="di-preview">Спасибо за фидбэк! Буду дорабатывать 🙏</span></div>
+            </div>
+          </div>
+
+          <div class="dialog-item unread" data-id="2" onclick="openDialog(2)">
+            <div class="di-ava">
+              <div class="di-ava-img"><img src="img/avatar/ava_2.jpg" alt=""/></div>
+            </div>
+            <div class="di-info">
+              <div class="di-row1"><span class="di-name">InkMaster</span><span class="di-time">14:22</span></div>
+              <div class="di-row2"><span class="di-preview">Интересно, можем обсудить детали?</span><span class="di-badge">3</span></div>
+            </div>
+          </div>
+
+          <div class="dialog-item unread" data-id="3" onclick="openDialog(3)">
+            <div class="di-ava">
+              <div class="di-ava-img"><img src="img/avatar/ava_3.jpg" alt=""/></div>
+            </div>
+            <div class="di-info">
+              <div class="di-row1"><span class="di-name">MoonPen_Art</span><span class="di-time">11:05</span></div>
+              <div class="di-row2"><span class="di-preview">Смотри, набросал первые страницы 👀</span><span class="di-badge">1</span></div>
+            </div>
+          </div>
+
+          <div class="dialog-item" data-id="4" onclick="openDialog(4)">
+            <div class="di-ava">
+              <div class="di-ava-img"><img src="img/avatar/ava_4.jpg" alt=""/></div>
+              <div class="di-online"></div>
+            </div>
+            <div class="di-info">
+              <div class="di-row1"><span class="di-name">KaijuManga</span><span class="di-time">вчера</span></div>
+              <div class="di-row2"><span class="di-preview">Принял заявку, добро пожаловать!</span></div>
+            </div>
+          </div>
+
+          <div class="dialog-item" data-id="5" onclick="openDialog(5)">
+            <div class="di-ava">
+              <div class="di-ava-img"><img src="img/avatar/ava_5.jpg" alt=""/></div>
+            </div>
+            <div class="di-info">
+              <div class="di-row1"><span class="di-name">DarkInk</span><span class="di-time">вчера</span></div>
+              <div class="di-row2"><span class="di-preview">Спасибо! 🙏 Удачи с проектом</span></div>
+            </div>
+          </div>
+
+          <div class="dialog-item" data-id="6" onclick="openDialog(6)">
+            <div class="di-ava">
+              <div class="di-ava-img"><img src="img/avatar/ava_6.jpg" alt=""/></div>
+            </div>
+            <div class="di-info">
+              <div class="di-row1"><span class="di-name">StarPen</span><span class="di-time">2 дня</span></div>
+              <div class="di-row2"><span class="di-preview">Ты читал «Звёздный Бог»? Как тебе?</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ══ ПРАВАЯ ПАНЕЛЬ: Чат ══ -->
+      <div class="chat-panel" id="chatPanel">
+
+        <!-- Шапка чата -->
+        <div class="chat-header">
+          <button class="ch-back" id="chBack" onclick="closeChat()"><i class="fa fa-arrow-left"></i></button>
+          <a href="profile.html" class="ch-ava-link">
+            <div class="ch-ava">
+              <img src="img/avatar/ava_1.jpg" alt="VoidWriter" id="chatAvatar"/>
+              <div class="ch-online-dot"></div>
+            </div>
+          </a>
+          <div class="ch-info">
+            <a href="profile.html" class="ch-name" id="chatName">VoidWriter</a>
+            <div class="ch-status" id="chatStatus">
+              <span class="ch-status-dot"></span>
+              <span>Онлайн · Автор ранобэ</span>
+            </div>
+          </div>
+          <div class="ch-actions">
+            <button class="ch-btn" title="Профиль" onclick="window.location.href='profile.html'"><i class="fa fa-user"></i></button>
+            <button class="ch-btn" title="Найти в чате" onclick="toggleChatSearch()"><i class="fa fa-search"></i></button>
+            <button class="ch-btn" title="Очистить историю"><i class="fa fa-trash-can"></i></button>
+          </div>
+        </div>
+
+        <!-- Поиск по чату (скрыт по умолчанию) -->
+        <div class="chat-search-bar" id="chatSearchBar">
+          <i class="fa fa-search" style="font-size:0.72rem;color:rgba(221,214,200,0.3);"></i>
+          <input type="text" id="chatSearchInput" placeholder="Поиск по сообщениям…" oninput="searchMessages(this.value)"/>
+          <button onclick="toggleChatSearch()"><i class="fa fa-xmark"></i></button>
+        </div>
+
+        <!-- Область сообщений -->
+        <div class="chat-messages" id="chatMessages">
+
+          <div class="msg-day"><span>Вчера</span></div>
+
+          <div class="msg-group">
+            <div class="msg-row">
+              <div class="msg-ava"><img src="img/avatar/ava_1.jpg" alt=""/></div>
+              <div class="msg-bubble" ondblclick="replyTo(this)">Привет! Я видел твой «Демонический Клинок» — очень интересная концепция с кузнецом.</div>
+              <span class="msg-time">18:10</span>
+            </div>
+            <div class="msg-row">
+              <div class="msg-ava"><img src="img/avatar/ava_1.jpg" alt=""/></div>
+              <div class="msg-bubble" ondblclick="replyTo(this)">Хотел спросить — ты рассматриваешь возможность адаптации в ранобэ? Мне кажется, там огромный потенциал для расширения лора</div>
+              <span class="msg-time">18:11</span>
+            </div>
+          </div>
+
+          <div class="msg-group">
+            <div class="msg-row own">
+              <span class="msg-status read"><i class="fa fa-check-double"></i></span>
+              <span class="msg-time">18:24</span>
+              <div class="msg-bubble" ondblclick="replyTo(this)">Привет! Да, я как раз думал об этом. Открыл поиск команды на странице произведения</div>
+            </div>
+            <div class="msg-row own">
+              <span class="msg-status read"><i class="fa fa-check-double"></i></span>
+              <span class="msg-time">18:24</span>
+              <div class="msg-bubble" ondblclick="replyTo(this)">Вот ссылка — посмотри описание, там всё про лор</div>
+            </div>
+          </div>
+
+          <!-- Карточка произведения -->
+          <div class="msg-group">
+            <div class="msg-row own">
+              <span class="msg-status read"><i class="fa fa-check-double"></i></span>
+              <span class="msg-time">18:24</span>
+              <a href="title.html" class="msg-work-card">
+                <div class="msg-work-cover"><img src="img/posters/poster_2.webp" alt=""/></div>
+                <div class="msg-work-info">
+                  <div class="msg-work-type"><i class="fa fa-image fa-xs"></i> Манга</div>
+                  <div class="msg-work-title">Демонический Клинок</div>
+                  <div class="msg-work-meta">ShadowBrush · 34 главы · ★ 4.8</div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div class="msg-group">
+            <div class="msg-row">
+              <div class="msg-ava"><img src="img/avatar/ava_1.jpg" alt=""/></div>
+              <div class="msg-bubble" ondblclick="replyTo(this)" style="margin-bottom:14px;">
+                Посмотрел — да, тема мощная. У меня есть опыт с тёмным фэнтези, писал «Призыватель Бездны»
+                <div class="msg-reactions"><span class="msg-react" onclick="toggleReact(this,'🔥')">🔥 2</span></div>
+              </div>
+              <span class="msg-time">18:31</span>
+            </div>
+          </div>
+
+          <div class="msg-day"><span>Сегодня</span></div>
+
+          <div class="msg-group">
+            <div class="msg-row">
+              <div class="msg-ava"><img src="img/avatar/ava_1.jpg" alt=""/></div>
+              <div class="msg-bubble" ondblclick="replyTo(this)">Кстати, написал небольшой черновик первой главы ранобэ по твоей манге. Посмотришь?</div>
+              <span class="msg-time">09:14</span>
+            </div>
+          </div>
+
+          <div class="msg-group">
+            <div class="msg-row own">
+              <span class="msg-status read"><i class="fa fa-check-double"></i></span>
+              <span class="msg-time">09:42</span>
+              <div class="msg-bubble" ondblclick="replyTo(this)">
+                <div class="msg-quote"><strong>VoidWriter</strong> написал небольшой черновик первой главы…</div>
+                Конечно! Скидывай, очень интересно
+              </div>
+            </div>
+          </div>
+
+          <div class="msg-group">
+            <div class="msg-row">
+              <div class="msg-ava"><img src="img/avatar/ava_1.jpg" alt=""/></div>
+              <div class="msg-bubble" ondblclick="replyTo(this)">Держи черновик первой сцены. Сосредоточился на внутреннем монологе Кая — хотел показать, как он впервые слышит голос в металле. Напиши что думаешь, это только набросок!</div>
+              <span class="msg-time">09:55</span>
+            </div>
+          </div>
+
+          <div class="msg-group">
+            <div class="msg-row own">
+              <span class="msg-status read"><i class="fa fa-check-double"></i></span>
+              <span class="msg-time">10:18</span>
+              <div class="msg-bubble" ondblclick="replyTo(this)">Прочитал — очень круто передал атмосферу. Голос в металле — это именно то, что я хотел!</div>
+            </div>
+            <div class="msg-row own">
+              <span class="msg-status"><i class="fa fa-check"></i></span>
+              <span class="msg-time">10:19</span>
+              <div class="msg-bubble" ondblclick="replyTo(this)">Спасибо за фидбэк! Буду дорабатывать 🙏</div>
+            </div>
+          </div>
+
+          <!-- Индикатор печатания -->
+          <div class="typing-indicator" id="typingIndicator">
+            <div class="msg-ava"><img src="img/avatar/ava_1.jpg" alt=""/></div>
+            <div class="typing-bubble">
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+            </div>
+          </div>
+
+        </div><!-- /chat-messages -->
+
+        <!-- Инпут -->
+        <div class="chat-input-area">
+          <div class="reply-bar" id="replyBar">
+            <i class="fa fa-reply fa-xs" style="color:var(--red);flex-shrink:0;"></i>
+            <span class="reply-bar-text" id="replyText"></span>
+            <button class="reply-bar-close" onclick="cancelReply()"><i class="fa fa-xmark"></i></button>
+          </div>
+          <div class="chat-input-row">
+            <div style="position:relative;">
+              <div class="emoji-picker" id="emojiPicker">
+                <button class="emoji-btn" onclick="insertEmoji('😊')">😊</button>
+                <button class="emoji-btn" onclick="insertEmoji('🔥')">🔥</button>
+                <button class="emoji-btn" onclick="insertEmoji('👍')">👍</button>
+                <button class="emoji-btn" onclick="insertEmoji('❤️')">❤️</button>
+                <button class="emoji-btn" onclick="insertEmoji('😂')">😂</button>
+                <button class="emoji-btn" onclick="insertEmoji('🙏')">🙏</button>
+                <button class="emoji-btn" onclick="insertEmoji('✨')">✨</button>
+                <button class="emoji-btn" onclick="insertEmoji('👀')">👀</button>
+                <button class="emoji-btn" onclick="insertEmoji('🎨')">🎨</button>
+                <button class="emoji-btn" onclick="insertEmoji('📖')">📖</button>
+                <button class="emoji-btn" onclick="insertEmoji('⚔️')">⚔️</button>
+                <button class="emoji-btn" onclick="insertEmoji('🌙')">🌙</button>
+                <button class="emoji-btn" onclick="insertEmoji('💬')">💬</button>
+                <button class="emoji-btn" onclick="insertEmoji('🤝')">🤝</button>
+                <button class="emoji-btn" onclick="insertEmoji('😮')">😮</button>
+                <button class="emoji-btn" onclick="insertEmoji('🎉')">🎉</button>
+              </div>
+              <button class="ci-action-btn" id="emojiBtn" title="Эмодзи"><i class="fa fa-face-smile"></i></button>
+            </div>
+            <button class="ci-action-btn" title="Прикрепить файл"><i class="fa fa-paperclip"></i></button>
+            <textarea class="chat-textarea" id="chatInput" placeholder="Написать сообщение…" rows="1"
+              oninput="autoResize(this); updateSendBtn()"
+              onkeydown="handleInputKey(event)"></textarea>
+            <button class="chat-send-btn" id="sendBtn" disabled onclick="sendMessage()">
+              <i class="fa fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /chat-panel -->
+
+    </div><!-- /messenger -->
+  </div>
+</div><!-- /messenger-wrap -->
+
+<script src="js/messages.js"></script>
+<script src="js/navbar.js"></script>
+</body>
+</html>

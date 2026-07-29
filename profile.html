@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ru" id="htmlRoot">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mangoria — ShadowBrush</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&family=Dela+Gothic+One&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/profile.css"/>
+</head>
+<body>
+
+<!-- ══════════════════ NAVBAR ══════════════════ -->
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-inner">
+      <a class="navbar-brand" href="index.html">
+        <span class="brand-icon"><i class="fa-solid fa-torii-gate"></i></span>
+        Mang<span class="brand-oni">oria</span>
+      </a>
+      <button class="navbar-toggler-custom" id="navToggle"><i class="fa fa-bars"></i></button>
+      <div class="nav-center" id="navCenter">
+        <div class="nav-type-switcher">
+          <a href="index.html#catalog" class="nav-type-btn active"><i class="fa fa-image"></i><span data-i18n="nav_manga">Манга</span></a>
+          <a href="index.html#ranobe"  class="nav-type-btn"><i class="fa fa-book"></i><span data-i18n="nav_ranobe">Ранобэ</span></a>
+        </div>
+        <div class="nav-item-custom"><a href="index.html#catalog" class="nav-link-custom"><i class="fa fa-compass"></i><span data-i18n="nav_catalog">Каталог</span></a></div>
+        <div class="nav-item-custom"><a href="#" class="nav-link-custom"><i class="fa fa-layer-group"></i><span data-i18n="nav_genres">Жанры</span></a></div>
+        <div class="nav-item-custom"><a href="#" class="nav-link-custom"><i class="fa fa-star"></i><span data-i18n="nav_rating">Рейтинг</span></a></div>
+        <div class="nav-item-custom"><a href="#" class="nav-link-custom"><i class="fa fa-users"></i><span data-i18n="nav_authors">Авторы</span></a></div>
+        <div class="nav-item-custom"><a href="#" class="nav-link-custom"><i class="fa fa-fire"></i><span data-i18n="nav_new">Новинки</span></a></div>
+      </div>
+      <div class="nav-right" id="navRight">
+        <div class="lang-dropdown" id="langDropdownWrap">
+          <button class="lang-dropdown-btn" id="langDropdownBtn">
+            <i class="fa fa-globe"></i><span id="langDropdownLabel">РУ</span>
+            <i class="fa fa-chevron-down lang-chevron"></i>
+          </button>
+          <div class="lang-dropdown-menu" id="langDropdownMenu">
+            <button class="lang-option" data-lang="uk"><span class="lang-flag">🇺🇦</span><span class="lang-name">Українська</span><span class="lang-code">УК</span></button>
+            <button class="lang-option active" data-lang="ru"><span class="lang-flag">🇷🇺</span><span class="lang-name">Русский</span><span class="lang-code">РУ</span></button>
+            <button class="lang-option" data-lang="en"><span class="lang-flag">🇬🇧</span><span class="lang-name">English</span><span class="lang-code">EN</span></button>
+          </div>
+        </div>
+        <button class="nav-icon-btn nav-search-btn" data-action="search" title="Поиск (Ctrl+K)"><i class="fa fa-search"></i></button>
+        <a href="publish.html" class="btn-publish ms-1"><i class="fa fa-upload"></i><span data-i18n="nav_publish">Публиковать</span></a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════ PROFILE HERO ══════════════════ -->
+<section class="profile-hero">
+
+  <!-- Фоновый баннер -->
+  <div class="profile-banner">
+    <img src="img/banner/profile_banner.jpg"" alt="Баннер профиля"/>
+  </div>
+  <div class="profile-banner-stripes"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="profile-banner-kanji">創</div>
+
+  <!-- Кнопка смены баннера -->
+  <button class="btn-change-banner"><i class="fa fa-camera"></i> Сменить баннер</button>
+
+  <!-- Контент -->
+  <div class="profile-hero-content">
+    <div class="container">
+      <div class="profile-hero-grid">
+
+        <!-- Аватар -->
+        <div class="profile-avatar-wrap">
+          <div class="profile-avatar">
+            <img src="img/avatar/ava_10.jpg" alt="ShadowBrush"/>
+            <div class="profile-avatar-online"></div>
+          </div>
+          <button class="btn-change-avatar"><i class="fa fa-camera"></i></button>
+        </div>
+
+        <!-- Основная информация -->
+        <div class="profile-info">
+
+          <h1 class="profile-name">ShadowBrush</h1>
+          <p class="profile-handle">@shadowbrush · #00142</p>
+
+          <!-- Роли -->
+          <div class="profile-roles">
+            <span class="role-badge author"><i class="fa fa-pen-nib"></i> Автор</span>
+            <span class="role-badge artist"><i class="fa fa-palette"></i> Художник</span>
+            <span class="role-badge verified"><i class="fa fa-circle-check"></i> Подтверждён</span>
+          </div>
+
+          <p class="profile-bio">
+            Рисую тёмное фэнтези и пишу истории о людях на грани. Люблю демонов, кузнецов и антигероев. Открыт к коллаборациям.
+          </p>
+
+          <div class="profile-meta-row">
+            <span class="profile-meta-item"><i class="fa fa-location-dot"></i> Киев, Украина</span>
+            <span class="profile-meta-item"><i class="fa fa-link"></i><a href="#">pixiv.net/shadowbrush</a></span>
+            <span class="profile-meta-item"><i class="fa fa-calendar"></i> На платформе с марта 2024</span>
+            <span class="profile-meta-item"><i class="fa fa-circle" style="color:#22c55e;font-size:0.45rem;"></i> Онлайн</span>
+          </div>
+
+        </div>
+
+        <!-- Правая колонка: статы + кнопки -->
+        <div class="profile-right">
+
+          <div class="profile-stats">
+            <div class="profile-stat">
+              <span class="pstat-num">3</span>
+              <span class="pstat-label">Работы</span>
+            </div>
+            <div class="profile-stat">
+              <span class="pstat-num">1 240</span>
+              <span class="pstat-label">Подписчики</span>
+            </div>
+            <div class="profile-stat">
+              <span class="pstat-num">84</span>
+              <span class="pstat-label">Подписки</span>
+            </div>
+          </div>
+
+          <div class="profile-actions">
+            <button class="btn-profile-follow" id="followBtn">
+              <i class="fa fa-plus"></i> Подписаться
+            </button>
+            <button class="btn-profile-msg">
+              <i class="fa fa-paper-plane"></i> Сообщение
+            </button>
+            <div style="position:relative;">
+              <button class="btn-profile-more" id="moreBtn">
+                <i class="fa fa-ellipsis"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<div class="profile-divider"></div>
+
+<!-- ══════════════════ BODY ══════════════════ -->
+<div class="profile-body">
+  <div class="container">
+    <div class="profile-layout">
+
+      <!-- ══ MAIN ══ -->
+      <div>
+
+        <!-- Табы -->
+        <div class="profile-tabs">
+          <button class="ptab-btn active" data-tab="works"><i class="fa fa-book-open"></i> Работы <span class="ptab-count">3</span></button>
+          <button class="ptab-btn" data-tab="activity"><i class="fa fa-bolt"></i> Активность</button>
+          <button class="ptab-btn" data-tab="about"><i class="fa fa-user"></i> О себе</button>
+        </div>
+
+        <!-- ══ ТАБ: Работы ══ -->
+        <div class="ptab-content active" id="ptab-works">
+
+          <div class="works-toolbar">
+            <div class="works-filter-row">
+              <button class="wfilter-btn active" data-filter="all">Все</button>
+              <button class="wfilter-btn" data-filter="manga"><i class="fa fa-image"></i> Манга</button>
+              <button class="wfilter-btn" data-filter="ranobe"><i class="fa fa-book"></i> Ранобэ</button>
+            </div>
+            <span class="works-total">3 произведения · 487 страниц · 42 800 просмотров</span>
+          </div>
+
+          <div class="works-grid">
+
+            <!-- Работа 1 -->
+            <a href="title.html" class="work-card">
+              <div class="work-cover">
+                <img src="img/posters/poster_2.webp" alt="Демонический Клинок"/>
+                <div class="work-cover-overlay"></div>
+                <span class="work-cover-type manga">Манга</span>
+                <span class="work-cover-rating"><i class="fa fa-star" style="font-size:0.58rem;"></i> 4.8</span>
+                <span class="work-cover-chapters">34 гл.</span>
+              </div>
+              <div class="work-info">
+                <div class="work-genre">Фэнтези · Сёнэн</div>
+                <div class="work-title">Демонический Клинок</div>
+                <div class="work-meta">
+                  <div class="work-meta-stat"><i class="fa fa-eye"></i> 42.8k</div>
+                  <span class="work-status ongoing">Онгоинг</span>
+                </div>
+              </div>
+            </a>
+
+            <!-- Работа 2 -->
+            <a href="#" class="work-card">
+              <div class="work-cover">
+                <img src="img/posters/poster_1.webp"" alt="Пепельный Рассвет"/>
+                <div class="work-cover-overlay"></div>
+                <span class="work-cover-type manga">Манга</span>
+                <span class="work-cover-rating"><i class="fa fa-star" style="font-size:0.58rem;"></i> 4.5</span>
+                <span class="work-cover-chapters">12 гл.</span>
+              </div>
+              <div class="work-info">
+                <div class="work-genre">Хоррор · Психология</div>
+                <div class="work-title">Пепельный Рассвет</div>
+                <div class="work-meta">
+                  <div class="work-meta-stat"><i class="fa fa-eye"></i> 11.4k</div>
+                  <span class="work-status ongoing">Онгоинг</span>
+                </div>
+              </div>
+            </a>
+
+            <!-- Работа 3 -->
+            <a href="#" class="work-card">
+              <div class="work-cover">
+                <img src="img/posters/poster_3.webp"" alt="Записки кузнеца"/>
+                <div class="work-cover-overlay"></div>
+                <span class="work-cover-type ranobe">Ранобэ</span>
+                <span class="work-cover-rating"><i class="fa fa-star" style="font-size:0.58rem;"></i> 4.6</span>
+                <span class="work-cover-chapters">8 гл.</span>
+              </div>
+              <div class="work-info">
+                <div class="work-genre">Фэнтези · Приключения</div>
+                <div class="work-title">Записки Кузнеца</div>
+                <div class="work-meta">
+                  <div class="work-meta-stat"><i class="fa fa-eye"></i> 6.2k</div>
+                  <span class="work-status completed">Завершено</span>
+                </div>
+              </div>
+            </a>
+
+          </div>
+        </div>
+
+        <!-- ══ ТАБ: Активность ══ -->
+        <div class="ptab-content" id="ptab-activity">
+          <div class="activity-list">
+
+            <div class="activity-item">
+              <div class="activity-icon-wrap chapter"><i class="fa fa-book-open"></i></div>
+              <div class="activity-body">
+                <p class="activity-text">Опубликована новая глава <strong>«Последний удар»</strong> (Гл. 34) в произведении <a href="title.html">Демонический Клинок</a></p>
+                <p class="activity-date">2 июня 2025, 14:32</p>
+                <a href="title.html" class="activity-preview">
+                  <div class="activity-preview-cover"><img src="img/posters/poster_2.webp" alt=""/></div>
+                  <div><div class="activity-preview-title">Демонический Клинок</div><div class="activity-preview-meta">Глава 34 · 14 страниц</div></div>
+                </a>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon-wrap team"><i class="fa fa-users"></i></div>
+              <div class="activity-body">
+                <p class="activity-text">Открыт поиск <strong>автора ранобэ и переводчика</strong> для адаптации произведения <a href="title.html">Демонический Клинок</a></p>
+                <p class="activity-date">28 мая 2025, 09:15</p>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon-wrap publish"><i class="fa fa-plus"></i></div>
+              <div class="activity-body">
+                <p class="activity-text">Опубликовано новое произведение <a href="#">Пепельный Рассвет</a> — манга в жанре хоррор</p>
+                <p class="activity-date">14 мая 2025, 20:00</p>
+                <a href="#" class="activity-preview">
+                  <div class="activity-preview-cover"><img src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=80&q=70&fit=crop" alt=""/></div>
+                  <div><div class="activity-preview-title">Пепельный Рассвет</div><div class="activity-preview-meta">Манга · 12 глав · Хоррор</div></div>
+                </a>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon-wrap chapter"><i class="fa fa-book-open"></i></div>
+              <div class="activity-body">
+                <p class="activity-text">Опубликована <strong>Глава 33 — «Тень владыки»</strong> в <a href="title.html">Демонический Клинок</a></p>
+                <p class="activity-date">19 мая 2025, 16:44</p>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon-wrap follow"><i class="fa fa-user-plus"></i></div>
+              <div class="activity-body">
+                <p class="activity-text">На автора подписались <strong>NightReader_92</strong>, <strong>DarkInk</strong> и ещё <strong>18 человек</strong></p>
+                <p class="activity-date">12 мая 2025</p>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon-wrap comment"><i class="fa fa-comment"></i></div>
+              <div class="activity-body">
+                <p class="activity-text">Ответил на комментарий <strong>KaijuManga</strong> в <a href="title.html">Демонический Клинок</a> — «Спасибо за такой подробный отзыв!»</p>
+                <p class="activity-date">8 мая 2025, 11:20</p>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon-wrap publish"><i class="fa fa-plus"></i></div>
+              <div class="activity-body">
+                <p class="activity-text">Завершено ранобэ <a href="#">Записки Кузнеца</a> — 8 глав, 42 000 знаков</p>
+                <p class="activity-date">1 апреля 2025</p>
+              </div>
+            </div>
+
+          </div>
+
+          <button class="btn-load-more"><i class="fa fa-chevron-down"></i> Загрузить ещё</button>
+        </div>
+
+        <!-- ══ ТАБ: О себе ══ -->
+        <div class="ptab-content" id="ptab-about">
+
+          <div class="about-section">
+            <h3 class="about-section-title"><i class="fa fa-user"></i> Биография</h3>
+            <p class="about-text">
+              Независимый мангака и иллюстратор. Рисую с 2018 года, публикуюсь онлайн с 2022-го.
+              Вдохновляюсь японскими манга-сериями, тёмным фэнтези и восточной мифологией.
+              Особенно люблю проработанные боевые системы и моральные дилеммы персонажей.
+            </p>
+            <p class="about-text" style="margin-top:0.8rem;">
+              Открыт к коллаборациям: ищу авторов ранобэ для адаптации своих произведений,
+              переводчиков EN/UK, и соавторов для новых проектов.
+            </p>
+          </div>
+
+          <div class="about-section">
+            <h3 class="about-section-title"><i class="fa fa-wand-magic-sparkles"></i> Специализация</h3>
+            <div class="skill-tags">
+              <span class="skill-tag"><i class="fa fa-palette"></i> Тёмное фэнтези</span>
+              <span class="skill-tag"><i class="fa fa-pen-nib"></i> Баттл-манга</span>
+              <span class="skill-tag"><i class="fa fa-ghost"></i> Хоррор</span>
+              <span class="skill-tag"><i class="fa fa-robot"></i> AI-арт (частично)</span>
+              <span class="skill-tag"><i class="fa fa-book"></i> Сторителлинг</span>
+              <span class="skill-tag"><i class="fa fa-fire"></i> Экшен-сцены</span>
+              <span class="skill-tag"><i class="fa fa-brain"></i> Психологические темы</span>
+            </div>
+          </div>
+
+          <div class="about-section">
+            <h3 class="about-section-title"><i class="fa fa-share-nodes"></i> Социальные сети</h3>
+            <div class="about-socials">
+              <a href="#" class="about-social-link telegram"><i class="fab fa-telegram"></i> Telegram</a>
+              <a href="#" class="about-social-link discord"><i class="fab fa-discord"></i> Discord</a>
+              <a href="#" class="about-social-link pixiv"><i class="fa fa-paintbrush"></i> Pixiv</a>
+              <a href="#" class="about-social-link"><i class="fab fa-vk"></i> VK</a>
+              <a href="#" class="about-social-link"><i class="fab fa-twitter"></i> Twitter/X</a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ══ SIDEBAR ══ -->
+      <aside class="profile-sidebar">
+
+        <!-- Информация -->
+        <div class="pcard">
+          <div class="pcard-header"><i class="fa fa-circle-info"></i> Информация</div>
+          <div class="pcard-body">
+            <table class="profile-info-table">
+              <tr><td class="pik">Роли</td><td class="piv">Автор, Художник</td></tr>
+              <tr><td class="pik">На платформе</td><td class="piv">с марта 2024</td></tr>
+              <tr><td class="pik">Последний визит</td><td class="piv" style="color:#22c55e;">Сейчас онлайн</td></tr>
+              <tr><td class="pik">Произведений</td><td class="piv">3</td></tr>
+              <tr><td class="pik">Глав выпущено</td><td class="piv">54</td></tr>
+              <tr><td class="pik">Страниц</td><td class="piv">487</td></tr>
+              <tr><td class="pik">Всего просмотров</td><td class="piv">60 400</td></tr>
+              <tr><td class="pik">Лайков получено</td><td class="piv">8 640</td></tr>
+              <tr><td class="pik">Местоположение</td><td class="piv">Киев, Украина</td></tr>
+              <tr><td class="pik">Сайт</td><td class="piv"><a href="#" style="color:var(--red);">pixiv.net/shadowbrush</a></td></tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- Достижения -->
+        <div class="pcard">
+          <div class="pcard-header"><i class="fa fa-trophy"></i> Достижения</div>
+          <div class="pcard-body">
+            <div class="achievements-grid">
+              <div class="achievement" title="Первая публикация">
+                <div class="ach-icon">👑</div>
+                <div class="ach-label">Дебют</div>
+                <div class="ach-progress"><div class="ach-progress-fill" style="width:100%"></div></div>
+              </div>
+              <div class="achievement" title="1000 просмотров">
+                <div class="ach-icon">👑</div>
+                <div class="ach-label">1K просм.</div>
+                <div class="ach-progress"><div class="ach-progress-fill" style="width:100%"></div></div>
+              </div>
+              <div class="achievement" title="10 000 просмотров">
+                <div class="ach-icon">👑</div>
+                <div class="ach-label">10K просм.</div>
+                <div class="ach-progress"><div class="ach-progress-fill" style="width:100%"></div></div>
+              </div>
+              <div class="achievement" title="50 000 просмотров">
+                <div class="ach-icon">👑</div>
+                <div class="ach-label">50K просм.</div>
+                <div class="ach-progress"><div class="ach-progress-fill" style="width:80%"></div></div>
+              </div>
+              <div class="achievement" title="100 подписчиков">
+                <div class="ach-icon">👑</div>
+                <div class="ach-label">100 подп.</div>
+                <div class="ach-progress"><div class="ach-progress-fill" style="width:100%"></div></div>
+              </div>
+              <div class="achievement" title="1000 подписчиков">
+                <div class="ach-icon">👑</div>
+                <div class="ach-label">1K подп.</div>
+                <div class="ach-progress"><div class="ach-progress-fill" style="width:100%"></div></div>
+              </div>
+              <div class="achievement locked" title="10 000 подписчиков — заблокировано">
+                <div class="ach-icon">👑</div>
+                <div class="ach-label">10K подп.</div>
+                <div class="ach-progress"><div class="ach-progress-fill" style="width:12%"></div></div>
+              </div>
+              <div class="achievement locked" title="Команда — заблокировано">
+                <div class="ach-icon">👑</div>
+                <div class="ach-label">Команда</div>
+                <div class="ach-progress"><div class="ach-progress-fill" style="width:0%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Подписчики -->
+        <div class="pcard">
+          <div class="pcard-header"><i class="fa fa-users"></i> Подписчики <span style="color:rgba(221,214,200,0.28);font-size:0.75rem;letter-spacing:0;text-transform:none;font-weight:300;margin-left:0.3rem;">1 240</span></div>
+          <div class="pcard-body">
+            <div class="follow-list">
+              <a href="#" class="follow-item">
+                <div class="follow-ava"><img src="img/avatar/ava_1.jpg" alt=""/></div>
+                <div><div class="follow-name">NightReader_92</div><div class="follow-role">Читатель</div></div>
+              </a>
+              <a href="#" class="follow-item">
+                <div class="follow-ava"><img src="img/avatar/ava_2.jpg" alt=""/></div>
+                <div><div class="follow-name">DarkInk</div><div class="follow-role">Художник</div></div>
+              </a>
+              <a href="#" class="follow-item">
+                <div class="follow-ava"><img src="img/avatar/ava_3.jpg" alt=""/></div>
+                <div><div class="follow-name">ShadowFan_RU</div><div class="follow-role">Читатель</div></div>
+              </a>
+              <a href="#" class="follow-item">
+                <div class="follow-ava"><img src="img/avatar/ava_4.jpg" alt=""/></div>
+                <div><div class="follow-name">KaijuManga</div><div class="follow-role">Автор</div></div>
+              </a>
+            </div>
+            <button class="btn-load-more" style="margin-top:0.8rem; font-size:0.72rem; padding:0.55rem;">Показать всех</button>
+          </div>
+        </div>
+
+        <!-- Подписки -->
+        <div class="pcard">
+          <div class="pcard-header"><i class="fa fa-heart"></i> Подписки <span style="color:rgba(221,214,200,0.28);font-size:0.75rem;letter-spacing:0;text-transform:none;font-weight:300;margin-left:0.3rem;">84</span></div>
+          <div class="pcard-body">
+            <div class="follow-list">
+              <a href="#" class="follow-item">
+                <div class="follow-ava"><img src="img/avatar/ava_5.jpg" alt=""/></div>
+                <div><div class="follow-name">VoidWriter</div><div class="follow-role">Автор ранобэ</div></div>
+              </a>
+              <a href="#" class="follow-item">
+                <div class="follow-ava"><img src="img/avatar/ava_6.jpg" alt=""/></div>
+                <div><div class="follow-name">InkMaster</div><div class="follow-role">Мангака</div></div>
+              </a>
+              <a href="#" class="follow-item">
+                <div class="follow-ava"><img src="img/avatar/ava_7.jpg" alt=""/></div>
+                <div><div class="follow-name">MoonPen_Art</div><div class="follow-role">Художник</div></div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer>
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <p class="footer-brand">Mang<span>oria</span> <small style="font-family:'Sawarabi Mincho';color:var(--muted);font-size:0.8rem;">鬼</small></p>
+        <p class="footer-tagline">Манга і Ранобе — відкрита платформа</p>
+        <p class="mt-3" style="font-size:0.78rem;color:var(--muted);line-height:1.75;">Сообщество художников и писателей.</p>
+        <div class="d-flex gap-2 mt-3">
+          <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-discord"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+      <div class="col-6 col-lg-2 offset-lg-1 footer-links">
+        <h6>Платформа</h6>
+        <a href="index.html">Манга</a>
+        <a href="index.html#ranobe">Ранобэ</a>
+        <a href="#">Новинки</a>
+        <a href="#">Рейтинг</a>
+      </div>
+      <div class="col-6 col-lg-2 footer-links">
+        <h6>Авторам</h6>
+        <a href="publish.html">Публикация</a>
+        <a href="static.html">Правила</a>
+        <a href="static.html">FAQ</a>
+      </div>
+      <div class="col-6 col-lg-2 footer-links">
+        <h6>О нас</h6>
+        <a href="static.html">О платформе</a>
+        <a href="static.html">Политика</a>
+        <a href="static.html">Контакты</a>
+      </div>
+    </div>
+    <div class="footer-bottom d-flex justify-content-between flex-wrap gap-2">
+      <span class="footer-copy">© 2025 Mangoria. Все права защищены.</span>
+      <span style="color:rgba(94,94,94,0.6);">Сделано с <i class="fa fa-heart" style="color:var(--red);"></i> для авторов</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/navbar.js"></script>
+
+<div class="more-dropdown" id="moreDropdown">
+  <button class="more-dropdown-item"><i class="fa fa-share-nodes"></i> Поделиться профилем</button>
+  <button class="more-dropdown-item"><i class="fa fa-copy"></i> Скопировать ссылку</button>
+  <div class="more-dropdown-sep"></div>
+  <button class="more-dropdown-item"><i class="fa fa-flag"></i> Пожаловаться</button>
+  <button class="more-dropdown-item danger"><i class="fa fa-ban"></i> Заблокировать</button>
+</div>
+
+</body>
+</html>

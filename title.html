@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="ru" id="htmlRoot">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mangoria — Демонический Клинок</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&family=Dela+Gothic+One&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/title.css"/>
+</head>
+<body>
+
+<!-- ══════════════════ NAVBAR ══════════════════ -->
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-inner">
+      <a class="navbar-brand" href="index.html">
+        <span class="brand-icon"><i class="fa-solid fa-torii-gate"></i></span>
+        Mang<span class="brand-oni">oria</span>
+      </a>
+      <button class="navbar-toggler-custom" id="navToggle"><i class="fa fa-bars"></i></button>
+      <div class="nav-center" id="navCenter">
+        <div class="nav-type-switcher">
+          <a href="index.html#catalog" class="nav-type-btn active">
+            <i class="fa fa-image"></i><span data-i18n="nav_manga">Манга</span>
+          </a>
+          <a href="index.html#ranobe" class="nav-type-btn">
+            <i class="fa fa-book"></i><span data-i18n="nav_ranobe">Ранобэ</span>
+          </a>
+        </div>
+        <div class="nav-item-custom"><a href="index.html#catalog" class="nav-link-custom"><i class="fa fa-compass"></i><span data-i18n="nav_catalog">Каталог</span></a></div>
+        <div class="nav-item-custom"><a href="#" class="nav-link-custom"><i class="fa fa-layer-group"></i><span data-i18n="nav_genres">Жанры</span></a></div>
+        <div class="nav-item-custom"><a href="#" class="nav-link-custom"><i class="fa fa-star"></i><span data-i18n="nav_rating">Рейтинг</span></a></div>
+        <div class="nav-item-custom"><a href="#" class="nav-link-custom"><i class="fa fa-users"></i><span data-i18n="nav_authors">Авторы</span></a></div>
+        <div class="nav-item-custom"><a href="#" class="nav-link-custom"><i class="fa fa-fire"></i><span data-i18n="nav_new">Новинки</span></a></div>
+      </div>
+      <div class="nav-right" id="navRight">
+        <div class="lang-dropdown" id="langDropdownWrap">
+          <button class="lang-dropdown-btn" id="langDropdownBtn">
+            <i class="fa fa-globe"></i>
+            <span id="langDropdownLabel">РУ</span>
+            <i class="fa fa-chevron-down lang-chevron"></i>
+          </button>
+          <div class="lang-dropdown-menu" id="langDropdownMenu">
+            <button class="lang-option" data-lang="uk"><span class="lang-flag">🇺🇦</span><span class="lang-name">Українська</span><span class="lang-code">УК</span></button>
+            <button class="lang-option active" data-lang="ru"><span class="lang-flag">🇷🇺</span><span class="lang-name">Русский</span><span class="lang-code">РУ</span></button>
+            <button class="lang-option" data-lang="en"><span class="lang-flag">🇬🇧</span><span class="lang-name">English</span><span class="lang-code">EN</span></button>
+          </div>
+        </div>
+        <button class="nav-icon-btn nav-search-btn" data-action="search" title="Поиск (Ctrl+K)"><i class="fa fa-search"></i></button>
+        <a href="publish.html" class="btn-publish ms-1"><i class="fa fa-upload"></i><span data-i18n="nav_publish">Публиковать</span></a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════ HERO SECTION (баннер + обложка + инфо) ══════════════════ -->
+<section class="title-hero-section">
+
+  <!-- Фоновый баннер — абсолютно позиционирован -->
+  <div class="title-banner-bg">
+    <img
+      src="img/banner/banner_2.png"
+      alt="Баннер"
+    />
+  </div>
+
+  <!-- Декор -->
+  <div class="title-banner-stripes">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="title-banner-kanji">鬼刃</div>
+
+  <!-- Контент поверх баннера -->
+  <div class="title-hero-content">
+    <div class="container">
+      <div class="title-hero-grid">
+
+        <!-- Обложка -->
+        <div>
+          <div class="title-cover">
+            <img
+              src="img/posters/poster_2.webp"
+              alt="Демонический Клинок — обложка"
+            />
+            <span class="title-cover-badge">Манга</span>
+            <span class="title-cover-rating"><i class="fa fa-star" style="font-size:0.65rem;"></i> 4.8</span>
+          </div>
+        </div>
+
+        <!-- Информация -->
+        <div class="title-info">
+
+          <div class="title-breadcrumb">
+            <a href="index.html"><i class="fa fa-house fa-xs"></i> Главная</a>
+            <span class="sep">/</span>
+            <a href="#">Каталог</a>
+            <span class="sep">/</span>
+            <a href="#">Фэнтези</a>
+            <span class="sep">/</span>
+            <span style="color:rgba(221,214,200,0.55);">Демонический Клинок</span>
+          </div>
+
+          <div class="title-badges-row">
+            <span class="tbadge type-manga"><i class="fa fa-image"></i> Манга</span>
+            <span class="tbadge ongoing"><i class="fa fa-circle" style="font-size:0.4rem;"></i> Онгоинг</span>
+            <span class="tbadge age">16+</span>
+            <span class="tbadge origin">Оригинал</span>
+            <span class="tbadge ai"><i class="fa fa-robot"></i> AI-арт частично</span>
+            <span class="tbadge lang"><i class="fa fa-globe"></i> Русский</span>
+          </div>
+
+          <h1 class="title-name">Демонический Клинок</h1>
+          <p class="title-altname">Demonic Blade / 悪魔の刃</p>
+
+          <div class="title-author-row">
+            <div class="title-author-ava">
+              <img src="img/avatar/ava_10.jpg" alt="ShadowBrush"/>
+            </div>
+            <div>
+              <div class="title-author-lbl">Автор</div>
+              <a href="#" class="title-author-name">ShadowBrush</a>
+            </div>
+            <div style="margin-left:1rem; padding-left:1rem; border-left:1px solid rgba(255,255,255,0.08);">
+              <div class="title-author-lbl">Опубликовано</div>
+              <div style="font-size:0.82rem; color:rgba(221,214,200,0.55);">14 марта 2024</div>
+            </div>
+          </div>
+
+          <div class="title-stats">
+            <div class="title-stat-item"><i class="fa fa-eye"></i><strong>42 800</strong><span>просм.</span></div>
+            <div class="title-stat-item"><i class="fa fa-heart"></i><strong>3 240</strong><span>лайков</span></div>
+            <div class="title-stat-item"><i class="fa fa-book-open"></i><strong>34</strong><span>главы</span></div>
+            <div class="title-stat-item"><i class="fa fa-file-image"></i><strong>487</strong><span>страниц</span></div>
+            <div class="title-stat-item"><i class="fa fa-comment"></i><strong>218</strong></div>
+          </div>
+
+          <div class="title-actions">
+            <a href="#" class="btn-read-primary"><i class="fa fa-book-open"></i> Читать с гл. 1</a>
+            <a href="#" class="btn-read-continue"><i class="fa fa-forward"></i> Продолжить</a>
+            <button class="btn-icon-action" id="btnLike" title="Нравится"><i class="fa-regular fa-heart"></i></button>
+            <button class="btn-icon-action" id="btnBookmark" title="Закладка"><i class="fa-regular fa-bookmark"></i></button>
+            <button class="btn-icon-action" id="btnStar" title="В список"><i class="fa-regular fa-star"></i></button>
+          </div>
+
+          <!-- ── Кнопки автора (видны только автору) ── -->
+          <div class="author-actions" id="authorActions">
+            <div class="author-actions-label">
+              <i class="fa fa-pen-nib"></i> Управление произведением
+            </div>
+            <div class="author-actions-btns">
+              <a href="publish.html" class="btn-author-edit">
+                <i class="fa fa-pen-to-square"></i>
+                <span>Редактировать</span>
+              </a>
+              <button class="btn-author-chapter manga" onclick="openChapterModal('manga')">
+                <i class="fa fa-images"></i>
+                <span>Добавить главу манги</span>
+              </button>
+              <button class="btn-author-chapter ranobe" onclick="openChapterModal('ranobe')">
+                <i class="fa fa-feather-alt"></i>
+                <span>Добавить главу ранобэ</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+<!-- Тонкая красная линия-разделитель -->
+<div class="title-divider"></div>
+
+<!-- ══════════════════ BODY ══════════════════ -->
+<div class="title-body">
+  <div class="container">
+    <div class="title-layout">
+
+      <!-- ══ MAIN ══ -->
+      <div>
+
+        <!-- Табы -->
+        <div class="title-tabs">
+          <button class="tab-btn active" data-tab="about"><i class="fa fa-circle-info"></i> О произведении</button>
+          <button class="tab-btn" data-tab="chapters"><i class="fa fa-list"></i> Главы <span class="tab-count">34</span></button>
+          <button class="tab-btn" data-tab="comments"><i class="fa fa-comments"></i> Комментарии <span class="tab-count">218</span></button>
+        </div>
+
+        <!-- ══ ТАБ: О произведении ══ -->
+        <div class="tab-content active" id="tab-about">
+
+          <!-- Описание -->
+          <div class="tcard">
+            <div class="tcard-header"><i class="fa fa-align-left"></i> Описание</div>
+            <div class="tcard-body">
+              <div id="descShort">
+                <p class="title-desc">Юный кузнец Кай обнаруживает, что его руки способны ковать оружие из самой тьмы. Каждый клинок несёт осколок демонической силы — и каждый раз забирает часть его человеческой сущности...</p>
+              </div>
+              <div id="descFull" style="display:none;">
+                <p class="title-desc">Юный кузнец Кай обнаруживает, что его руки способны ковать оружие из самой тьмы. Каждый клинок, выкованный им, несёт в себе осколок демонической силы — и каждый раз забирает часть его человеческой сущности.</p>
+                <p class="title-desc">Отвергнутый людьми и преследуемый демонами, Кай идёт по тонкой грани между двумя мирами. Его единственный союзник — древний дух, запечатанный в первом клинке, принадлежавшем легендарному воину, уничтожившему демонического владыку тысячу лет назад.</p>
+                <p class="title-desc">Но история повторяется. Новый владыка пробуждается, и только Демонический Клинок способен остановить его — ценой последней частицы человеческой души кузнеца.</p>
+              </div>
+              <button class="btn-desc-toggle" id="descToggle"><i class="fa fa-chevron-down" style="font-size:0.65rem;"></i> Читать далее</button>
+            </div>
+          </div>
+
+          <!-- Жанры и теги -->
+          <div class="tcard">
+            <div class="tcard-header"><i class="fa fa-tags"></i> Жанры и теги</div>
+            <div class="tcard-body">
+              <div class="chip-section-label">Жанры</div>
+              <div class="chip-row">
+                <a href="#" class="chip genre">Фэнтези</a>
+                <a href="#" class="chip genre">Сёнэн</a>
+                <a href="#" class="chip genre">Экшен</a>
+                <a href="#" class="chip genre">Приключения</a>
+                <a href="#" class="chip genre">Психологическое</a>
+              </div>
+              <div class="chip-section-label">Теги</div>
+              <div class="chip-row">
+                <a href="#" class="chip tag"># демоны</a>
+                <a href="#" class="chip tag"># кузнец</a>
+                <a href="#" class="chip tag"># тёмная сила</a>
+                <a href="#" class="chip tag"># антигерой</a>
+                <a href="#" class="chip tag"># одиночка</a>
+                <a href="#" class="chip tag"># месть</a>
+                <a href="#" class="chip tag"># магическое оружие</a>
+                <a href="#" class="chip tag"># боевая система</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Детали -->
+          <div class="tcard">
+            <div class="tcard-header"><i class="fa fa-circle-info"></i> Детали</div>
+            <div class="tcard-body">
+              <table class="info-table">
+                <tr><td class="ik">Тип</td><td class="iv"><span class="tbadge type-manga" style="font-size:0.65rem;">Манга</span></td></tr>
+                <tr><td class="ik">Статус</td><td class="iv"><span class="tbadge ongoing" style="font-size:0.65rem;">Онгоинг</span></td></tr>
+                <tr><td class="ik">Язык оригинала</td><td class="iv">Русский</td></tr>
+                <tr><td class="ik">Тип создания</td><td class="iv">Оригинал</td></tr>
+                <tr><td class="ik">Возрастной рейтинг</td><td class="iv"><span class="tbadge age" style="font-size:0.65rem;">16+</span></td></tr>
+                <tr><td class="ik">Режим чтения</td><td class="iv">Справа налево (манга)</td></tr>
+                <tr><td class="ik">Дата публикации</td><td class="iv">14 марта 2024</td></tr>
+                <tr><td class="ik">Последнее обновление</td><td class="iv">2 июня 2025</td></tr>
+                <tr><td class="ik">Страниц всего</td><td class="iv">487</td></tr>
+                <tr><td class="ik">Использование ИИ</td><td class="iv"><span class="tbadge ai" style="font-size:0.65rem;"><i class="fa fa-robot"></i> Частично</span></td></tr>
+                <tr><td class="ik">Ссылка на оригинал</td><td class="iv"><a href="#">pixiv.net/user/shadowbrush</a></td></tr>
+              </table>
+            </div>
+          </div>
+
+          <!-- Предупреждения -->
+          <div class="tcard">
+            <div class="tcard-header"><i class="fa fa-triangle-exclamation"></i> Предупреждения о контенте</div>
+            <div class="tcard-body">
+              <p style="font-size:0.8rem;color:rgba(221,214,200,0.42);line-height:1.6;margin-bottom:0.9rem;">Автор указал следующие предупреждения:</p>
+              <div class="warnings-row">
+                <span class="warning-tag"><i class="fa fa-skull-crossbones"></i> Насилие</span>
+                <span class="warning-tag"><i class="fa fa-droplet"></i> Кровь</span>
+                <span class="warning-tag"><i class="fa fa-brain"></i> Психологически тяжёлые темы</span>
+                <span class="warning-tag"><i class="fa fa-moon"></i> Тёмная атмосфера</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Развитие проекта -->
+          <div class="tcard">
+            <div class="tcard-header"><i class="fa fa-wand-magic-sparkles"></i> Развитие проекта</div>
+            <div class="tcard-body">
+              <div class="dev-card">
+                <div class="dev-card-head">
+                  <div class="dev-card-icon"><i class="fa fa-route"></i></div>
+                  <div>
+                    <div class="dev-card-title">Жизненный цикл произведения</div>
+                    <div class="dev-card-sub">Автор разрешил адаптацию. Сейчас ведётся работа над ранобэ.</div>
+                  </div>
+                </div>
+                <div class="stages-row">
+                  <div class="stage-col">
+                    <div class="stage-node done"><i class="fa fa-check" style="font-size:0.6rem;"></i></div>
+                    <div class="stage-lbl done">Манга</div>
+                  </div>
+                  <div class="stage-connector done"></div>
+                  <div class="stage-col">
+                    <div class="stage-node active"><i class="fa fa-pen" style="font-size:0.6rem;"></i></div>
+                    <div class="stage-lbl active">Ранобэ</div>
+                  </div>
+                  <div class="stage-connector"></div>
+                  <div class="stage-col">
+                    <div class="stage-node"><i class="fa fa-users" style="font-size:0.6rem;"></i></div>
+                    <div class="stage-lbl">Команда</div>
+                  </div>
+                  <div class="stage-connector"></div>
+                  <div class="stage-col">
+                    <div class="stage-node"><i class="fa fa-globe" style="font-size:0.6rem;"></i></div>
+                    <div class="stage-lbl">Релиз</div>
+                  </div>
+                </div>
+                <button class="dev-card-btn"><i class="fa fa-handshake"></i> Предложить адаптацию</button>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /tab-about -->
+
+        <!-- ══ ТАБ: Главы ══ -->
+        <div class="tab-content" id="tab-chapters">
+          <div class="chapters-toolbar">
+            <div class="sort-pills">
+              <button class="sort-pill active" data-sort="new"><i class="fa fa-arrow-down-9-1"></i> Новые сначала</button>
+              <button class="sort-pill" data-sort="old"><i class="fa fa-arrow-up-1-9"></i> Старые сначала</button>
+            </div>
+            <span class="chapters-meta">34 главы · 487 страниц</span>
+          </div>
+
+          <div class="tcard">
+            <div class="tcard-body" style="padding-top:1rem;">
+              <div class="chapter-list">
+                <a href="#" class="chapter-row is-new"><span class="ch-num">Гл. 34</span><div class="ch-title"><b>Последний удар</b></div><span class="ch-new">NEW</span><span class="ch-date">2 июн. 2025</span></a>
+                <a href="#" class="chapter-row is-new"><span class="ch-num">Гл. 33</span><div class="ch-title"><b>Тень владыки</b></div><span class="ch-new">NEW</span><span class="ch-date">19 мая 2025</span></a>
+                <a href="#" class="chapter-row"><span class="ch-num">Гл. 32</span><div class="ch-title">Врата Бездны</div><span class="ch-date">5 мая 2025</span></a>
+                <a href="#" class="chapter-row"><span class="ch-num">Гл. 31</span><div class="ch-title">Цена силы</div><span class="ch-date">21 апр. 2025</span></a>
+                <a href="#" class="chapter-row"><span class="ch-num">Гл. 30</span><div class="ch-title">Союзник из прошлого</div><span class="ch-date">7 апр. 2025</span></a>
+                <a href="#" class="chapter-row"><span class="ch-num">Гл. 29</span><div class="ch-title">Кузница на краю мира</div><span class="ch-date">24 мар. 2025</span></a>
+                <a href="#" class="chapter-row"><span class="ch-num">Гл. 28</span><div class="ch-title">Пепел и сталь</div><span class="ch-date">10 мар. 2025</span></a>
+                <a href="#" class="chapter-row"><span class="ch-num">Гл. 27</span><div class="ch-title">Голос в клинке</div><span class="ch-date">24 фев. 2025</span></a>
+                <a href="#" class="chapter-row"><span class="ch-num">Гл. 26</span><div class="ch-title">Испытание тьмой</div><span class="ch-date">10 фев. 2025</span></a>
+                <a href="#" class="chapter-row"><span class="ch-num">Гл. 25</span><div class="ch-title">Первая потеря</div><span class="ch-date">27 янв. 2025</span></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="chapters-pagination">
+            <button class="pg-btn active">1</button>
+            <button class="pg-btn">2</button>
+            <button class="pg-btn">3</button>
+            <button class="pg-btn dots">…</button>
+            <button class="pg-btn">4</button>
+          </div>
+        </div>
+
+        <!-- ══ ТАБ: Комментарии ══ -->
+        <div class="tab-content" id="tab-comments">
+          <div class="comment-form">
+            <textarea class="comment-textarea" id="commentInput" placeholder="Ваш комментарий…" rows="2"></textarea>
+            <div class="comment-form-foot">
+              <button class="btn-send-comment" id="commentSubmit"><i class="fa fa-paper-plane me-1"></i> Отправить</button>
+            </div>
+          </div>
+
+          <div class="comments-list">
+            <div class="comment-item">
+              <div class="comment-head">
+                <div class="comment-ava"><img src="img/avatar/ava_1.jpg" alt=""/></div>
+                <span class="comment-user">NightReader_92</span>
+                <span class="comment-date">1 июня 2025</span>
+              </div>
+              <p class="comment-text">34 глава просто взорвала мозг. Финальная панель — это что-то невероятное, автор умеет держать напряжение до последней страницы!</p>
+              <div class="comment-foot">
+                <button class="comment-btn" data-like><i class="fa-regular fa-heart"></i> <span class="like-count">47</span></button>
+                <button class="comment-btn"><i class="fa fa-reply"></i> Ответить</button>
+              </div>
+            </div>
+            <div class="comment-item">
+              <div class="comment-head">
+                <div class="comment-ava"><img src="img/avatar/ava_2.jpg" alt=""/></div>
+                <span class="comment-user">DarkInk</span>
+                <span class="comment-date">29 мая 2025</span>
+              </div>
+              <p class="comment-text">Арт просто на другом уровне. Особенно нравится, как автор рисует демонические клинки — каждый уникален. И то, что частично использован AI для фонов, совсем не портит впечатление.</p>
+              <div class="comment-foot">
+                <button class="comment-btn" data-like><i class="fa-regular fa-heart"></i> <span class="like-count">31</span></button>
+                <button class="comment-btn"><i class="fa fa-reply"></i> Ответить</button>
+              </div>
+            </div>
+            <div class="comment-item">
+              <div class="comment-head">
+                <div class="comment-ava"><img src="img/avatar/ava_3.jpg" alt=""/></div>
+                <span class="comment-user">ShadowFan_RU</span>
+                <span class="comment-date">25 мая 2025</span>
+              </div>
+              <p class="comment-text">Слышал, что автор ищет кого-то для адаптации в ранобэ. Это было бы потрясающе — история настолько богата деталями!</p>
+              <div class="comment-foot">
+                <button class="comment-btn" data-like><i class="fa-regular fa-heart"></i> <span class="like-count">19</span></button>
+                <button class="comment-btn"><i class="fa fa-reply"></i> Ответить</button>
+              </div>
+            </div>
+            <div class="comment-item">
+              <div class="comment-head">
+                <div class="comment-ava"><img src="img/avatar/ava_4.jpg" alt=""/></div>
+                <span class="comment-user">KaijuManga</span>
+                <span class="comment-date">20 мая 2025</span>
+              </div>
+              <p class="comment-text">Психологическая составляющая в главах 28–30 просто мощная. Кай постепенно теряет себя — и это видно не только в тексте, но и в изменении стиля арта.</p>
+              <div class="comment-foot">
+                <button class="comment-btn" data-like><i class="fa-regular fa-heart"></i> <span class="like-count">25</span></button>
+                <button class="comment-btn"><i class="fa fa-reply"></i> Ответить</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /main -->
+
+      <!-- ══ SIDEBAR ══ -->
+      <aside class="sidebar">
+
+        <!-- Автор -->
+        <div class="sidebar-author">
+          <div class="sidebar-author-head">Об авторе</div>
+          <div class="sidebar-author-body">
+            <div class="sidebar-author-row">
+              <div class="sidebar-author-ava"><img src="img/avatar/ava_10.jpg" alt=""/></div>
+              <div>
+                <a href="#" class="sidebar-author-name">ShadowBrush</a>
+                <div class="sidebar-author-subs">1 240 подписчиков · 3 произведения</div>
+              </div>
+            </div>
+            <button class="btn-sub" id="subscribeBtn"><i class="fa fa-plus"></i><span>Подписаться</span></button>
+          </div>
+        </div>
+
+        <!-- Статистика -->
+        <div class="tcard">
+          <div class="tcard-header"><i class="fa fa-chart-bar"></i> Статистика</div>
+          <div class="tcard-body">
+            <div class="stats-grid">
+              <div class="stat-box"><div class="stat-box-num">42.8k</div><div class="stat-box-label">Просмотров</div></div>
+              <div class="stat-box"><div class="stat-box-num">18.3k</div><div class="stat-box-label">Читателей</div></div>
+              <div class="stat-box"><div class="stat-box-num">4 120</div><div class="stat-box-label">В списках</div></div>
+              <div class="stat-box"><div class="stat-box-num">2 890</div><div class="stat-box-label">Закладок</div></div>
+              <div class="stat-box"><div class="stat-box-num">3 240</div><div class="stat-box-label">Лайков</div></div>
+              <div class="stat-box"><div class="stat-box-num">~380</div><div class="stat-box-label">В день</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Поиск команды -->
+        <div class="sidebar-team">
+          <div class="sidebar-team-head">Поиск команды</div>
+          <div class="sidebar-team-body">
+            <p style="font-size:0.77rem;color:rgba(221,214,200,0.42);line-height:1.6;margin-bottom:0.8rem;">Автор ищет участников для развития проекта:</p>
+            <div class="team-roles">
+              <div class="team-role">
+                <span class="team-role-name"><i class="fa fa-pen-nib"></i> Автор ранобэ</span>
+                <span class="team-role-tag">Открыто</span>
+              </div>
+              <div class="team-role">
+                <span class="team-role-name"><i class="fa fa-language"></i> Переводчик</span>
+                <span class="team-role-tag">Открыто</span>
+              </div>
+              <div class="team-role">
+                <span class="team-role-name"><i class="fa fa-spell-check"></i> Редактор</span>
+                <span class="team-role-tag taken">Занято</span>
+              </div>
+            </div>
+            <button class="btn-apply"><i class="fa fa-paper-plane"></i> Подать заявку</button>
+          </div>
+        </div>
+
+        <!-- Похожие -->
+        <div class="tcard">
+          <div class="tcard-header"><i class="fa fa-th-large"></i> Похожие произведения</div>
+          <div class="tcard-body">
+            <div class="similar-list">
+              <a href="#" class="similar-item">
+                <div class="similar-cover"><img src="https://images.unsplash.com/photo-1614583225154-5fcdda07019e?w=100&q=70&fit=crop" alt=""/></div>
+                <div><div class="similar-title">Звёздный Бог</div><div class="similar-meta">Ранобэ · Фэнтези · ★ 4.9</div></div>
+              </a>
+              <a href="#" class="similar-item">
+                <div class="similar-cover"><img src="https://images.unsplash.com/photo-1560169897-fc0cdbdfa4d5?w=100&q=70&fit=crop" alt=""/></div>
+                <div><div class="similar-title">Путь Демона</div><div class="similar-meta">Ранобэ · Боевик · ★ 4.7</div></div>
+              </a>
+              <a href="#" class="similar-item">
+                <div class="similar-cover"><img src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=100&q=70&fit=crop" alt=""/></div>
+                <div><div class="similar-title">Чёрный Клинок</div><div class="similar-meta">Манга · Сёнэн · ★ 4.8</div></div>
+              </a>
+              <a href="#" class="similar-item">
+                <div class="similar-cover"><img src="https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=100&q=70&fit=crop" alt=""/></div>
+                <div><div class="similar-title">Лесной Дух</div><div class="similar-meta">Манга · Хоррор · ★ 4.5</div></div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer>
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <p class="footer-brand">Mang<span>oria</span> <small style="font-family:'Sawarabi Mincho';color:var(--muted);font-size:0.8rem;">鬼</small></p>
+        <p class="footer-tagline">Манга і Ранобе — відкрита платформа</p>
+        <p class="mt-3" style="font-size:0.78rem;color:var(--muted);line-height:1.75;">Сообщество художников и писателей.</p>
+        <div class="d-flex gap-2 mt-3">
+          <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-discord"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+      <div class="col-6 col-lg-2 offset-lg-1 footer-links">
+        <h6>Платформа</h6>
+        <a href="index.html">Манга</a>
+        <a href="index.html#ranobe">Ранобэ</a>
+        <a href="#">Новинки</a>
+        <a href="#">Рейтинг</a>
+      </div>
+      <div class="col-6 col-lg-2 footer-links">
+        <h6>Авторам</h6>
+        <a href="publish.html">Публикация</a>
+        <a href="static.html">Правила</a>
+        <a href="static.html">FAQ</a>
+      </div>
+      <div class="col-6 col-lg-2 footer-links">
+        <h6>О нас</h6>
+        <a href="static.html">О платформе</a>
+        <a href="static.html">Политика</a>
+        <a href="static.html">Контакты</a>
+      </div>
+    </div>
+    <div class="footer-bottom d-flex justify-content-between flex-wrap gap-2">
+      <span class="footer-copy">© 2025 Mangoria. Все права защищены.</span>
+      <span style="color:rgba(94,94,94,0.6);">Сделано с <i class="fa fa-heart" style="color:var(--red);"></i> для авторов</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════ MODAL: ДОБАВИТЬ ГЛАВУ МАНГИ ══════════════════ -->
+<div class="chapter-modal-overlay" id="modalManga" onclick="closeModalOutside(event,'modalManga')">
+  <div class="chapter-modal manga-modal">
+
+    <div class="cm-header manga-header">
+      <div class="cm-header-left">
+        <div class="cm-type-badge manga-badge"><i class="fa fa-image"></i> Манга</div>
+        <div>
+          <div class="cm-title">Добавить главу</div>
+          <div class="cm-subtitle">Демонический Клинок</div>
+        </div>
+      </div>
+      <button class="cm-close" onclick="closeModal('modalManga')"><i class="fa fa-xmark"></i></button>
+    </div>
+
+    <div class="cm-body">
+
+      <div class="cm-row-2">
+        <div class="cm-field">
+          <div class="cm-label">Номер главы <span class="cm-req">*</span></div>
+          <div class="cm-num-wrap">
+            <input type="number" class="cm-input" id="mangaChNum" value="35" min="0" step="0.5"/>
+            <div class="cm-num-btns">
+              <button onclick="changeNum('mangaChNum', 0.5)"><i class="fa fa-chevron-up"></i></button>
+              <button onclick="changeNum('mangaChNum', -0.5)"><i class="fa fa-chevron-down"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="cm-field">
+          <div class="cm-label">Название главы <span class="cm-opt">необязательно</span></div>
+          <input type="text" class="cm-input" placeholder="Например: Пепел и пламя…"/>
+        </div>
+      </div>
+
+      <div class="cm-field">
+        <div class="cm-label">Режим чтения</div>
+        <div class="cm-select-wrap">
+          <select class="cm-input cm-select">
+            <option>Справа налево (манга)</option>
+            <option>Слева направо (вебтун)</option>
+            <option>Вертикальный (манхва)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="cm-field">
+        <div class="cm-label">Страницы <span class="cm-req">*</span></div>
+        <div class="cm-drop-zone" id="mangaDropZone">
+          <input type="file" multiple accept="image/*" onchange="previewMangaPages(event)" style="position:absolute;inset:0;opacity:0;cursor:pointer;"/>
+          <div class="cm-drop-icon"><i class="fa fa-cloud-arrow-up"></i></div>
+          <div class="cm-drop-text">Перетащите страницы или <span>выберите файлы</span></div>
+          <div class="cm-drop-hint">JPG, PNG, WebP · до 20 МБ каждая · порядок по имени файла</div>
+        </div>
+        <div class="cm-pages-grid" id="mangaPagesGrid"></div>
+      </div>
+
+      <div class="cm-field">
+        <div class="cm-label">Примечание автора <span class="cm-opt">необязательно</span></div>
+        <textarea class="cm-input cm-textarea" placeholder="Поделитесь мыслями с читателями…" rows="2"></textarea>
+      </div>
+
+      <div class="cm-field cm-toggles">
+        <label class="cm-toggle-row">
+          <span class="cm-toggle-label">Опубликовать сразу</span>
+          <span class="cm-toggle-switch"><input type="checkbox" checked/><span class="cm-toggle-track"></span></span>
+        </label>
+        <label class="cm-toggle-row">
+          <span class="cm-toggle-label">Уведомить подписчиков</span>
+          <span class="cm-toggle-switch"><input type="checkbox" checked/><span class="cm-toggle-track"></span></span>
+        </label>
+      </div>
+
+    </div>
+
+    <div class="cm-footer">
+      <button class="cm-btn-cancel" onclick="closeModal('modalManga')">Отменить</button>
+      <button class="cm-btn-draft"><i class="fa fa-floppy-disk"></i> Черновик</button>
+      <button class="cm-btn-publish manga-publish" onclick="submitChapter('manga')">
+        <i class="fa fa-paper-plane"></i> Опубликовать главу
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ MODAL: ДОБАВИТЬ ГЛАВУ РАНОБЭ ══════════════════ -->
+<div class="chapter-modal-overlay" id="modalRanobe" onclick="closeModalOutside(event,'modalRanobe')">
+  <div class="chapter-modal ranobe-modal">
+
+    <div class="cm-header ranobe-header">
+      <div class="cm-header-left">
+        <div class="cm-type-badge ranobe-badge"><i class="fa fa-feather-alt"></i> Ранобэ</div>
+        <div>
+          <div class="cm-title">Добавить главу</div>
+          <div class="cm-subtitle">Демонический Клинок</div>
+        </div>
+      </div>
+      <button class="cm-close" onclick="closeModal('modalRanobe')"><i class="fa fa-xmark"></i></button>
+    </div>
+
+    <div class="cm-body">
+
+      <div class="cm-row-2">
+        <div class="cm-field">
+          <div class="cm-label">Номер главы <span class="cm-req">*</span></div>
+          <div class="cm-num-wrap">
+            <input type="number" class="cm-input" id="ranobeChNum" value="35" min="0" step="0.5"/>
+            <div class="cm-num-btns">
+              <button onclick="changeNum('ranobeChNum', 0.5)"><i class="fa fa-chevron-up"></i></button>
+              <button onclick="changeNum('ranobeChNum', -0.5)"><i class="fa fa-chevron-down"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="cm-field">
+          <div class="cm-label">Название главы <span class="cm-opt">необязательно</span></div>
+          <input type="text" class="cm-input" placeholder="Например: Голос из темноты…"/>
+        </div>
+      </div>
+
+      <!-- RTE toolbar -->
+      <div class="cm-field">
+        <div class="cm-label">Текст главы <span class="cm-req">*</span></div>
+        <div class="cm-rte">
+          <div class="cm-rte-toolbar ranobe-toolbar">
+            <div class="cm-rte-group">
+              <button class="cm-rte-btn" onclick="rteCmd('bold')" title="Жирный"><i class="fa fa-bold"></i></button>
+              <button class="cm-rte-btn" onclick="rteCmd('italic')" title="Курсив"><i class="fa fa-italic"></i></button>
+              <button class="cm-rte-btn" onclick="rteCmd('underline')" title="Подчёркнутый"><i class="fa fa-underline"></i></button>
+              <button class="cm-rte-btn" onclick="rteCmd('strikeThrough')" title="Зачёркнутый"><i class="fa fa-strikethrough"></i></button>
+            </div>
+            <div class="cm-rte-sep"></div>
+            <div class="cm-rte-group">
+              <button class="cm-rte-btn" onclick="rteHeading()" title="Заголовок раздела"><i class="fa fa-heading"></i></button>
+              <button class="cm-rte-btn" onclick="rteCmd('formatBlock','blockquote')" title="Цитата"><i class="fa fa-quote-left"></i></button>
+              <button class="cm-rte-btn" onclick="insertSceneBrk()" title="Разрыв сцены"><i class="fa fa-ellipsis"></i></button>
+            </div>
+            <div class="cm-rte-sep"></div>
+            <div class="cm-rte-group">
+              <button class="cm-rte-btn" onclick="rteCmd('justifyLeft')"   title="Влево"><i class="fa fa-align-left"></i></button>
+              <button class="cm-rte-btn" onclick="rteCmd('justifyCenter')" title="Центр"><i class="fa fa-align-center"></i></button>
+              <button class="cm-rte-btn" onclick="rteCmd('justifyRight')"  title="Вправо"><i class="fa fa-align-right"></i></button>
+            </div>
+            <div class="cm-rte-sep"></div>
+            <div class="cm-rte-group">
+              <button class="cm-rte-btn" onclick="rteCmd('undo')" title="Отменить"><i class="fa fa-rotate-left"></i></button>
+              <button class="cm-rte-btn" onclick="rteCmd('redo')" title="Повторить"><i class="fa fa-rotate-right"></i></button>
+            </div>
+            <div style="margin-left:auto; display:flex; align-items:center; gap:0.4rem;">
+              <span class="cm-rte-count" id="rteCount">0 знаков</span>
+            </div>
+          </div>
+          <div class="cm-rte-area"
+               id="rteArea"
+               contenteditable="true"
+               spellcheck="true"
+               data-placeholder="Начните вводить текст главы…"
+               oninput="updateRteCount()">
+          </div>
+        </div>
+      </div>
+
+      <div class="cm-field">
+        <div class="cm-label">Примечание автора <span class="cm-opt">необязательно</span></div>
+        <textarea class="cm-input cm-textarea" placeholder="Поделитесь мыслями с читателями…" rows="2"></textarea>
+      </div>
+
+      <div class="cm-field cm-toggles">
+        <label class="cm-toggle-row">
+          <span class="cm-toggle-label">Опубликовать сразу</span>
+          <span class="cm-toggle-switch"><input type="checkbox" checked/><span class="cm-toggle-track"></span></span>
+        </label>
+        <label class="cm-toggle-row">
+          <span class="cm-toggle-label">Уведомить подписчиков</span>
+          <span class="cm-toggle-switch"><input type="checkbox" checked/><span class="cm-toggle-track"></span></span>
+        </label>
+      </div>
+
+    </div>
+
+    <div class="cm-footer">
+      <button class="cm-btn-cancel" onclick="closeModal('modalRanobe')">Отменить</button>
+      <button class="cm-btn-draft"><i class="fa fa-floppy-disk"></i> Черновик</button>
+      <button class="cm-btn-publish ranobe-publish" onclick="submitChapter('ranobe')">
+        <i class="fa fa-paper-plane"></i> Опубликовать главу
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="titleToast" style="position:fixed;bottom:2rem;right:2rem;z-index:9999;background:#1c1c1c;border-radius:12px;padding:0.9rem 1.3rem;box-shadow:0 8px 32px rgba(0,0,0,0.7);display:none;align-items:center;gap:0.75rem;max-width:320px;border-left:3px solid var(--red);">
+  <i class="fa fa-circle-check" style="color:#4ade80;font-size:1rem;flex-shrink:0;" id="titleToastIcon"></i>
+  <div>
+    <div style="font-size:0.83rem;color:#f0ebe0;margin-bottom:2px;" id="titleToastTitle">Готово</div>
+    <div style="font-size:0.72rem;color:rgba(221,214,200,0.42);" id="titleToastMsg"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/title.js"></script>
+<script src="js/navbar.js"></script>
+<script>
+/* ── Модальные окна ── */
+function openChapterModal(type) {
+  var id = type === 'manga' ? 'modalManga' : 'modalRanobe';
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModalOutside(e, id) {
+  if (e.target === document.getElementById(id)) closeModal(id);
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeModal('modalManga');
+    closeModal('modalRanobe');
+    document.body.style.overflow = '';
+  }
+});
+
+/* ── Счётчик ± для номера главы ── */
+function changeNum(id, delta) {
+  var el = document.getElementById(id);
+  if (el) el.value = Math.max(0, parseFloat(el.value || 0) + delta);
+}
+
+/* ── Превью страниц манги ── */
+function previewMangaPages(e) {
+  var files = Array.from(e.target.files);
+  var grid = document.getElementById('mangaPagesGrid');
+  grid.innerHTML = '';
+  files.forEach(function(f, i) {
+    var div = document.createElement('div');
+    div.className = 'cm-page-thumb';
+    var img = document.createElement('img');
+    img.src = URL.createObjectURL(f);
+    var num = document.createElement('span');
+    num.className = 'cm-page-num';
+    num.textContent = i + 1;
+    div.appendChild(img);
+    div.appendChild(num);
+    grid.appendChild(div);
+  });
+  var zone = document.getElementById('mangaDropZone');
+  var txt  = zone.querySelector('.cm-drop-text');
+  if (txt) txt.innerHTML = '<span style="color:var(--red);">' + files.length + ' файлов выбрано</span>';
+}
+
+/* ── RTE команды ── */
+function rteCmd(cmd, val) {
+  document.getElementById('rteArea').focus();
+  document.execCommand(cmd, false, val || null);
+  updateRteCount();
+}
+function rteHeading() {
+  document.getElementById('rteArea').focus();
+  document.execCommand('formatBlock', false, '<h3>');
+}
+function insertSceneBrk() {
+  document.getElementById('rteArea').focus();
+  document.execCommand('insertHTML', false, '<p style="text-align:center;letter-spacing:0.5em;color:rgba(26,155,138,0.6);padding:0.5em 0;">✦ ✦ ✦</p><p><br></p>');
+  updateRteCount();
+}
+function updateRteCount() {
+  var el = document.getElementById('rteArea');
+  var cnt = document.getElementById('rteCount');
+  if (!el || !cnt) return;
+  var len = el.innerText.replace(/\n/g,'').length;
+  cnt.textContent = len.toLocaleString('ru') + ' знаков';
+}
+
+/* ── Сабмит (заглушка) ── */
+function submitChapter(type) {
+  var btn = document.querySelector(type === 'manga' ? '.manga-publish' : '.ranobe-publish');
+  if (!btn) return;
+  var orig = btn.innerHTML;
+  btn.innerHTML = '<i class="fa fa-circle-notch fa-spin"></i> Публикуем…';
+  btn.disabled = true;
+  setTimeout(function() {
+    closeModal(type === 'manga' ? 'modalManga' : 'modalRanobe');
+    btn.innerHTML = orig;
+    btn.disabled = false;
+    showTitleToast(
+      type === 'manga' ? 'Глава манги опубликована' : 'Глава ранобэ опубликована',
+      'Подписчики получат уведомление',
+      type === 'manga' ? 'var(--red)' : 'var(--teal)'
+    );
+  }, 1400);
+}
+
+/* ── Toast ── */
+function showTitleToast(title, msg, color) {
+  var t = document.getElementById('titleToast');
+  var icon = document.getElementById('titleToastIcon');
+  document.getElementById('titleToastTitle').textContent = title;
+  document.getElementById('titleToastMsg').textContent   = msg;
+  t.style.borderLeftColor = color || 'var(--red)';
+  icon.style.color        = color || '#4ade80';
+  t.style.display = 'flex';
+  clearTimeout(window._titleToast);
+  window._titleToast = setTimeout(function() { t.style.display = 'none'; }, 3500);
+}
+</script>
+</html>

@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="ru" id="htmlRoot">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mangoria — Демонический Клинок · Глава 34</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&family=Dela+Gothic+One&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+/* =====================================================
+   Mangoria Reader — reader.html
+   Режим: Манга (вертикальный скролл)
+   ===================================================== */
+
+:root {
+  --ink:       #0d0d0d;
+  --ink2:      #111;
+  --paper:     #f0ebe0;
+  --red:       #c0392b;
+  --red-dim:   #8b1e14;
+  --gold:      #d4a017;
+  --teal:      #1a9b8a;
+  --card:      #181818;
+  --card2:     #1e1e1e;
+  --r:         12px;
+  --r-sm:      8px;
+  --r-pill:    50px;
+  --panel-w:   340px;
+  --topbar-h:  54px;
+  --botbar-h:  58px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; height: 100%; }
+
+body {
+  background: #0a0a0a;
+  color: #ddd6c8;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #0a0a0a; }
+::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--red); }
+
+/* ── Анимации ── */
+@keyframes fadeIn  { from { opacity:0; } to { opacity:1; } }
+@keyframes slideDown { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
+@keyframes slideUp   { from { opacity:0; transform:translateY(10px);  } to { opacity:1; transform:translateY(0); } }
+@keyframes slideLeft { from { opacity:0; transform:translateX(20px);  } to { opacity:1; transform:translateX(0); } }
+@keyframes spin      { to { transform:rotate(360deg); } }
+@keyframes pulse     { 0%,100%{opacity:1;} 50%{opacity:0.5;} }
+
+/* =====================================================
+   TOP BAR
+   ===================================================== */
+#topBar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: var(--topbar-h);
+  background: rgba(8,8,8,0.92);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  display: flex; align-items: center; gap: 0; padding: 0 1rem;
+  z-index: 100;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+#topBar.hidden { transform: translateY(-100%); opacity: 0; pointer-events: none; }
+
+/* Левая группа */
+.tb-left { display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; }
+.tb-back {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: var(--r-sm);
+  background: rgba(255,255,255,0.06); border: none;
+  color: rgba(221,214,200,0.65); font-size: 0.9rem; cursor: pointer;
+  transition: background 0.18s, color 0.18s; text-decoration: none;
+}
+.tb-back:hover { background: rgba(255,255,255,0.1); color: var(--paper); }
+.tb-brand {
+  font-family: 'Dela Gothic One', sans-serif; font-size: 1rem;
+  color: var(--paper); text-decoration: none; display: flex; align-items: center; gap: 0.35rem;
+}
+.tb-brand-dot { width: 8px; height: 8px; background: var(--red); border-radius: 2px; }
+.tb-sep { width: 1px; height: 20px; background: rgba(255,255,255,0.1); margin: 0 0.3rem; }
+
+/* Центр */
+.tb-center { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 1px; overflow: hidden; }
+.tb-title {
+  font-size: 0.85rem; color: var(--paper); font-weight: 500;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px;
+}
+.tb-chapter { font-size: 0.7rem; color: rgba(221,214,200,0.38); letter-spacing: 0.04em; }
+
+/* Правая группа */
+.tb-right { display: flex; align-items: center; gap: 0.45rem; flex-shrink: 0; }
+.tb-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: var(--r-sm);
+  background: rgba(255,255,255,0.06); border: none;
+  color: rgba(221,214,200,0.55); font-size: 0.88rem; cursor: pointer;
+  transition: background 0.18s, color 0.18s; position: relative;
+}
+.tb-btn:hover { background: rgba(255,255,255,0.1); color: var(--paper); }
+.tb-btn.active { background: rgba(192,57,43,0.15); color: #e8726a; }
+.tb-btn.bookmarked { background: rgba(212,160,23,0.15); color: var(--gold); }
+
+/* Прогресс-бар главы */
+#chapterProgress {
+  position: fixed; top: var(--topbar-h); left: 0; right: 0; height: 2px;
+  background: rgba(255,255,255,0.06); z-index: 99;
+  transition: opacity 0.25s;
+}
+#chapterProgress.hidden { opacity: 0; }
+#chapterProgressFill {
+  height: 100%; background: linear-gradient(90deg, var(--red), #e85d4a);
+  width: 0%; transition: width 0.1s linear;
+}
+
+/* =====================================================
+   НАСТРОЙКИ — выезжающая панель сверху
+   ===================================================== */
+#settingsPanel {
+  position: fixed; top: var(--topbar-h); left: 50%; transform: translateX(-50%) translateY(-10px);
+  width: 480px; max-width: calc(100vw - 2rem);
+  background: #161616;
+  border: 1px solid rgba(255,255,255,0.09);
+  border-top: none; border-radius: 0 0 var(--r) var(--r);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.7);
+  z-index: 200; padding: 1.2rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+#settingsPanel.open {
+  opacity: 1; pointer-events: all;
+  transform: translateX(-50%) translateY(0);
+}
+
+.sp-title {
+  font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(221,214,200,0.28); margin-bottom: 1rem;
+}
+.sp-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1rem; gap: 1rem;
+}
+.sp-row:last-child { margin-bottom: 0; }
+.sp-label { font-size: 0.8rem; color: rgba(221,214,200,0.65); white-space: nowrap; }
+.sp-controls { display: flex; gap: 5px; }
+.sp-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0.3rem 0.75rem; border-radius: var(--r-sm);
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09);
+  color: rgba(221,214,200,0.5); font-size: 0.75rem; cursor: pointer;
+  transition: background 0.15s, color 0.15s; font-family: 'Noto Sans JP', sans-serif;
+  white-space: nowrap;
+}
+.sp-btn:hover { background: rgba(255,255,255,0.1); color: var(--paper); }
+.sp-btn.active { background: rgba(192,57,43,0.15); border-color: rgba(192,57,43,0.3); color: #e8726a; }
+
+/* Ширина контента — слайдер */
+.sp-slider {
+  flex: 1; -webkit-appearance: none; appearance: none; height: 3px;
+  background: rgba(255,255,255,0.1); border-radius: 2px; outline: none; cursor: pointer;
+}
+.sp-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%;
+  background: var(--red); cursor: pointer; box-shadow: 0 0 0 3px rgba(192,57,43,0.2);
+}
+.sp-slider-val {
+  font-size: 0.72rem; color: rgba(221,214,200,0.4); min-width: 40px; text-align: right;
+}
+
+/* Фон ── переключатели цвета */
+.bg-options { display: flex; gap: 6px; }
+.bg-option {
+  width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+  border: 2px solid transparent; transition: border-color 0.18s;
+}
+.bg-option.active { border-color: var(--red); box-shadow: 0 0 0 2px rgba(192,57,43,0.3); }
+.bg-dark  { background: #0a0a0a; }
+.bg-dim   { background: #1a1614; }
+.bg-sepia { background: #2a2218; }
+.bg-light { background: #f0ebe0; }
+
+/* =====================================================
+   COMMENTS PANEL — выезжает справа
+   ===================================================== */
+#commentsPanel {
+  position: fixed; top: 0; right: -360px; bottom: 0; width: 340px;
+  background: #141414;
+  border-left: 1px solid rgba(255,255,255,0.08);
+  z-index: 150; display: flex; flex-direction: column;
+  transition: right 0.3s cubic-bezier(.22,.68,0,1.1);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.5);
+}
+#commentsPanel.open { right: 0; }
+/* Отключаем transition ширины при drag (иначе лагает) */
+#commentsPanel.resizing { transition: right 0.3s cubic-bezier(.22,.68,0,1.1); }
+
+.cp-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  flex-shrink: 0;
+}
+.cp-title { font-size: 0.85rem; color: var(--paper); font-weight: 500; }
+.cp-count { font-size: 0.72rem; color: rgba(221,214,200,0.35); margin-left: 0.4rem; }
+.cp-close {
+  width: 28px; height: 28px; border-radius: var(--r-sm);
+  background: rgba(255,255,255,0.06); border: none;
+  color: rgba(221,214,200,0.5); font-size: 0.8rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+.cp-close:hover { background: rgba(255,255,255,0.1); color: var(--paper); }
+
+.cp-body { flex: 1; overflow-y: auto; padding: 0.8rem 1.2rem; }
+.cp-body::-webkit-scrollbar { width: 3px; }
+.cp-body::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 2px; }
+
+.comment-item {
+  display: flex; gap: 0.65rem; margin-bottom: 1.1rem;
+  padding-bottom: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.comment-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.c-ava {
+  width: 28px; height: 28px; border-radius: 50%;
+  overflow: hidden; flex-shrink: 0; background: var(--card2);
+  border: 1px solid rgba(255,255,255,0.07);
+}
+.c-ava img { width: 100%; height: 100%; object-fit: cover; }
+.c-body { flex: 1; }
+.c-user { font-size: 0.78rem; color: var(--paper); font-weight: 500; margin-bottom: 3px; }
+.c-text { font-size: 0.8rem; color: rgba(221,214,200,0.6); line-height: 1.65; }
+.c-meta { display: flex; align-items: center; gap: 0.7rem; margin-top: 0.4rem; }
+.c-date { font-size: 0.68rem; color: rgba(221,214,200,0.28); }
+.c-like {
+  display: inline-flex; align-items: center; gap: 0.28rem;
+  background: none; border: none; color: rgba(221,214,200,0.3);
+  font-size: 0.7rem; cursor: pointer; transition: color 0.18s;
+  font-family: 'Noto Sans JP', sans-serif; padding: 0;
+}
+.c-like:hover { color: rgba(221,214,200,0.7); }
+.c-like.liked { color: var(--red); }
+
+.cp-footer {
+  padding: 0.9rem 1.2rem;
+  border-top: 1px solid rgba(255,255,255,0.07); flex-shrink: 0;
+}
+/* Textarea + кнопка — вертикально */
+.cp-input-wrap { display: flex; flex-direction: column; gap: 8px; }
+.cp-input {
+  width: 100%; background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09); border-radius: var(--r-sm);
+  color: var(--paper); font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.82rem; font-weight: 300; padding: 0.6rem 0.85rem;
+  outline: none; resize: none; min-height: 64px; line-height: 1.55;
+  transition: border-color 0.2s;
+}
+.cp-input:focus { border-color: rgba(192,57,43,0.4); box-shadow: 0 0 0 2px rgba(192,57,43,0.08); }
+.cp-send {
+  align-self: flex-end;
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: var(--red); border: none; border-radius: var(--r-sm);
+  color: #fff; font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.75rem; letter-spacing: 0.07em; text-transform: uppercase;
+  padding: 0.46rem 1.1rem; cursor: pointer;
+  transition: background 0.18s, transform 0.15s;
+  box-shadow: 0 2px 8px rgba(192,57,43,0.35);
+}
+.cp-send:hover { background: var(--red-dim); transform: translateY(-1px); }
+
+/* ── Ресайз-хендл (правая граница панели) ── */
+#cpResizeHandle {
+  position: absolute; top: 0; left: 0; bottom: 0; width: 5px;
+  cursor: ew-resize; z-index: 10;
+  background: transparent;
+  transition: background 0.18s;
+}
+#cpResizeHandle:hover,
+#cpResizeHandle.dragging { background: rgba(192,57,43,0.35); }
+/* Иконка-подсказка на ручке */
+#cpResizeHandle::after {
+  content: '';
+  position: absolute; top: 50%; left: 1px; transform: translateY(-50%);
+  width: 3px; height: 32px; border-radius: 2px;
+  background: rgba(255,255,255,0.1);
+}
+#cpResizeHandle.dragging::after { background: rgba(192,57,43,0.7); }
+
+/* ── CHAPTER INTRO BLOCK ── */
+#chapterIntro {
+  position: relative; overflow: hidden;
+  margin-top: calc(var(--topbar-h) + 2px);
+  padding: 0;
+  background: var(--ink2);
+}
+
+/* Баннер-фон интро */
+.ci-banner {
+  position: relative; height: 260px; overflow: hidden;
+}
+.ci-banner img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 25%;
+  filter: brightness(0.22) saturate(0.6);
+  display: block;
+}
+.ci-banner::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(13,13,13,0.1) 0%, rgba(13,13,13,0.75) 70%, #111 100%),
+    linear-gradient(to right,  rgba(13,13,13,0.4) 0%, transparent 60%);
+}
+/* Иероглиф на фоне */
+.ci-kanji {
+  position: absolute; right: 4%; top: 50%; transform: translateY(-50%);
+  font-family: 'Sawarabi Mincho', serif; font-size: 9rem;
+  color: rgba(245,240,232,0.04); writing-mode: vertical-rl;
+  user-select: none; pointer-events: none; z-index: 1;
+}
+
+/* Контент поверх баннера */
+.ci-content {
+  position: relative; z-index: 2;
+  width: 720px; max-width: 100%; margin: 0 auto;
+  padding: 0 0 0;
+  margin-top: -120px; /* накладываем на баннер снизу */
+}
+
+.ci-cover-row {
+  display: flex; align-items: flex-end; gap: 1.5rem;
+  padding: 0 0 1.5rem;
+}
+.ci-cover {
+  width: 80px; flex-shrink: 0; aspect-ratio: 2/3;
+  border-radius: 8px; overflow: hidden;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.1);
+}
+.ci-cover img { width: 100%; height: 100%; object-fit: cover; }
+
+.ci-meta { flex: 1; padding-bottom: 0.2rem; }
+.ci-manga-title {
+  font-size: 0.72rem; color: rgba(221,214,200,0.45); margin-bottom: 0.3rem;
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.ci-manga-title a { color: rgba(221,214,200,0.45); text-decoration: none; transition: color 0.18s; }
+.ci-manga-title a:hover { color: var(--paper); }
+.ci-manga-title .sep { opacity: 0.3; }
+.ci-chapter-name {
+  font-family: 'Dela Gothic One', sans-serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.65rem);
+  color: var(--paper); line-height: 1.1; margin-bottom: 0.7rem;
+}
+
+/* Строка со статами */
+.ci-stats {
+  display: flex; align-items: center; gap: 0; flex-wrap: wrap;
+}
+.ci-stat {
+  display: flex; align-items: center; gap: 0.35rem;
+  font-size: 0.78rem; color: rgba(221,214,200,0.5);
+  padding: 0 0.75rem; border-right: 1px solid rgba(255,255,255,0.1);
+}
+.ci-stat:first-child { padding-left: 0; }
+.ci-stat:last-child  { border-right: none; }
+.ci-stat .fa { font-size: 0.7rem; }
+.ci-stat.red  { color: rgba(232,114,106,0.85); }
+.ci-stat.gold { color: var(--gold); }
+.ci-stat strong { color: var(--paper); font-weight: 500; }
+
+/* Звёздочки рейтинга */
+.ci-stars { display: flex; align-items: center; gap: 2px; }
+.ci-stars .fa-star     { color: var(--gold); font-size: 0.75rem; }
+.ci-stars .fa-star-half-stroke { color: var(--gold); font-size: 0.75rem; }
+.ci-stars .fa-star.empty { color: rgba(221,214,200,0.18); }
+
+/* Разделитель между интро и страницами */
+.ci-start-btn {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0.5rem; padding: 0.9rem 0 1.2rem;
+  font-size: 0.72rem; color: rgba(221,214,200,0.3);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  cursor: pointer; transition: color 0.18s;
+  border: none; background: transparent;
+  width: 100%; font-family: 'Noto Sans JP', sans-serif;
+}
+.ci-start-btn:hover { color: rgba(221,214,200,0.6); }
+.ci-start-btn .ci-arrow {
+  width: 1px; height: 28px; background: rgba(255,255,255,0.12);
+  position: relative; margin: 0 0.6rem;
+}
+.ci-start-btn .ci-arrow::after {
+  content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 4px solid transparent; border-right: 4px solid transparent;
+  border-top: 5px solid rgba(255,255,255,0.2);
+}
+
+/* Граница — конец интро, начало чтения */
+.ci-end-line {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(192,57,43,0.4), transparent);
+  margin-bottom: 0;
+}
+
+/* =====================================================
+   READING AREA
+   ===================================================== */
+#readingArea {
+  padding-top: 0;
+  padding-bottom: 100px;
+  transition: padding-right 0.3s cubic-bezier(.22,.68,0,1.1), background 0.3s;
+  min-height: 100vh;
+}
+#readingArea.panel-open { padding-right: var(--panel-w); }
+
+/* Обёртка страниц — центрирует и задаёт ширину */
+#pagesWrap {
+  margin: 0 auto;
+  width: var(--reader-width, 720px);
+  max-width: 100%;
+  transition: width 0.3s ease;
+}
+
+/* Страница манги */
+.manga-page {
+  display: block; width: 100%;
+  position: relative; background: #0f0f0f;
+  overflow: hidden;
+}
+.manga-page + .manga-page { margin-top: 3px; }
+.manga-page img {
+  display: block; width: 100%; height: auto;
+  object-fit: contain;
+  transition: opacity 0.3s;
+}
+.manga-page .page-num {
+  position: absolute; bottom: 8px; right: 10px;
+  font-size: 0.6rem; color: rgba(221,214,200,0.2);
+  letter-spacing: 0.08em; user-select: none;
+}
+
+/* Скелетон-лоадер страниц */
+.manga-page.loading img { opacity: 0; }
+.manga-page.loading::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, #151515 25%, #1e1e1e 50%, #151515 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+@keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+.manga-page.loaded::before { display: none; }
+
+/* =====================================================
+   BOTTOM NAV
+   ===================================================== */
+#bottomNav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  height: var(--botbar-h);
+  background: rgba(8,8,8,0.92);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border-top: 1px solid rgba(255,255,255,0.07);
+  display: flex; align-items: center; padding: 0 1rem; gap: 0.8rem;
+  z-index: 100;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+#bottomNav.hidden { transform: translateY(100%); opacity: 0; pointer-events: none; }
+
+.bn-nav { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
+.bn-btn {
+  display: flex; align-items: center; gap: 0.4rem;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.09);
+  color: rgba(221,214,200,0.6); border-radius: var(--r-sm);
+  padding: 0.45rem 0.9rem; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase;
+  cursor: pointer; transition: background 0.18s, color 0.18s;
+  font-family: 'Noto Sans JP', sans-serif; white-space: nowrap;
+}
+.bn-btn:hover { background: rgba(255,255,255,0.1); color: var(--paper); }
+.bn-btn:disabled { opacity: 0.3; cursor: default; }
+.bn-btn.primary {
+  background: rgba(192,57,43,0.14); border-color: rgba(192,57,43,0.28); color: #e8726a;
+}
+
+/* Глава-селектор по центру */
+.bn-chapter-picker {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+}
+.bn-chapter-select {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09);
+  color: var(--paper); font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.8rem; padding: 0.38rem 1.8rem 0.38rem 0.75rem;
+  border-radius: var(--r-sm); outline: none; appearance: none; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='rgba(221,214,200,0.3)' d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 0.5rem center; background-size: 14px;
+}
+.bn-chapter-select option { background: #1a1a1a; }
+.bn-pages-label { font-size: 0.72rem; color: rgba(221,214,200,0.28); white-space: nowrap; }
+
+/* =====================================================
+   КОНЕЦ ГЛАВЫ
+   ===================================================== */
+#chapterEnd {
+  display: none; text-align: center; padding: 3rem 2rem 5rem;
+  animation: fadeIn 0.4s ease;
+}
+#chapterEnd.visible { display: block; }
+.end-icon {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: rgba(192,57,43,0.1); border: 1px solid rgba(192,57,43,0.2);
+  color: var(--red); font-size: 1.3rem;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.2rem;
+}
+.end-title {
+  font-family: 'Dela Gothic One', sans-serif; font-size: 1.2rem;
+  color: var(--paper); margin-bottom: 0.4rem;
+}
+.end-sub { font-size: 0.82rem; color: rgba(221,214,200,0.4); margin-bottom: 1.8rem; line-height: 1.6; }
+.end-actions { display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap; }
+.btn-end-primary {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  background: var(--red); color: #fff; border: none; border-radius: var(--r-sm);
+  padding: 0.7rem 1.6rem; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase;
+  cursor: pointer; font-family: 'Noto Sans JP', sans-serif;
+  box-shadow: 0 4px 14px rgba(192,57,43,0.4); transition: background 0.18s, transform 0.15s;
+}
+.btn-end-primary:hover { background: var(--red-dim); transform: translateY(-1px); }
+.btn-end-ghost {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(221,214,200,0.65); border-radius: var(--r-sm);
+  padding: 0.7rem 1.3rem; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase;
+  cursor: pointer; font-family: 'Noto Sans JP', sans-serif; transition: background 0.18s;
+}
+.btn-end-ghost:hover { background: rgba(255,255,255,0.1); color: var(--paper); }
+
+/* Адаптация-бейдж */
+.adaptation-badge {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: rgba(26,155,138,0.1); border: 1px solid rgba(26,155,138,0.22);
+  color: #5dcfc2; border-radius: var(--r-pill);
+  font-size: 0.72rem; padding: 0.28rem 0.85rem; margin-bottom: 1.2rem;
+}
+
+/* =====================================================
+   TAP ZONES (мобильные зоны клика)
+   ===================================================== */
+.tap-zone {
+  position: fixed; top: var(--topbar-h); bottom: var(--botbar-h);
+  width: 20%; z-index: 50; cursor: pointer;
+  display: none; /* показываем только при скрытых панелях */
+}
+#tapLeft  { left: 0; }
+#tapRight { right: 0; }
+#tapCenter { left: 20%; right: 20%; cursor: default; }
+
+/* =====================================================
+   ОВЕРЛЕЙ (затемнение при открытых панелях)
+   ===================================================== */
+#overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+  z-index: 140; opacity: 0; pointer-events: none;
+  transition: opacity 0.3s;
+}
+#overlay.visible { opacity: 1; pointer-events: all; }
+
+/* =====================================================
+   КИНЕМАТОГРАФИЧЕСКИЙ РЕЖИМ
+   ===================================================== */
+body.cinema-mode #topBar,
+body.cinema-mode #bottomNav,
+body.cinema-mode #chapterProgress { opacity: 0; pointer-events: none; }
+body.cinema-mode #readingArea { padding-top: 0; }
+
+/* =====================================================
+   ТОСТ-УВЕДОМЛЕНИЕ
+   ===================================================== */
+#readerToast {
+  position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+  background: rgba(22,22,22,0.95); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1); border-radius: var(--r-pill);
+  padding: 0.55rem 1.2rem; font-size: 0.78rem; color: rgba(221,214,200,0.85);
+  display: flex; align-items: center; gap: 0.5rem;
+  z-index: 500; opacity: 0; pointer-events: none;
+  transition: opacity 0.22s ease;
+  white-space: nowrap;
+}
+#readerToast.show { opacity: 1; }
+#readerToast .fa { color: var(--red); }
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+@media (max-width: 768px) {
+  :root { --panel-w: 100vw; }
+  #pagesWrap { width: 100% !important; }
+  #commentsPanel { width: 100%; }
+  .bn-nav .bn-btn span { display: none; }
+  .bn-btn { padding: 0.45rem 0.65rem; }
+  .tap-zone { display: block; }
+  #settingsPanel { width: calc(100vw - 2rem); }
+}
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════ TOP BAR ══════════════════ -->
+<div id="topBar">
+
+  <div class="tb-left">
+    <a href="title.html" class="tb-back" title="Назад к произведению">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <span class="tb-brand">
+      <span class="tb-brand-dot"></span>
+      <span>Mang<span style="color:var(--red);">oria</span></span>
+    </span>
+    <div class="tb-sep"></div>
+  </div>
+
+  <div class="tb-center">
+    <div class="tb-title">Демонический Клинок</div>
+    <div class="tb-chapter">Глава 34 · Последний удар</div>
+  </div>
+
+  <div class="tb-right">
+    <!-- Закладка -->
+    <button class="tb-btn" id="btnBookmark" onclick="toggleBookmark()" title="Закладка">
+      <i class="fa-regular fa-bookmark"></i>
+    </button>
+    <!-- Настройки -->
+    <button class="tb-btn" id="btnSettings" onclick="toggleSettings()" title="Настройки чтения">
+      <i class="fa fa-sliders"></i>
+    </button>
+    <!-- Комментарии -->
+    <button class="tb-btn" id="btnComments" onclick="toggleComments()" title="Комментарии">
+      <i class="fa fa-comments"></i>
+    </button>
+    <!-- Полный экран / кинорежим -->
+    <button class="tb-btn" id="btnCinema" onclick="toggleCinema()" title="Кинематографический режим">
+      <i class="fa fa-expand"></i>
+    </button>
+  </div>
+
+</div>
+
+<!-- Прогресс-бар -->
+<div id="chapterProgress">
+  <div id="chapterProgressFill"></div>
+</div>
+
+<!-- ══════════════════ SETTINGS PANEL ══════════════════ -->
+<div id="settingsPanel">
+
+  <div class="sp-title">Настройки чтения</div>
+
+  <!-- Ширина области -->
+  <div class="sp-row">
+    <span class="sp-label">Ширина области</span>
+    <input type="range" class="sp-slider" id="widthSlider"
+      min="480" max="1080" value="720" step="40"
+      oninput="setReaderWidth(this.value)"/>
+    <span class="sp-slider-val" id="widthVal">720px</span>
+  </div>
+
+  <!-- Фон -->
+  <div class="sp-row">
+    <span class="sp-label">Фон страницы</span>
+    <div class="bg-options">
+      <div class="bg-option bg-dark active"  onclick="setBg('#0a0a0a', this)" title="Тёмный"></div>
+      <div class="bg-option bg-dim"          onclick="setBg('#1a1614', this)" title="Приглушённый"></div>
+      <div class="bg-option bg-sepia"        onclick="setBg('#2a2218', this)" title="Сепия"></div>
+      <div class="bg-option bg-light"        onclick="setBg('#e8e3d8', this)" title="Светлый"></div>
+    </div>
+  </div>
+
+  <!-- Режим чтения -->
+  <div class="sp-row">
+    <span class="sp-label">Режим</span>
+    <div class="sp-controls">
+      <button class="sp-btn active" onclick="setReadMode('vertical', this)">
+        <i class="fa fa-arrows-up-down fa-xs"></i> Вертикальный
+      </button>
+      <button class="sp-btn" onclick="setReadMode('double', this)">
+        <i class="fa fa-table-columns fa-xs"></i> Двойная
+      </button>
+    </div>
+  </div>
+
+  <!-- Отступы -->
+  <div class="sp-row">
+    <span class="sp-label">Промежуток между страницами</span>
+    <div class="sp-controls">
+      <button class="sp-btn active" onclick="setGap('none', this)">Нет</button>
+      <button class="sp-btn" onclick="setGap('small', this)">Малый</button>
+      <button class="sp-btn" onclick="setGap('large', this)">Большой</button>
+    </div>
+  </div>
+
+  <!-- Скрыть интерфейс -->
+  <div class="sp-row">
+    <span class="sp-label">Скрыть интерфейс при скролле</span>
+    <div class="sp-controls">
+      <button class="sp-btn active" id="autoHideBtn" onclick="toggleAutoHide(this)">
+        <i class="fa fa-check fa-xs"></i> Вкл
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════ COMMENTS PANEL ══════════════════ -->
+<div id="commentsPanel">
+
+  <!-- Ресайз-хендл слева -->
+  <div id="cpResizeHandle"></div>
+
+  <div class="cp-header">
+    <div>
+      <span class="cp-title">Комментарии</span>
+      <span class="cp-count">218</span>
+    </div>
+    <button class="cp-close" onclick="toggleComments()"><i class="fa fa-xmark"></i></button>
+  </div>
+
+  <div class="cp-body">
+    <div class="comment-item">
+      <div class="c-ava"><img src="https://api.dicebear.com/8.x/bottts/svg?seed=reader1&backgroundColor=0e1a1e" alt=""/></div>
+      <div class="c-body">
+        <div class="c-user">NightReader_92</div>
+        <div class="c-text">34 глава просто взорвала мозг. Финальная панель невероятна!</div>
+        <div class="c-meta">
+          <span class="c-date">2 июн.</span>
+          <button class="c-like" data-like onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i> 47</button>
+        </div>
+      </div>
+    </div>
+    <div class="comment-item">
+      <div class="c-ava"><img src="https://api.dicebear.com/8.x/bottts/svg?seed=user2&backgroundColor=120a1e" alt=""/></div>
+      <div class="c-body">
+        <div class="c-user">DarkInk</div>
+        <div class="c-text">Арт в этой главе просто на другом уровне. Особенно сцена с клинком.</div>
+        <div class="c-meta">
+          <span class="c-date">29 мая</span>
+          <button class="c-like" data-like onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i> 31</button>
+        </div>
+      </div>
+    </div>
+    <div class="comment-item">
+      <div class="c-ava"><img src="https://api.dicebear.com/8.x/bottts/svg?seed=user3&backgroundColor=061a17" alt=""/></div>
+      <div class="c-body">
+        <div class="c-user">ShadowFan_RU</div>
+        <div class="c-text">Когда следующая глава? Не могу ждать развязки!</div>
+        <div class="c-meta">
+          <span class="c-date">25 мая</span>
+          <button class="c-like" data-like onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i> 19</button>
+        </div>
+      </div>
+    </div>
+    <div class="comment-item">
+      <div class="c-ava"><img src="https://api.dicebear.com/8.x/bottts/svg?seed=user4&backgroundColor=1a1505" alt=""/></div>
+      <div class="c-body">
+        <div class="c-user">KaijuManga</div>
+        <div class="c-text">Психологическая составляющая на высоте. Кай окончательно теряет себя — и это чувствуется в каждой линии.</div>
+        <div class="c-meta">
+          <span class="c-date">20 мая</span>
+          <button class="c-like" data-like onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i> 25</button>
+        </div>
+      </div>
+    </div>
+    <div class="comment-item">
+      <div class="c-ava"><img src="https://api.dicebear.com/8.x/bottts/svg?seed=user5&backgroundColor=0a1030" alt=""/></div>
+      <div class="c-body">
+        <div class="c-user">InkDemon</div>
+        <div class="c-text">Переход между страницами 8 и 9 просто гениален. Автор — мастер.</div>
+        <div class="c-meta">
+          <span class="c-date">18 мая</span>
+          <button class="c-like" data-like onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i> 12</button>
+        </div>
+      </div>
+    </div>
+    <div class="comment-item">
+      <div class="c-ava"><img src="https://api.dicebear.com/8.x/bottts/svg?seed=user6&backgroundColor=1e1008" alt=""/></div>
+      <div class="c-body">
+        <div class="c-user">MangaHunter</div>
+        <div class="c-text">Это произведение должно быть адаптировано в аниме. Немедленно.</div>
+        <div class="c-meta">
+          <span class="c-date">15 мая</span>
+          <button class="c-like" data-like onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i> 88</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cp-footer">
+    <div class="cp-input-wrap">
+      <textarea class="cp-input" rows="2" placeholder="Написать комментарий…" id="commentInput"></textarea>
+      <button class="cp-send" onclick="sendComment()">
+        <i class="fa fa-paper-plane"></i> Отправить
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════ OVERLAY ══════════════════ -->
+<div id="overlay" onclick="closeAll()"></div>
+
+<!-- ══════════════════ CHAPTER INTRO ══════════════════ -->
+<div id="chapterIntro">
+  <!-- Баннер -->
+  <div class="ci-banner">
+    <img src="img/banner/banner_2.png" alt="Баннер"/>
+    <div class="ci-kanji">鬼刃</div>
+  </div>
+
+  <!-- Контент поверх -->
+  <div class="ci-content">
+    <div class="ci-cover-row">
+      <!-- Обложка -->
+      <div class="ci-cover">
+        <img src="img/posters/poster_2.webp" alt="Обложка"/>
+      </div>
+      <!-- Метаданные -->
+      <div class="ci-meta">
+        <div class="ci-manga-title">
+          <a href="title.html">Демонический Клинок</a>
+          <span class="sep">/</span>
+          <span>Том 3</span>
+        </div>
+        <div class="ci-chapter-name">Глава 34 · Последний удар</div>
+        <div class="ci-stats">
+          <!-- Рейтинг звёздочками -->
+          <div class="ci-stat gold">
+            <div class="ci-stars">
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <i class="fa-regular fa-star-half-stroke"></i>
+            </div>
+            <strong>4.8</strong>
+          </div>
+          <!-- Просмотры -->
+          <div class="ci-stat">
+            <i class="fa fa-eye"></i>
+            <strong>18 421</strong> просм.
+          </div>
+          <!-- Комментарии -->
+          <div class="ci-stat">
+            <i class="fa fa-comments"></i>
+            <strong>218</strong> комм.
+          </div>
+          <!-- Дата -->
+          <div class="ci-stat">
+            <i class="fa fa-calendar"></i>
+            2 июня 2025
+          </div>
+          <!-- Автор -->
+          <div class="ci-stat">
+            <i class="fa fa-user"></i>
+            <a href="profile.html" style="color:rgba(221,214,200,0.5);text-decoration:none;transition:color .18s;"
+               onmouseover="this.style.color='var(--paper)'" onmouseout="this.style.color='rgba(221,214,200,0.5)'">
+              ShadowBrush
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Кнопка «начать читать» — плавный якорь -->
+    <div class="ci-end-line"></div>
+    <button class="ci-start-btn" onclick="scrollToPages()">
+      Начать чтение
+      <span class="ci-arrow"></span>
+      Страница 1 из 14
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════ READING AREA ══════════════════ -->
+<div id="readingArea">
+  <div id="pagesWrap">
+
+    <!-- Страницы манги — реальные placeholder-изображения в стиле манги -->
+    <div class="manga-page loading" id="p1">
+      <img src="img/manga_demo/p1.png"
+        alt="Страница 1" onload="pageLoaded(this)" onerror="pageError(this)"/>
+      <span class="page-num">1</span>
+    </div>
+    <div class="manga-page loading" id="p2">
+      <img src="img/manga_demo/p2.png"
+        alt="Страница 2" onload="pageLoaded(this)" onerror="pageError(this)"/>
+      <span class="page-num">2</span>
+    </div>
+    <div class="manga-page loading" id="p3">
+      <img src="img/manga_demo/p3.png"
+        alt="Страница 3" onload="pageLoaded(this)" onerror="pageError(this)"/>
+      <span class="page-num">3</span>
+    </div>
+    <div class="manga-page loading" id="p4">
+      <img src="img/manga_demo/p4.png"
+        alt="Страница 4" onload="pageLoaded(this)" onerror="pageError(this)"/>
+      <span class="page-num">4</span>
+    </div>
+    <div class="manga-page loading" id="p5">
+      <img src="img/manga_demo/p5.png"
+        alt="Страница 5" onload="pageLoaded(this)" onerror="pageError(this)"/>
+      <span class="page-num">5</span>
+    </div>
+    <div class="manga-page loading" id="p6">
+      <img src="img/manga_demo/p6.png"
+        alt="Страница 6" onload="pageLoaded(this)" onerror="pageError(this)"/>
+      <span class="page-num">6</span>
+    </div>
+    <div class="manga-page loading" id="p7">
+      <img src="img/manga_demo/p7.png"
+        alt="Страница 7" onload="pageLoaded(this)" onerror="pageError(this)"/>
+      <span class="page-num">7</span>
+    </div>
+    <div class="manga-page loading" id="p8">
+      <img src="img/manga_demo/p8.png"
+        alt="Страница 8" onload="pageLoaded(this)" onerror="pageError(this)"/>
+      <span class="page-num">8</span>
+    </div>
+    <div class="manga-page loading" id="p9">
+      <img src="img/manga_demo/p9.png"
+        alt="Страница 9" onload="pageLoaded(this)" onerror="pageError(this)"/>
+      <span class="page-num">9</span>
+    </div>
+    <div class="manga-page loading" id="p10">
+      <img src="himg/manga_demo/p10.png"
+        alt="Страница 10" onload="pageLoaded(this)" onerror="pageError(this)"/>
+      <span class="page-num">10</span>
+    </div>
+    <div class="manga-page loading" id="p11">
+      <img src="img/manga_demo/p11.png"
+        alt="Страница 11" onload="pageLoaded(this)" onerror="pageError(this)"/>
+      <span class="page-num">11</span>
+    </div>
+    <div class="manga-page loading" id="p12">
+      <img src="img/manga_demo/p12.png"
+        alt="Страница 12" onload="pageLoaded(this)" onerror="pageError(this)"/>
+      <span class="page-num">12</span>
+    </div>
+    <div class="manga-page loading" id="p13">
+      <img src="img/manga_demo/p13.png
+        alt="Страница 13" onload="pageLoaded(this)" onerror="pageError(this)"/>
+      <span class="page-num">13</span>
+    </div>
+    <div class="manga-page loading" id="p14">
+      <img src="img/manga_demo/p14.png"
+        alt="Страница 14" onload="pageLoaded(this)" onerror="pageError(this)"/>
+      <span class="page-num">14</span>
+    </div>
+
+    <!-- КОНЕЦ ГЛАВЫ -->
+    <div id="chapterEnd">
+      <div class="end-icon"><i class="fa fa-flag-checkered"></i></div>
+      <div class="adaptation-badge">
+        <i class="fa fa-wand-magic-sparkles fa-xs"></i>
+        Есть адаптация в ранобэ
+      </div>
+      <h2 class="end-title">Конец главы 34</h2>
+      <p class="end-sub">
+        «Последний удар» прочитан.<br>
+        Следующая глава выйдет через <strong>14 дней</strong>.
+      </p>
+      <div class="end-actions">
+        <button class="btn-end-primary" onclick="nextChapter()">
+          <i class="fa fa-forward"></i> Следующая глава
+        </button>
+        <a href="title.html" class="btn-end-ghost">
+          <i class="fa fa-list"></i> Список глав
+        </a>
+        <button class="btn-end-ghost" onclick="toggleComments()">
+          <i class="fa fa-comments"></i> Комментарии
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Тап-зоны для мобильных -->
+<div class="tap-zone" id="tapLeft"   onclick="handleTap('prev')"></div>
+<div class="tap-zone" id="tapCenter" onclick="handleTap('toggle')"></div>
+<div class="tap-zone" id="tapRight"  onclick="handleTap('next')"></div>
+
+<!-- ══════════════════ BOTTOM NAV ══════════════════ -->
+<div id="bottomNav">
+
+  <div class="bn-nav">
+    <button class="bn-btn" id="btnPrevChapter" onclick="prevChapter()" title="Предыдущая глава">
+      <i class="fa fa-backward-step"></i>
+      <span>Пред.</span>
+    </button>
+  </div>
+
+  <div class="bn-chapter-picker">
+    <select class="bn-chapter-select" id="chapterSelect" onchange="changeChapter(this.value)">
+      <option value="31">Глава 31 · Цена силы</option>
+      <option value="32">Глава 32 · Врата Бездны</option>
+      <option value="33">Глава 33 · Тень владыки</option>
+      <option value="34" selected>Глава 34 · Последний удар</option>
+    </select>
+    <span class="bn-pages-label" id="pageLabel">1 / 14</span>
+  </div>
+
+  <div class="bn-nav">
+    <button class="bn-btn bn-btn primary" id="btnNextChapter" onclick="nextChapter()" title="Следующая глава">
+      <span>След.</span>
+      <i class="fa fa-forward-step"></i>
+    </button>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div id="readerToast"><i class="fa fa-bookmark"></i> <span id="toastText">Закладка добавлена</span></div>
+
+<script>
+/* =====================================================
+   СОСТОЯНИЕ
+   ===================================================== */
+var state = {
+  bookmarked:     false,
+  settingsOpen:   false,
+  commentsOpen:   false,
+  cinemaMode:     false,
+  autoHide:       true,
+  readerWidth:    720,
+  totalPages:     14,
+  currentPage:    1,
+  uiVisible:      true,
+};
+
+var scrollTimer = null;
+var lastScrollY = 0;
+
+/* =====================================================
+   ПРОГРЕСС И ТЕКУЩАЯ СТРАНИЦА
+   ===================================================== */
+function updateProgress() {
+  /* ── БАГ 1 ИСПРАВЛЕН: считаем прогресс по всему документу ──
+     scrollY + innerHeight = сколько страницы "прошли" снизу
+     document.body.scrollHeight = полная высота документа
+     Когда долистали в самый конец → числитель == знаменателю → 100%  */
+  var scrollBottom = window.scrollY + window.innerHeight;
+  var docHeight    = document.body.scrollHeight;
+  var pct = Math.min(100, Math.max(0, (scrollBottom / docHeight) * 100));
+
+  document.getElementById('chapterProgressFill').style.width = pct + '%';
+
+  /* Текущая страница по скроллу */
+  var pages = document.querySelectorAll('.manga-page');
+  var current = 1;
+  pages.forEach(function (p, i) {
+    var rect = p.getBoundingClientRect();
+    if (rect.top <= window.innerHeight * 0.6) current = i + 1;
+  });
+  state.currentPage = current;
+  document.getElementById('pageLabel').textContent = current + ' / ' + state.totalPages;
+
+  /* Показываем конец главы когда долистали до самого низа */
+  var end = document.getElementById('chapterEnd');
+  if (pct > 96) { end.classList.add('visible'); }
+  else          { end.classList.remove('visible'); }
+
+  /* Авто-скрытие UI при скролле */
+  if (state.autoHide) {
+    var delta = window.scrollY - lastScrollY;
+    if (delta > 40 && state.uiVisible) {
+      hideUI();
+    } else if (delta < -30 && !state.uiVisible) {
+      showUI();
+    }
+    lastScrollY = window.scrollY;
+  }
+}
+
+function hideUI() {
+  if (state.settingsOpen || state.commentsOpen) return;
+  state.uiVisible = false;
+  document.getElementById('topBar').classList.add('hidden');
+  document.getElementById('bottomNav').classList.add('hidden');
+  document.getElementById('chapterProgress').classList.add('hidden');
+}
+
+function showUI() {
+  state.uiVisible = true;
+  document.getElementById('topBar').classList.remove('hidden');
+  document.getElementById('bottomNav').classList.remove('hidden');
+  document.getElementById('chapterProgress').classList.remove('hidden');
+}
+
+window.addEventListener('scroll', updateProgress, { passive: true });
+
+/* =====================================================
+   ЗАКЛАДКА
+   ===================================================== */
+function toggleBookmark() {
+  state.bookmarked = !state.bookmarked;
+  var btn  = document.getElementById('btnBookmark');
+  var icon = btn.querySelector('i');
+  if (state.bookmarked) {
+    btn.classList.add('bookmarked');
+    icon.className = 'fa-solid fa-bookmark';
+    showToast('Закладка добавлена на стр. ' + state.currentPage);
+  } else {
+    btn.classList.remove('bookmarked');
+    icon.className = 'fa-regular fa-bookmark';
+    showToast('Закладка удалена');
+  }
+}
+
+/* =====================================================
+   НАСТРОЙКИ
+   ===================================================== */
+function toggleSettings() {
+  state.settingsOpen = !state.settingsOpen;
+  document.getElementById('settingsPanel').classList.toggle('open', state.settingsOpen);
+  document.getElementById('btnSettings').classList.toggle('active', state.settingsOpen);
+  if (state.settingsOpen) {
+    closeComments();
+    document.getElementById('overlay').classList.add('visible');
+    showUI();
+  } else {
+    document.getElementById('overlay').classList.remove('visible');
+  }
+}
+
+function setReaderWidth(val) {
+  state.readerWidth = parseInt(val);
+  document.getElementById('pagesWrap').style.width = val + 'px';
+  document.getElementById('widthVal').textContent  = val + 'px';
+}
+
+function setBg(color, el) {
+  document.getElementById('readingArea').style.background = color;
+  document.querySelectorAll('.bg-option').forEach(function (o) { o.classList.remove('active'); });
+  el.classList.add('active');
+  /* На светлом фоне меняем цвет номеров страниц */
+  var isLight = color === '#e8e3d8';
+  document.querySelectorAll('.page-num').forEach(function (n) {
+    n.style.color = isLight ? 'rgba(0,0,0,0.25)' : 'rgba(221,214,200,0.2)';
+  });
+}
+
+function setReadMode(mode, btn) {
+  document.querySelectorAll('.sp-btn').forEach(function (b) {
+    if (b.onclick && b.onclick.toString().includes('setReadMode')) b.classList.remove('active');
+  });
+  btn.classList.add('active');
+  showToast(mode === 'double' ? 'Двойная страница (скоро)' : 'Вертикальный режим');
+}
+
+function setGap(size, btn) {
+  var map = { none: '3px', small: '12px', large: '32px' };
+  document.querySelectorAll('.manga-page + .manga-page').forEach(function (p) {
+    p.style.marginTop = map[size] || '3px';
+  });
+  document.querySelectorAll('.sp-btn').forEach(function (b) {
+    if (b.onclick && b.onclick.toString().includes('setGap')) b.classList.remove('active');
+  });
+  btn.classList.add('active');
+}
+
+function toggleAutoHide(btn) {
+  state.autoHide = !state.autoHide;
+  btn.classList.toggle('active', state.autoHide);
+  btn.innerHTML = state.autoHide
+    ? '<i class="fa fa-check fa-xs"></i> Вкл'
+    : 'Выкл';
+  if (!state.autoHide) showUI();
+}
+
+/* =====================================================
+   КОММЕНТАРИИ
+   ===================================================== */
+function toggleComments() {
+  if (state.commentsOpen) {
+    closeComments();
+    document.getElementById('overlay').classList.remove('visible');
+  } else {
+    state.commentsOpen = true;
+    var panel = document.getElementById('commentsPanel');
+    /* Убеждаемся что inline right сброшен перед открытием */
+    panel.style.right = '';
+    panel.classList.add('open');
+    document.getElementById('btnComments').classList.add('active');
+    document.getElementById('readingArea').classList.add('panel-open');
+    closeSettings();
+    document.getElementById('overlay').classList.add('visible');
+    showUI();
+  }
+}
+
+function closeComments() {
+  state.commentsOpen = false;
+  var panel = document.getElementById('commentsPanel');
+
+  /* ── БАГ 2 ИСПРАВЛЕН ──
+     1. Запоминаем текущую ширину (может быть изменена ресайзом).
+     2. Выставляем right = -currentWidth чтобы панель ПОЛНОСТЬЮ ушла за край.
+     3. После завершения transition (300ms) сбрасываем inline-стили —
+        панель возвращается в исходное CSS-состояние (width:340px, right:-360px). */
+  var currentW = panel.offsetWidth;
+  panel.style.right = '-' + (currentW + 10) + 'px';
+
+  setTimeout(function () {
+    panel.style.width = '';
+    panel.style.right = '';
+    document.documentElement.style.setProperty('--panel-w', '340px');
+  }, 320);
+
+  panel.classList.remove('open');
+  document.getElementById('btnComments').classList.remove('active');
+  document.getElementById('readingArea').classList.remove('panel-open');
+}
+
+function closeSettings() {
+  state.settingsOpen = false;
+  document.getElementById('settingsPanel').classList.remove('open');
+  document.getElementById('btnSettings').classList.remove('active');
+}
+
+function closeAll() {
+  closeSettings();
+  closeComments();
+  document.getElementById('overlay').classList.remove('visible');
+}
+
+function sendComment() {
+  var inp = document.getElementById('commentInput');
+  if (!inp.value.trim()) return;
+  inp.value = '';
+  showToast('Комментарий отправлен');
+}
+
+/* =====================================================
+   КИНОРЕЖИМ
+   ===================================================== */
+function toggleCinema() {
+  state.cinemaMode = !state.cinemaMode;
+  document.body.classList.toggle('cinema-mode', state.cinemaMode);
+  var btn  = document.getElementById('btnCinema');
+  var icon = btn.querySelector('i');
+  icon.className = state.cinemaMode ? 'fa fa-compress' : 'fa fa-expand';
+  btn.classList.toggle('active', state.cinemaMode);
+  showToast(state.cinemaMode ? 'Кинорежим включён · Нажмите Esc для выхода' : 'Кинорежим выключен');
+}
+
+/* =====================================================
+   ЛАЙКИ КОММЕНТАРИЕВ
+   ===================================================== */
+function toggleLike(btn) {
+  var on = btn.classList.toggle('liked');
+  var n  = parseInt(btn.textContent.replace(/\D/g, '')) || 0;
+  var icon = btn.querySelector('i');
+  icon.className = on ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
+  btn.innerHTML  = icon.outerHTML + ' ' + (on ? n + 1 : Math.max(0, n - 1));
+}
+
+/* =====================================================
+   НАВИГАЦИЯ ПО ГЛАВАМ
+   ===================================================== */
+function prevChapter() {
+  showToast('Переход к главе 33…');
+  setTimeout(function () { window.scrollTo({ top: 0, behavior: 'smooth' }); }, 300);
+}
+
+function nextChapter() {
+  showToast('Следующая глава ещё не вышла');
+}
+
+function changeChapter(val) {
+  showToast('Переход к главе ' + val + '…');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* =====================================================
+   ЗАГРУЗКА СТРАНИЦ
+   ===================================================== */
+function pageLoaded(img) {
+  img.closest('.manga-page').classList.remove('loading');
+  img.closest('.manga-page').classList.add('loaded');
+}
+function pageError(img) {
+  img.closest('.manga-page').classList.remove('loading');
+  img.closest('.manga-page').classList.add('loaded');
+  img.style.minHeight = '300px';
+  img.style.background = '#151515';
+  img.alt = 'Страница не загрузилась';
+}
+
+/* =====================================================
+   ТОСТ
+   ===================================================== */
+function showToast(msg, icon) {
+  var t   = document.getElementById('readerToast');
+  var txt = document.getElementById('toastText');
+  var ico = t.querySelector('.fa');
+  txt.textContent = msg;
+  if (icon) ico.className = 'fa ' + icon;
+  t.classList.add('show');
+  clearTimeout(window._toastT);
+  window._toastT = setTimeout(function () { t.classList.remove('show'); }, 2500);
+}
+
+/* =====================================================
+   TAP ZONES (мобильные)
+   ===================================================== */
+function handleTap(dir) {
+  if (dir === 'toggle') {
+    if (state.uiVisible) hideUI(); else showUI();
+  } else {
+    showToast(dir === 'prev' ? 'Предыдущая страница' : 'Следующая страница');
+  }
+}
+
+/* =====================================================
+   КЛАВИАТУРА
+   ===================================================== */
+document.addEventListener('keydown', function (e) {
+  switch (e.key) {
+    case 'Escape':
+      if (state.cinemaMode) { toggleCinema(); break; }
+      closeAll(); break;
+    case 'f': case 'F':
+      toggleCinema(); break;
+    case 'b': case 'B':
+      toggleBookmark(); break;
+    case 'c': case 'C':
+      if (!e.ctrlKey) toggleComments(); break;
+    case 's': case 'S':
+      if (!e.ctrlKey) toggleSettings(); break;
+    case 'ArrowLeft':
+      window.scrollBy({ top: -window.innerHeight * 0.8, behavior: 'smooth' }); break;
+    case 'ArrowRight':
+    case ' ':
+      if (e.key === ' ') e.preventDefault();
+      window.scrollBy({ top: window.innerHeight * 0.8, behavior: 'smooth' }); break;
+  }
+});
+
+/* =====================================================
+   SCROLL TO PAGES (интро → читалка)
+   ===================================================== */
+function scrollToPages() {
+  var ra = document.getElementById('readingArea');
+  if (ra) ra.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* =====================================================
+   RESIZE COMMENTS PANEL
+   ===================================================== */
+(function () {
+  var handle  = document.getElementById('cpResizeHandle');
+  var panel   = document.getElementById('commentsPanel');
+  var MIN_W   = 280;
+  var MAX_W   = 600;
+  var dragging = false;
+  var startX, startW;
+
+  handle.addEventListener('mousedown', function (e) {
+    dragging = true;
+    startX   = e.clientX;
+    startW   = panel.offsetWidth;
+    handle.classList.add('dragging');
+    document.body.style.userSelect   = 'none';
+    document.body.style.cursor       = 'ew-resize';
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', function (e) {
+    if (!dragging) return;
+    var delta = startX - e.clientX;      /* тянем влево → панель шире */
+    var newW  = Math.min(MAX_W, Math.max(MIN_W, startW + delta));
+    panel.style.width = newW + 'px';
+    /* Обновляем CSS-переменную для отступа readingArea */
+    document.documentElement.style.setProperty('--panel-w', newW + 'px');
+  });
+
+  document.addEventListener('mouseup', function () {
+    if (!dragging) return;
+    dragging = false;
+    handle.classList.remove('dragging');
+    document.body.style.userSelect = '';
+    document.body.style.cursor     = '';
+  });
+
+  /* Touch-поддержка */
+  handle.addEventListener('touchstart', function (e) {
+    dragging = true;
+    startX   = e.touches[0].clientX;
+    startW   = panel.offsetWidth;
+    handle.classList.add('dragging');
+    e.preventDefault();
+  }, { passive: false });
+
+  document.addEventListener('touchmove', function (e) {
+    if (!dragging) return;
+    var delta = startX - e.touches[0].clientX;
+    var newW  = Math.min(MAX_W, Math.max(MIN_W, startW + delta));
+    panel.style.width = newW + 'px';
+    document.documentElement.style.setProperty('--panel-w', newW + 'px');
+  }, { passive: true });
+
+  document.addEventListener('touchend', function () {
+    dragging = false;
+    handle.classList.remove('dragging');
+  });
+})();
+document.addEventListener('DOMContentLoaded', function () {
+  /* Восстановить позицию чтения из localStorage */
+  var saved = localStorage.getItem('mangoria_progress_ch34');
+  if (saved) {
+    setTimeout(function () {
+      window.scrollTo({ top: parseInt(saved), behavior: 'smooth' });
+      showToast('Позиция восстановлена', 'fa-bookmark');
+    }, 400);
+  }
+
+  /* Сохранять позицию каждые 5 секунд */
+  setInterval(function () {
+    localStorage.setItem('mangoria_progress_ch34', String(Math.round(window.scrollY)));
+  }, 5000);
+
+  updateProgress();
+});
+</script>
+</body>
+</html>

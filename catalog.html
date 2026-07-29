@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="ru" id="htmlRoot">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mangoria — Каталог</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&family=Dela+Gothic+One&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/main.css"/>
+  <style>
+/* =====================================================
+   Catalog page — inline styles
+   ===================================================== */
+
+/* ── HERO ── */
+.catalog-hero {
+  position: relative; overflow: hidden;
+  padding: 3rem 0 2.5rem;
+  background: var(--ink2);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.catalog-hero-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 100% at 100% 50%, rgba(192,57,43,0.08) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 80%  at 0%   50%, rgba(26,155,138,0.05) 0%, transparent 60%);
+}
+.catalog-hero-kanji {
+  position: absolute; right: 3%; top: 50%; transform: translateY(-50%);
+  font-family: 'Sawarabi Mincho', serif; font-size: clamp(5rem,12vw,11rem);
+  color: rgba(245,240,232,0.03); writing-mode: vertical-rl;
+  pointer-events: none; user-select: none;
+}
+.catalog-hero-content { position: relative; z-index: 2; }
+.catalog-eyebrow {
+  font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 0.7rem;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.catalog-eyebrow::before { content:''; width:20px; height:1px; background:var(--red); }
+.catalog-title {
+  font-family: 'Dela Gothic One', sans-serif;
+  font-size: clamp(1.7rem, 3.5vw, 2.6rem);
+  color: var(--paper); margin-bottom: 0.4rem;
+}
+.catalog-sub { font-size: 0.85rem; color: rgba(224,216,204,0.42); }
+
+/* Счётчик и сортировка в hero */
+.catalog-meta-row {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 0.8rem; margin-top: 1.5rem;
+}
+.catalog-count { font-size: 0.8rem; color: rgba(224,216,204,0.45); }
+.catalog-count strong { color: var(--paper); font-weight: 500; }
+
+/* ── Сортировка ── */
+.sort-row { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.sort-label { font-size: 0.7rem; color: rgba(224,216,204,0.32); letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+.sort-btn {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  padding: 0.32rem 0.82rem; border-radius: var(--r-pill);
+  font-size: 0.74rem; letter-spacing: 0.04em;
+  background: rgba(255,255,255,0.06); border: none;
+  color: rgba(224,216,204,0.5); cursor: pointer;
+  transition: all 0.18s; font-family: 'Noto Sans JP', sans-serif;
+}
+.sort-btn:hover { background: rgba(255,255,255,0.1); color: var(--paper); }
+.sort-btn.active { background: rgba(192,57,43,0.18); color: #e8726a; }
+.sort-btn .fa { font-size: 0.65rem; }
+
+/* ── VIEW TOGGLE ── */
+.view-toggle { display: flex; background: rgba(255,255,255,0.04); border-radius: var(--r-sm); padding: 2px; gap: 2px; }
+.view-btn {
+  width: 32px; height: 30px; border-radius: 7px; border: none; background: transparent;
+  color: rgba(224,216,204,0.4); font-size: 0.82rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: all 0.18s;
+}
+.view-btn.active { background: var(--card-bg); color: var(--paper); box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+
+/* ── LAYOUT ── */
+.catalog-body { padding: 2rem 0 5rem; }
+.catalog-layout { display: grid; grid-template-columns: 260px 1fr; gap: 2rem; align-items: start; }
+
+/* =====================================================
+   FILTER SIDEBAR
+   ===================================================== */
+.filter-sidebar { position: sticky; top: 82px; }
+.filter-card {
+  background: var(--card-bg); border-radius: var(--r);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45); overflow: hidden;
+}
+
+/* Шапка сайдбара */
+.filter-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 1.2rem; border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.filter-header-title {
+  font-size: 0.63rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(224,216,204,0.35); display: flex; align-items: center; gap: 0.45rem;
+}
+.filter-header-title .fa { color: var(--red); }
+.filter-reset {
+  font-size: 0.7rem; color: rgba(192,57,43,0.7); background: none; border: none;
+  cursor: pointer; padding: 0; transition: color 0.18s;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+.filter-reset:hover { color: var(--red); }
+
+/* Секция фильтра */
+.filter-section { padding: 1rem 1.2rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.filter-section:last-child { border-bottom: none; padding-bottom: 1.2rem; }
+.filter-section-title {
+  font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(224,216,204,0.28); margin-bottom: 0.8rem;
+  display: flex; align-items: center; justify-content: space-between; cursor: pointer;
+}
+.filter-section-title .fa { font-size: 0.55rem; transition: transform 0.2s; opacity: 0.5; }
+.filter-section-title.collapsed .fa { transform: rotate(-90deg); }
+.filter-section-body { /* видим по умолчанию */ }
+.filter-section-body.collapsed { display: none; }
+
+/* Тип контента — два тайла */
+.type-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.type-tile {
+  display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
+  padding: 0.75rem 0.5rem; border-radius: var(--r-sm);
+  background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.08);
+  cursor: pointer; transition: all 0.18s; text-align: center;
+}
+.type-tile:hover { background: rgba(255,255,255,0.06); }
+.type-tile.active-manga  { background: rgba(192,57,43,0.12); border-color: rgba(192,57,43,0.35); }
+.type-tile.active-ranobe { background: rgba(26,155,138,0.10); border-color: rgba(26,155,138,0.3); }
+.type-tile-icon { font-size: 1.15rem; }
+.type-tile.active-manga  .type-tile-icon { color: #e8726a; }
+.type-tile.active-ranobe .type-tile-icon { color: #5dcfc2; }
+.type-tile-label { font-size: 0.7rem; color: rgba(224,216,204,0.5); letter-spacing: 0.04em; }
+.type-tile.active-manga  .type-tile-label { color: #e8726a; }
+.type-tile.active-ranobe .type-tile-label { color: #5dcfc2; }
+
+/* Чекбокс-фильтры */
+.filter-checks { display: flex; flex-direction: column; gap: 4px; }
+.filter-check {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.45rem 0.5rem; border-radius: var(--r-sm);
+  cursor: pointer; transition: background 0.15s;
+}
+.filter-check:hover { background: rgba(255,255,255,0.04); }
+.filter-check input { display: none; }
+.fcheck-box {
+  width: 16px; height: 16px; border-radius: 4px; flex-shrink: 0;
+  border: 1.5px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.04);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.18s;
+}
+.filter-check input:checked + .fcheck-box { background: var(--red); border-color: var(--red); }
+.fcheck-box .fa { color: #fff; font-size: 0.5rem; display: none; }
+.filter-check input:checked + .fcheck-box .fa { display: block; }
+.fcheck-label {
+  font-size: 0.8rem; color: rgba(224,216,204,0.58); flex: 1;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: color 0.18s;
+}
+.filter-check input:checked ~ .fcheck-label { color: var(--paper); }
+.fcheck-count {
+  font-size: 0.65rem; color: rgba(224,216,204,0.25);
+  background: rgba(255,255,255,0.05); padding: 0.05rem 0.45rem;
+  border-radius: var(--r-pill);
+}
+
+/* Рейтинг — звёзды */
+.rating-options { display: flex; flex-direction: column; gap: 4px; }
+.rating-opt {
+  display: flex; align-items: center; gap: 0.55rem;
+  padding: 0.42rem 0.5rem; border-radius: var(--r-sm);
+  cursor: pointer; transition: background 0.15s;
+}
+.rating-opt:hover { background: rgba(255,255,255,0.04); }
+.rating-opt input { display: none; }
+.rating-stars { display: flex; gap: 2px; }
+.rating-stars .fa-star         { font-size: 0.72rem; color: var(--gold); }
+.rating-stars .fa-star.empty   { color: rgba(224,216,204,0.15); }
+.rating-label { font-size: 0.76rem; color: rgba(224,216,204,0.5); }
+.rating-opt input:checked ~ .rating-label { color: var(--paper); }
+.rating-opt input:checked ~ .rating-stars .fa-star { color: var(--gold); }
+
+/* Возраст — пилюли */
+.age-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.age-pill {
+  display: inline-flex; align-items: center;
+  padding: 0.28rem 0.75rem; border-radius: var(--r-pill);
+  font-size: 0.72rem; background: rgba(255,255,255,0.06); border: none;
+  color: rgba(224,216,204,0.5); cursor: pointer; transition: all 0.18s;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+.age-pill:hover { background: rgba(255,255,255,0.1); color: var(--paper); }
+.age-pill.active { background: rgba(224,94,80,0.2); color: #e07060; }
+
+/* Слайдер (для будущего year range) */
+.filter-search {
+  width: 100%; background: rgba(255,255,255,0.05); border: none;
+  border-radius: var(--r-sm); color: var(--paper); font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.82rem; padding: 0.5rem 0.8rem 0.5rem 2rem; outline: none;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.filter-search:focus { background: rgba(255,255,255,0.08); box-shadow: 0 0 0 2px rgba(192,57,43,0.3); }
+.filter-search-wrap { position: relative; }
+.filter-search-icon {
+  position: absolute; left: 0.7rem; top: 50%; transform: translateY(-50%);
+  color: rgba(224,216,204,0.28); font-size: 0.72rem; pointer-events: none;
+}
+
+/* Активные теги фильтра */
+.active-filters {
+  display: flex; flex-wrap: wrap; gap: 5px;
+  padding: 0.8rem 1.2rem 0; min-height: 0;
+}
+.active-filter-tag {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  background: rgba(192,57,43,0.16); border: none;
+  border-radius: var(--r-pill); padding: 0.2rem 0.65rem;
+  font-size: 0.7rem; color: #e8726a; cursor: pointer;
+  transition: background 0.15s;
+}
+.active-filter-tag:hover { background: rgba(192,57,43,0.22); }
+.active-filter-tag .fa { font-size: 0.55rem; }
+
+/* =====================================================
+   CARDS GRID
+   ===================================================== */
+.catalog-main { min-width: 0; }
+
+/* Грид — 4 колонки по умолчанию */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.6rem 1.1rem;
+  transition: grid-template-columns 0.2s;
+}
+.cards-grid.view-list {
+  grid-template-columns: 1fr;
+  gap: 0.7rem;
+}
+/* Карточки в последней колонке — тултип выезжает влево, чтобы не обрезался краем экрана */
+.cards-grid:not(.view-list) .c-card:nth-child(4n) .c-tooltip {
+  left: auto; right: calc(100% + 10px);
+}
+.cards-grid:not(.view-list) .c-card:nth-child(4n) .c-tooltip::before {
+  left: auto; right: -6px;
+  border-left: none; border-bottom: none;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+@media (max-width: 1100px) {
+  .cards-grid:not(.view-list) .c-card:nth-child(4n) .c-tooltip { left: calc(100% + 10px); right: auto; }
+  .cards-grid:not(.view-list) .c-card:nth-child(4n) .c-tooltip::before { left: -6px; right: auto; border-left: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); border-right: none; border-top: none; }
+  .cards-grid:not(.view-list) .c-card:nth-child(3n) .c-tooltip { left: auto; right: calc(100% + 10px); }
+  .cards-grid:not(.view-list) .c-card:nth-child(3n) .c-tooltip::before { left: auto; right: -6px; border-left: none; border-bottom: none; border-right: 1px solid rgba(255,255,255,0.1); border-top: 1px solid rgba(255,255,255,0.1); }
+}
+@media (max-width: 640px) {
+  .cards-grid:not(.view-list) .c-card .c-tooltip { left: 50%; right: auto; top: auto; bottom: calc(100% + 10px); transform: translateX(-50%); width: 190px; }
+  .cards-grid:not(.view-list) .c-card .c-tooltip::before { display: none; }
+}
+
+/* ── Карточка (grid-режим) ── */
+.c-card {
+  background: transparent; border-radius: 8px;
+  overflow: visible; cursor: pointer;
+  transition: transform 0.25s;
+  text-decoration: none; display: flex; flex-direction: column;
+  position: relative;
+}
+.c-card:hover { transform: translateY(-4px); z-index: 5; }
+
+/* ── Обложка — верхние углы скруглены, нижние ПРЯМЫЕ (продолжаются в плашку) ── */
+.c-cover {
+  position: relative; aspect-ratio: 2/3; overflow: hidden;
+  background: linear-gradient(135deg, #181818, #1e1e1e);
+  flex-shrink: 0;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  transition: box-shadow 0.25s;
+}
+.c-card:hover .c-cover { box-shadow: 0 16px 40px rgba(0,0,0,0.65); }
+.c-cover img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
+.c-card:hover .c-cover img { transform: scale(1.05); }
+.c-cover-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 38%); pointer-events: none; }
+
+/* Бейджи — верхний край */
+.c-badge-type {
+  position: absolute; top: 0.5rem; left: 0.5rem;
+  font-size: 0.56rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.14rem 0.5rem; border-radius: 5px;
+  backdrop-filter: blur(3px);
+}
+.c-badge-type.manga  { background: rgba(192,57,43,0.85); color: #fff; }
+.c-badge-type.ranobe { background: rgba(26,155,138,0.85); color: #fff; }
+
+.c-badge-new {
+  position: absolute; top: 0.5rem; right: 0.5rem;
+  font-size: 0.54rem; font-weight: 700; letter-spacing: 0.06em;
+  padding: 0.13rem 0.45rem; border-radius: 5px;
+  background: var(--gold); color: #0d0d0d;
+}
+
+/* Главы — левый нижний угол обложки */
+.c-chapters {
+  display: block;
+  position: absolute; bottom: 0.5rem; left: 0.5rem;
+  font-size: 0.6rem; font-weight: 500; color: rgba(245,240,232,0.85);
+  background: rgba(0,0,0,0.55); backdrop-filter: blur(3px);
+  padding: 0.14rem 0.5rem; border-radius: 5px;
+  display: flex; align-items: center; gap: 0.3rem;
+}
+.c-chapters .fa { font-size: 0.55rem; opacity: 0.7; }
+
+/* Скрыты на постере — переехали в тултип */
+.c-badge-age, .c-rating { display: none; }
+
+/* ── Title bar — визуально продолжение обложки: верхние углы прямые, нижние скруглены ── */
+.c-title-bar {
+  margin-top: 0; /* без зазора — единая форма с обложкой */
+  background: var(--card-bg);
+  border-radius: 0 0 8px 8px;
+  padding: 0.55rem 0.65rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  transition: background 0.2s;
+}
+.c-card:hover .c-title-bar { background: #1c1414; }
+.c-title {
+  font-family: 'Dela Gothic One', sans-serif; font-size: 0.78rem;
+  color: var(--paper); line-height: 1.3;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+/* =====================================================
+   HOVER TOOLTIP — выезжает поверх соседних карточек
+   ===================================================== */
+.c-tooltip {
+  position: absolute; top: 0; left: calc(100% + 10px);
+  width: 210px; z-index: 50;
+  background: #1c1c1c; /* чуть светлее карточек — контраст без рамки */
+  border-radius: var(--r-sm);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.75);
+  padding: 0.9rem 1rem;
+  opacity: 0; pointer-events: none;
+  transform: translateX(-6px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.c-card:hover .c-tooltip {
+  opacity: 1; pointer-events: auto; transform: translateX(0);
+}
+/* Стрелочка-указатель слева — тот же цвет фона, без линий-границ */
+.c-tooltip::before {
+  content: '';
+  position: absolute; top: 16px; left: -6px;
+  width: 11px; height: 11px; background: #1c1c1c;
+  transform: rotate(45deg);
+}
+
+.ctt-title {
+  font-family: 'Dela Gothic One', sans-serif; font-size: 0.86rem;
+  color: var(--paper); line-height: 1.3; margin-bottom: 0.35rem;
+}
+.ctt-row {
+  display: flex; align-items: center; gap: 0.4rem;
+  margin-bottom: 0.5rem; flex-wrap: wrap;
+}
+.ctt-rating {
+  display: flex; align-items: center; gap: 0.25rem;
+  font-size: 0.74rem; color: var(--gold); font-weight: 500;
+}
+.ctt-status {
+  font-size: 0.58rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 0.12rem 0.5rem; border-radius: var(--r-pill);
+}
+.ctt-status.ongoing   { background: rgba(26,155,138,0.16); color: var(--teal); }
+.ctt-status.completed { background: rgba(212,160,23,0.16); color: var(--gold); }
+.ctt-status.frozen    { background: rgba(130,130,150,0.14); color: #9898b0; }
+.ctt-age {
+  font-size: 0.6rem; font-weight: 600;
+  padding: 0.12rem 0.45rem; border-radius: var(--r-pill);
+  background: rgba(255,255,255,0.09); color: rgba(224,216,204,0.6);
+}
+
+.ctt-genres { font-size: 0.72rem; color: rgba(224,216,204,0.5); line-height: 1.6; margin-bottom: 0.55rem; }
+
+.ctt-stats { display: flex; flex-direction: column; gap: 0.32rem; margin-bottom: 0.65rem; }
+.ctt-stat-row {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 0.7rem; color: rgba(224,216,204,0.4);
+}
+.ctt-stat-row .fa { color: rgba(192,57,43,0.6); font-size: 0.65rem; margin-right: 0.35rem; }
+.ctt-stat-row strong { color: rgba(224,216,204,0.75); font-weight: 500; }
+
+/* Разделитель без рамки — через тон фона */
+.ctt-author {
+  display: flex; align-items: center; gap: 0.45rem;
+  padding-top: 0.6rem; margin-top: 0.1rem;
+  background: linear-gradient(to bottom, transparent, transparent);
+  position: relative;
+}
+.ctt-author::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: rgba(255,255,255,0.07);
+}
+.ctt-author-ava {
+  width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg,#1e0e0e,#2d1515);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem; color: rgba(192,57,43,0.5);
+  overflow: hidden;
+}
+.ctt-author-ava img { width: 100%; height: 100%; object-fit: cover; }
+.ctt-author-name { font-size: 0.74rem; color: rgba(224,216,204,0.7); }
+
+/* ── Карточка LIST-режим ── */
+.cards-grid.view-list .c-card { flex-direction: row; align-items: stretch; height: 76px; }
+.cards-grid.view-list .c-cover { width: 54px; height: 76px; aspect-ratio: auto; flex-shrink: 0; border-radius: 6px; }
+.cards-grid.view-list .c-title-bar {
+  flex: 1; margin: 0; margin-left: 0.9rem;
+  display: flex; align-items: center; gap: 0.9rem;
+  background: rgba(255,255,255,0.03);
+  border-radius: 7px; box-shadow: none;
+}
+.cards-grid.view-list .c-title { font-size: 0.86rem; -webkit-line-clamp: 1; flex: 1; }
+.cards-grid.view-list .c-badge-new,
+.cards-grid.view-list .c-chapters { display: none; }
+.cards-grid.view-list .c-tooltip { left: auto; right: 0; top: calc(100% + 8px); width: 100%; }
+.cards-grid.view-list .c-tooltip::before { display: none; }
+
+/* ── Пустое состояние ── */
+.catalog-empty {
+  text-align: center; padding: 5rem 2rem; display: none;
+  animation: fadeUp 0.3s ease;
+}
+.catalog-empty.visible { display: block; }
+.empty-icon {
+  font-size: 2.5rem; color: rgba(224,216,204,0.12); margin-bottom: 1rem;
+}
+.empty-title {
+  font-family: 'Dela Gothic One', sans-serif;
+  font-size: 1.1rem; color: rgba(224,216,204,0.45); margin-bottom: 0.5rem;
+}
+.empty-sub { font-size: 0.82rem; color: rgba(224,216,204,0.28); margin-bottom: 1.2rem; line-height: 1.65; }
+.btn-empty-reset {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: rgba(192,57,43,0.16); border: none;
+  color: #e8726a; border-radius: var(--r-sm); padding: 0.6rem 1.3rem;
+  font-size: 0.8rem; letter-spacing: 0.07em; text-transform: uppercase;
+  cursor: pointer; font-family: 'Noto Sans JP', sans-serif; transition: background 0.18s;
+}
+.btn-empty-reset:hover { background: rgba(192,57,43,0.26); }
+
+/* Пагинация */
+.catalog-pagination {
+  display: flex; justify-content: center; align-items: center;
+  gap: 5px; margin-top: 2.5rem;
+}
+.pg-btn {
+  min-width: 36px; height: 36px; border-radius: var(--r-sm);
+  background: rgba(255,255,255,0.06); border: none;
+  color: rgba(224,216,204,0.5); font-size: 0.82rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; padding: 0 0.6rem;
+  transition: all 0.15s; font-family: 'Noto Sans JP', sans-serif;
+}
+.pg-btn:hover { background: rgba(255,255,255,0.1); color: var(--paper); }
+.pg-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
+.pg-btn.dots   { background: transparent; border-color: transparent; cursor: default; color: rgba(224,216,204,0.2); }
+.pg-btn:disabled { opacity: 0.3; cursor: default; }
+
+/* Скелетон-лоадер */
+.c-skeleton {
+  background: var(--card-bg); border-radius: var(--r);
+  overflow: hidden; aspect-ratio: 2/3;
+}
+.c-skeleton::before {
+  content: ''; display: block; height: 100%;
+  background: linear-gradient(90deg, #181818 25%, #212121 50%, #181818 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+@keyframes shimmer { from{background-position:200% 0} to{background-position:-200% 0} }
+@keyframes fadeUp  { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── Responsive ── */
+@media (max-width: 1100px) { .cards-grid { grid-template-columns: repeat(3,1fr); } }
+@media (max-width: 900px)  {
+  .catalog-layout { grid-template-columns: 1fr; }
+  .filter-sidebar { position: static; }
+  .filter-card { display: none; }
+  .filter-card.mobile-open { display: block; }
+  .cards-grid { grid-template-columns: repeat(3,1fr); }
+}
+@media (max-width: 640px)  { .cards-grid { grid-template-columns: repeat(2,1fr); } }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════ NAVBAR ══════════════════ -->
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-inner">
+      <a class="navbar-brand" href="index.html">
+        <span class="brand-icon"><i class="fa-solid fa-torii-gate"></i></span>
+        Mang<span class="brand-oni">oria</span>
+      </a>
+      <button class="navbar-toggler-custom" id="navToggle"><i class="fa fa-bars"></i></button>
+      <div class="nav-center" id="navCenter">
+        <div class="nav-type-switcher">
+          <a href="index.html#catalog" class="nav-type-btn active"><i class="fa fa-image"></i><span data-i18n="nav_manga">Манга</span></a>
+          <a href="index.html#ranobe"  class="nav-type-btn"><i class="fa fa-book"></i><span data-i18n="nav_ranobe">Ранобэ</span></a>
+        </div>
+        <div class="nav-item-custom"><a href="catalog.html" class="nav-link-custom active"><i class="fa fa-compass"></i><span data-i18n="nav_catalog">Каталог</span></a></div>
+        <div class="nav-item-custom"><a href="#" class="nav-link-custom"><i class="fa fa-layer-group"></i><span data-i18n="nav_genres">Жанры</span></a></div>
+        <div class="nav-item-custom"><a href="#" class="nav-link-custom"><i class="fa fa-star"></i><span data-i18n="nav_rating">Рейтинг</span></a></div>
+        <div class="nav-item-custom"><a href="#" class="nav-link-custom"><i class="fa fa-users"></i><span data-i18n="nav_authors">Авторы</span></a></div>
+        <div class="nav-item-custom"><a href="#" class="nav-link-custom"><i class="fa fa-fire"></i><span data-i18n="nav_new">Новинки</span></a></div>
+      </div>
+      <div class="nav-right" id="navRight">
+        <div class="lang-dropdown" id="langDropdownWrap">
+          <button class="lang-dropdown-btn" id="langDropdownBtn"><i class="fa fa-globe"></i><span id="langDropdownLabel">РУ</span><i class="fa fa-chevron-down lang-chevron"></i></button>
+          <div class="lang-dropdown-menu" id="langDropdownMenu">
+            <button class="lang-option" data-lang="uk"><span class="lang-flag">🇺🇦</span><span class="lang-name">Українська</span><span class="lang-code">УК</span></button>
+            <button class="lang-option active" data-lang="ru"><span class="lang-flag">🇷🇺</span><span class="lang-name">Русский</span><span class="lang-code">РУ</span></button>
+            <button class="lang-option" data-lang="en"><span class="lang-flag">🇬🇧</span><span class="lang-name">English</span><span class="lang-code">EN</span></button>
+          </div>
+        </div>
+        <button class="nav-icon-btn nav-search-btn" data-action="search"><i class="fa fa-search"></i></button>
+        <a href="publish.html" class="btn-publish ms-1"><i class="fa fa-upload"></i><span data-i18n="nav_publish">Публиковать</span></a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<div class="catalog-hero">
+  <div class="catalog-hero-bg"></div>
+  <div class="catalog-hero-kanji">目録</div>
+  <div class="container catalog-hero-content">
+    <p class="catalog-eyebrow">Mangoria</p>
+    <h1 class="catalog-title">Каталог произведений</h1>
+    <p class="catalog-sub">2 400+ манг и ранобэ от авторов со всего мира</p>
+
+    <div class="catalog-meta-row">
+      <!-- Счётчик -->
+      <div class="catalog-count">
+        Найдено: <strong id="totalCount">2 400</strong> произведений
+      </div>
+
+      <div class="d-flex align-items-center gap-3 flex-wrap">
+        <!-- Сортировка -->
+        <div class="sort-row">
+          <span class="sort-label">Сортировка:</span>
+          <button class="sort-btn active" data-sort="popular" onclick="setSort(this)"><i class="fa fa-fire"></i> Популярные</button>
+          <button class="sort-btn" data-sort="new" onclick="setSort(this)"><i class="fa fa-clock"></i> Новые</button>
+          <button class="sort-btn" data-sort="rating" onclick="setSort(this)"><i class="fa fa-star"></i> Рейтинг</button>
+          <button class="sort-btn" data-sort="updated" onclick="setSort(this)"><i class="fa fa-rotate"></i> Обновлено</button>
+        </div>
+
+        <!-- Вид -->
+        <div class="view-toggle">
+          <button class="view-btn active" id="viewGrid" onclick="setView('grid')" title="Сетка"><i class="fa fa-th-large"></i></button>
+          <button class="view-btn" id="viewList" onclick="setView('list')" title="Список"><i class="fa fa-list"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Активные фильтры -->
+    <div class="active-filters" id="activeFilters"></div>
+  </div>
+</div>
+
+<!-- ══════════════════ BODY ══════════════════ -->
+<div class="catalog-body">
+  <div class="container">
+    <div class="catalog-layout">
+
+      <!-- ══ SIDEBAR ══ -->
+      <aside class="filter-sidebar">
+        <div class="filter-card" id="filterCard">
+
+          <div class="filter-header">
+            <div class="filter-header-title"><i class="fa fa-sliders"></i> Фильтры</div>
+            <button class="filter-reset" onclick="resetFilters()"><i class="fa fa-rotate-left fa-xs"></i> Сбросить</button>
+          </div>
+
+          <!-- Поиск по названию -->
+          <div class="filter-section">
+            <div class="filter-search-wrap">
+              <i class="fa fa-search filter-search-icon"></i>
+              <input type="text" class="filter-search" placeholder="Поиск по названию…"
+                id="searchInput" oninput="applyFilters()"/>
+            </div>
+          </div>
+
+          <!-- Тип контента -->
+          <div class="filter-section">
+            <div class="filter-section-title" onclick="toggleSection(this)">
+              Тип контента <i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="filter-section-body">
+              <div class="type-tiles">
+                <div class="type-tile" id="typeManga" onclick="toggleType('manga')">
+                  <div class="type-tile-icon"><i class="fa fa-image" style="color:rgba(192,57,43,0.6);"></i></div>
+                  <div class="type-tile-label">Манга</div>
+                </div>
+                <div class="type-tile" id="typeRanobe" onclick="toggleType('ranobe')">
+                  <div class="type-tile-icon"><i class="fa fa-book" style="color:rgba(26,155,138,0.6);"></i></div>
+                  <div class="type-tile-label">Ранобэ</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Жанры -->
+          <div class="filter-section">
+            <div class="filter-section-title" onclick="toggleSection(this)">
+              Жанры <i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="filter-section-body">
+              <div class="filter-checks" id="genreFilters">
+                <label class="filter-check"><input type="checkbox" value="fantasy" onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Фэнтези<span class="fcheck-count">412</span></span></label>
+                <label class="filter-check"><input type="checkbox" value="shounen" onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Сёнэн<span class="fcheck-count">386</span></span></label>
+                <label class="filter-check"><input type="checkbox" value="action" onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Экшен<span class="fcheck-count">341</span></span></label>
+                <label class="filter-check"><input type="checkbox" value="romance" onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Романтика<span class="fcheck-count">298</span></span></label>
+                <label class="filter-check"><input type="checkbox" value="isekai" onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Исэкай<span class="fcheck-count">274</span></span></label>
+                <label class="filter-check"><input type="checkbox" value="horror" onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Хоррор<span class="fcheck-count">187</span></span></label>
+                <label class="filter-check"><input type="checkbox" value="scifi" onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Sci-Fi<span class="fcheck-count">154</span></span></label>
+                <label class="filter-check"><input type="checkbox" value="drama" onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Драма<span class="fcheck-count">148</span></span></label>
+                <label class="filter-check"><input type="checkbox" value="mystery" onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Детектив<span class="fcheck-count">132</span></span></label>
+                <label class="filter-check"><input type="checkbox" value="psychological" onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Психологическое<span class="fcheck-count">118</span></span></label>
+                <label class="filter-check"><input type="checkbox" value="comedy" onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Комедия<span class="fcheck-count">109</span></span></label>
+                <label class="filter-check"><input type="checkbox" value="mecha" onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Меха<span class="fcheck-count">76</span></span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Статус -->
+          <div class="filter-section">
+            <div class="filter-section-title" onclick="toggleSection(this)">
+              Статус <i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="filter-section-body">
+              <div class="filter-checks">
+                <label class="filter-check"><input type="checkbox" value="ongoing"   onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Онгоинг<span class="fcheck-count">1 240</span></span></label>
+                <label class="filter-check"><input type="checkbox" value="completed" onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Завершено<span class="fcheck-count">890</span></span></label>
+                <label class="filter-check"><input type="checkbox" value="frozen"    onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Заморожено<span class="fcheck-count">270</span></span></label>
+                <label class="filter-check"><input type="checkbox" value="announce"  onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Анонс<span class="fcheck-count">112</span></span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Язык -->
+          <div class="filter-section">
+            <div class="filter-section-title" onclick="toggleSection(this)">
+              Язык <i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="filter-section-body">
+              <div class="filter-checks">
+                <label class="filter-check"><input type="checkbox" value="uk" onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Українська 🇺🇦<span class="fcheck-count">640</span></span></label>
+                <label class="filter-check"><input type="checkbox" value="ru" onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Русский 🇷🇺<span class="fcheck-count">1 280</span></span></label>
+                <label class="filter-check"><input type="checkbox" value="en" onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">English 🇬🇧<span class="fcheck-count">480</span></span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Рейтинг -->
+          <div class="filter-section">
+            <div class="filter-section-title" onclick="toggleSection(this)">
+              Рейтинг <i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="filter-section-body rating-options">
+              <label class="rating-opt"><input type="radio" name="ratingFilter" value="" onchange="applyFilters()" checked>
+                <span style="font-size:0.76rem;color:rgba(224,216,204,0.4);">Любой</span>
+              </label>
+              <label class="rating-opt"><input type="radio" name="ratingFilter" value="4.5" onchange="applyFilters()">
+                <span class="rating-stars"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></span>
+                <span class="rating-label">4.5+</span>
+              </label>
+              <label class="rating-opt"><input type="radio" name="ratingFilter" value="4.0" onchange="applyFilters()">
+                <span class="rating-stars"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star empty"></i></span>
+                <span class="rating-label">4.0+</span>
+              </label>
+              <label class="rating-opt"><input type="radio" name="ratingFilter" value="3.0" onchange="applyFilters()">
+                <span class="rating-stars"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star empty"></i><i class="fa fa-star empty"></i></span>
+                <span class="rating-label">3.0+</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Возрастной рейтинг -->
+          <div class="filter-section">
+            <div class="filter-section-title" onclick="toggleSection(this)">
+              Возрастной рейтинг <i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="filter-section-body">
+              <div class="age-pills" id="agePills">
+                <span class="age-pill active" data-age="all"  onclick="setAge(this,'all')">Все</span>
+                <span class="age-pill" data-age="0"   onclick="setAge(this,'0')">0+</span>
+                <span class="age-pill" data-age="6"   onclick="setAge(this,'6')">6+</span>
+                <span class="age-pill" data-age="12"  onclick="setAge(this,'12')">12+</span>
+                <span class="age-pill" data-age="16"  onclick="setAge(this,'16')">16+</span>
+                <span class="age-pill" data-age="18"  onclick="setAge(this,'18')">18+</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Тип создания -->
+          <div class="filter-section">
+            <div class="filter-section-title" onclick="toggleSection(this)">
+              Тип создания <i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="filter-section-body">
+              <div class="filter-checks">
+                <label class="filter-check"><input type="checkbox" value="original"   onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Оригинал</span></label>
+                <label class="filter-check"><input type="checkbox" value="fanfic"     onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Фанфик</span></label>
+                <label class="filter-check"><input type="checkbox" value="adaptation" onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Адаптация</span></label>
+                <label class="filter-check"><input type="checkbox" value="translation" onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Перевод</span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI-контент -->
+          <div class="filter-section">
+            <div class="filter-section-title" onclick="toggleSection(this)">
+              AI-контент <i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="filter-section-body">
+              <div class="filter-checks">
+                <label class="filter-check"><input type="checkbox" value="no-ai" onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Без ИИ</span></label>
+                <label class="filter-check"><input type="checkbox" value="ai"    onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Частично ИИ</span></label>
+                <label class="filter-check"><input type="checkbox" value="ai-full" onchange="applyFilters()"><span class="fcheck-box"><i class="fa fa-check"></i></span><span class="fcheck-label">Полностью ИИ</span></label>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /filter-card -->
+      </aside>
+
+      <!-- ══ MAIN ══ -->
+      <main class="catalog-main">
+
+        <!-- Карточки -->
+        <div class="cards-grid" id="cardsGrid">
+
+          <a href="title.html" class="c-card">
+            <div class="c-cover">
+              <img src="img/posters/poster_2.webp" alt=""/>
+              <div class="c-cover-overlay"></div>
+              <span class="c-badge-type manga">Манга</span>
+            <span class="c-chapters"><i class="fa fa-book-open"></i>34 гл.</span>
+            </div>
+
+            <div class="c-title-bar">
+              <div class="c-title">Демонический Клинок</div>
+            </div>
+
+            <!-- Hover-тултип с полной информацией -->
+            <div class="c-tooltip">
+              <div class="ctt-title">Демонический Клинок</div>
+              <div class="ctt-row">
+                <span class="ctt-rating"><i class="fa fa-star" style="font-size:0.62rem;"></i> 4.8</span>
+                <span class="ctt-status ongoing">Онгоинг</span>
+                <span class="ctt-age">16+</span>
+              </div>
+              <div class="ctt-genres">Фэнтези · Сёнэн</div>
+              <div class="ctt-stats">
+                <div class="ctt-stat-row"><span><i class="fa fa-eye"></i>Просмотры</span><strong>42.8k</strong></div>
+                
+              </div>
+              <div class="ctt-author">
+                <div class="ctt-author-ava"><img src="img/avatar/ava_10.jpg" alt=""/></div>
+                <span class="ctt-author-name">ShadowBrush</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="c-card">
+            <div class="c-cover">
+              <img src="img/posters/poster_1.webp" alt=""/>
+              <div class="c-cover-overlay"></div>
+              <span class="c-badge-type ranobe">Ранобэ</span>
+              <span class="c-badge-new">NEW</span>
+            <span class="c-chapters"><i class="fa fa-book-open"></i>112 гл.</span>
+            </div>
+
+            <div class="c-title-bar">
+              <div class="c-title">Призыватель Бездны</div>
+            </div>
+
+            <!-- Hover-тултип с полной информацией -->
+            <div class="c-tooltip">
+              <div class="ctt-title">Призыватель Бездны</div>
+              <div class="ctt-row">
+                <span class="ctt-rating"><i class="fa fa-star" style="font-size:0.62rem;"></i> 4.9</span>
+                <span class="ctt-status ongoing">Онгоинг</span>
+                <span class="ctt-age">0+</span>
+              </div>
+              <div class="ctt-genres">Тёмное фэнтези · Исэкай</div>
+              <div class="ctt-stats">
+                <div class="ctt-stat-row"><span><i class="fa fa-eye"></i>Просмотры</span><strong>61.4k</strong></div>
+                
+              </div>
+              <div class="ctt-author">
+                <div class="ctt-author-ava"><img src="img/avatar/ava_1.jpg" alt=""/></div>
+                <span class="ctt-author-name">VoidWriter</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="c-card">
+            <div class="c-cover">
+              <img src="img/posters/poster_3.webp" alt=""/>
+              <div class="c-cover-overlay"></div>
+              <span class="c-badge-type manga">Манга</span>
+            <span class="c-chapters"><i class="fa fa-book-open"></i>12 гл.</span>
+            </div>
+
+            <div class="c-title-bar">
+              <div class="c-title">Пепельный Рассвет</div>
+            </div>
+
+            <!-- Hover-тултип с полной информацией -->
+            <div class="c-tooltip">
+              <div class="ctt-title">Пепельный Рассвет</div>
+              <div class="ctt-row">
+                <span class="ctt-rating"><i class="fa fa-star" style="font-size:0.62rem;"></i> 4.5</span>
+                <span class="ctt-status ongoing">Онгоинг</span>
+                <span class="ctt-age">18+</span>
+              </div>
+              <div class="ctt-genres">Хоррор · Психология</div>
+              <div class="ctt-stats">
+                <div class="ctt-stat-row"><span><i class="fa fa-eye"></i>Просмотры</span><strong>11.4k</strong></div>
+                
+              </div>
+              <div class="ctt-author">
+                <div class="ctt-author-ava"><img src="img/avatar/ava_2.jpg" alt=""/></div>
+                <span class="ctt-author-name">ShadowBrush</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="c-card">
+            <div class="c-cover">
+              <img src="img/posters/poster_4.jpg" alt=""/>
+              <div class="c-cover-overlay"></div>
+              <span class="c-badge-type ranobe">Ранобэ</span>
+            <span class="c-chapters"><i class="fa fa-book-open"></i>88 гл.</span>
+            </div>
+
+            <div class="c-title-bar">
+              <div class="c-title">Звёздный Бог</div>
+            </div>
+
+            <!-- Hover-тултип с полной информацией -->
+            <div class="c-tooltip">
+              <div class="ctt-title">Звёздный Бог</div>
+              <div class="ctt-row">
+                <span class="ctt-rating"><i class="fa fa-star" style="font-size:0.62rem;"></i> 4.9</span>
+                <span class="ctt-status completed">Завершено</span>
+                <span class="ctt-age">0+</span>
+              </div>
+              <div class="ctt-genres">Фэнтези · Приключения</div>
+              <div class="ctt-stats">
+                <div class="ctt-stat-row"><span><i class="fa fa-eye"></i>Просмотры</span><strong>29k</strong></div>
+                
+              </div>
+              <div class="ctt-author">
+                <div class="ctt-author-ava"><img src="img/avatar/ava_3.jpg" alt=""/></div>
+                <span class="ctt-author-name">StarPen</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="c-card">
+            <div class="c-cover">
+              <img src="img/posters/poster_5.jpg" alt=""/>
+              <div class="c-cover-overlay"></div>
+              <span class="c-badge-type manga">Манга</span>
+            <span class="c-chapters"><i class="fa fa-book-open"></i>7 гл.</span>
+            </div>
+
+            <div class="c-title-bar">
+              <div class="c-title">Лесной Дух</div>
+            </div>
+
+            <!-- Hover-тултип с полной информацией -->
+            <div class="c-tooltip">
+              <div class="ctt-title">Лесной Дух</div>
+              <div class="ctt-row">
+                <span class="ctt-rating"><i class="fa fa-star" style="font-size:0.62rem;"></i> 4.5</span>
+                <span class="ctt-status ongoing">Онгоинг</span>
+                <span class="ctt-age">16+</span>
+              </div>
+              <div class="ctt-genres">Хоррор · Мистика</div>
+              <div class="ctt-stats">
+                <div class="ctt-stat-row"><span><i class="fa fa-eye"></i>Просмотры</span><strong>5.6k</strong></div>
+                
+              </div>
+              <div class="ctt-author">
+                <div class="ctt-author-ava"><img src="img/avatar/ava_4.jpg" alt=""/></div>
+                <span class="ctt-author-name">InkDemon</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="c-card">
+            <div class="c-cover">
+              <img src="img/posters/poster_5.jpg" alt=""/>
+              <div class="c-cover-overlay"></div>
+              <span class="c-badge-type ranobe">Ранобэ</span>
+            <span class="c-chapters"><i class="fa fa-book-open"></i>145 гл.</span>
+            </div>
+
+            <div class="c-title-bar">
+              <div class="c-title">Путь Демона</div>
+            </div>
+
+            <!-- Hover-тултип с полной информацией -->
+            <div class="c-tooltip">
+              <div class="ctt-title">Путь Демона</div>
+              <div class="ctt-row">
+                <span class="ctt-rating"><i class="fa fa-star" style="font-size:0.62rem;"></i> 4.7</span>
+                <span class="ctt-status ongoing">Онгоинг</span>
+                <span class="ctt-age">18+</span>
+              </div>
+              <div class="ctt-genres">Боевик · Тёмное фэнтези</div>
+              <div class="ctt-stats">
+                <div class="ctt-stat-row"><span><i class="fa fa-eye"></i>Просмотры</span><strong>55k</strong></div>
+                
+              </div>
+              <div class="ctt-author">
+                <div class="ctt-author-ava"><img src="img/avatar/ava_5.jpg" alt=""/></div>
+                <span class="ctt-author-name">VoidWriter</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="c-card">
+            <div class="c-cover">
+              <img src="img/posters/poster_6.jpg" alt=""/>
+              <div class="c-cover-overlay"></div>
+              <span class="c-badge-type manga">Манга</span>
+            <span class="c-chapters"><i class="fa fa-book-open"></i>56 гл.</span>
+            </div>
+
+            <div class="c-title-bar">
+              <div class="c-title">Чёрный Клинок</div>
+            </div>
+
+            <!-- Hover-тултип с полной информацией -->
+            <div class="c-tooltip">
+              <div class="ctt-title">Чёрный Клинок</div>
+              <div class="ctt-row">
+                <span class="ctt-rating"><i class="fa fa-star" style="font-size:0.62rem;"></i> 4.8</span>
+                <span class="ctt-status ongoing">Онгоинг</span>
+                <span class="ctt-age">12+</span>
+              </div>
+              <div class="ctt-genres">Сёнэн · Экшен</div>
+              <div class="ctt-stats">
+                <div class="ctt-stat-row"><span><i class="fa fa-eye"></i>Просмотры</span><strong>48k</strong></div>
+                
+              </div>
+              <div class="ctt-author">
+                <div class="ctt-author-ava"><img src="img/avatar/ava_6.jpg" alt=""/></div>
+                <span class="ctt-author-name">KaijuManga</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="c-card">
+            <div class="c-cover">
+              <img src="img/posters/poster_7.jpg" alt=""/>
+              <div class="c-cover-overlay"></div>
+              <span class="c-badge-type ranobe">Ранобэ</span>
+              <span class="c-badge-new">NEW</span>
+            <span class="c-chapters"><i class="fa fa-book-open"></i>33 гл.</span>
+            </div>
+
+            <div class="c-title-bar">
+              <div class="c-title">Ледяной Дворец</div>
+            </div>
+
+            <!-- Hover-тултип с полной информацией -->
+            <div class="c-tooltip">
+              <div class="ctt-title">Ледяной Дворец</div>
+              <div class="ctt-row">
+                <span class="ctt-rating"><i class="fa fa-star" style="font-size:0.62rem;"></i> 4.6</span>
+                <span class="ctt-status ongoing">Онгоинг</span>
+                <span class="ctt-age">0+</span>
+              </div>
+              <div class="ctt-genres">Романтика · Фэнтези</div>
+              <div class="ctt-stats">
+                <div class="ctt-stat-row"><span><i class="fa fa-eye"></i>Просмотры</span><strong>22k</strong></div>
+                
+              </div>
+              <div class="ctt-author">
+                <div class="ctt-author-ava"><img src="img/avatar/ava_7.jpg" alt=""/></div>
+                <span class="ctt-author-name">MoonPen</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="c-card">
+            <div class="c-cover">
+              <img src="img/posters/poster_8.jpg" alt=""/>
+              <div class="c-cover-overlay"></div>
+              <span class="c-badge-type manga">Манга</span>
+            <span class="c-chapters"><i class="fa fa-book-open"></i>19 гл.</span>
+            </div>
+
+            <div class="c-title-bar">
+              <div class="c-title">Звёздная Пыль</div>
+            </div>
+
+            <!-- Hover-тултип с полной информацией -->
+            <div class="c-tooltip">
+              <div class="ctt-title">Звёздная Пыль</div>
+              <div class="ctt-row">
+                <span class="ctt-rating"><i class="fa fa-star" style="font-size:0.62rem;"></i> 4.4</span>
+                <span class="ctt-status frozen">Заморожено</span>
+                <span class="ctt-age">16+</span>
+              </div>
+              <div class="ctt-genres">Меха · Sci-Fi</div>
+              <div class="ctt-stats">
+                <div class="ctt-stat-row"><span><i class="fa fa-eye"></i>Просмотры</span><strong>14k</strong></div>
+                
+              </div>
+              <div class="ctt-author">
+                <div class="ctt-author-ava"><img src="img/avatar/ava_8.jpg" alt=""/></div>
+                <span class="ctt-author-name">IronPen</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="c-card">
+            <div class="c-cover">
+              <img src="img/posters/poster_9.jpg" alt=""/>
+              <div class="c-cover-overlay"></div>
+              <span class="c-badge-type ranobe">Ранобэ</span>
+            <span class="c-chapters"><i class="fa fa-book-open"></i>67 гл.</span>
+            </div>
+
+            <div class="c-title-bar">
+              <div class="c-title">Золото Пустыни</div>
+            </div>
+
+            <!-- Hover-тултип с полной информацией -->
+            <div class="c-tooltip">
+              <div class="ctt-title">Золото Пустыни</div>
+              <div class="ctt-row">
+                <span class="ctt-rating"><i class="fa fa-star" style="font-size:0.62rem;"></i> 4.3</span>
+                <span class="ctt-status ongoing">Онгоинг</span>
+                <span class="ctt-age">6+</span>
+              </div>
+              <div class="ctt-genres">Приключения · Исэкай</div>
+              <div class="ctt-stats">
+                <div class="ctt-stat-row"><span><i class="fa fa-eye"></i>Просмотры</span><strong>13k</strong></div>
+                
+              </div>
+              <div class="ctt-author">
+                <div class="ctt-author-ava"><img src="img/avatar/ava_9.jpg" alt=""/></div>
+                <span class="ctt-author-name">DustWriter</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="c-card">
+            <div class="c-cover">
+              <img src="img/posters/poster_3.webp" alt=""/>
+              <div class="c-cover-overlay"></div>
+              <span class="c-badge-type manga">Манга</span>
+            <span class="c-chapters"><i class="fa fa-book-open"></i>28 гл.</span>
+            </div>
+
+            <div class="c-title-bar">
+              <div class="c-title">Сакура в Бою</div>
+            </div>
+
+            <!-- Hover-тултип с полной информацией -->
+            <div class="c-tooltip">
+              <div class="ctt-title">Сакура в Бою</div>
+              <div class="ctt-row">
+                <span class="ctt-rating"><i class="fa fa-star" style="font-size:0.62rem;"></i> 4.6</span>
+                <span class="ctt-status completed">Завершено</span>
+                <span class="ctt-age">18+</span>
+              </div>
+              <div class="ctt-genres">Сёнэн · Психология</div>
+              <div class="ctt-stats">
+                <div class="ctt-stat-row"><span><i class="fa fa-eye"></i>Просмотры</span><strong>21k</strong></div>
+                
+              </div>
+              <div class="ctt-author">
+                <div class="ctt-author-ava"><img src="img/avatar/ava_3.jpg" alt=""/></div>
+                <span class="ctt-author-name">BladeArt</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="c-card">
+            <div class="c-cover">
+              <img src="img/posters/poster_4.jpg" alt=""/>
+              <div class="c-cover-overlay"></div>
+              <span class="c-badge-type ranobe">Ранобэ</span>
+              <span class="c-badge-new">NEW</span>
+            <span class="c-chapters"><i class="fa fa-book-open"></i>41 гл.</span>
+            </div>
+
+            <div class="c-title-bar">
+              <div class="c-title">Серебряные Крылья</div>
+            </div>
+
+            <!-- Hover-тултип с полной информацией -->
+            <div class="c-tooltip">
+              <div class="ctt-title">Серебряные Крылья</div>
+              <div class="ctt-row">
+                <span class="ctt-rating"><i class="fa fa-star" style="font-size:0.62rem;"></i> 4.8</span>
+                <span class="ctt-status ongoing">Онгоинг</span>
+                <span class="ctt-age">12+</span>
+              </div>
+              <div class="ctt-genres">Sci-Fi · Детектив</div>
+              <div class="ctt-stats">
+                <div class="ctt-stat-row"><span><i class="fa fa-eye"></i>Просмотры</span><strong>18k</strong></div>
+                
+              </div>
+              <div class="ctt-author">
+                <div class="ctt-author-ava"><img src="img/avatar/ava_4.jpg" alt=""/></div>
+                <span class="ctt-author-name">CyberScribe</span>
+              </div>
+            </div>
+          </a>
+
+        </div><!-- /cards-grid -->
+
+        <!-- Пустое состояние -->
+        <div class="catalog-empty" id="catalogEmpty">
+          <div class="empty-icon"><i class="fa fa-search"></i></div>
+          <div class="empty-title">Ничего не найдено</div>
+          <p class="empty-sub">Попробуйте изменить фильтры или поисковый запрос.<br>Возможно, таких произведений ещё нет на платформе.</p>
+          <button class="btn-empty-reset" onclick="resetFilters()"><i class="fa fa-rotate-left"></i> Сбросить фильтры</button>
+        </div>
+
+        <!-- Пагинация -->
+        <div class="catalog-pagination" id="pagination">
+          <button class="pg-btn" disabled><i class="fa fa-chevron-left"></i></button>
+          <button class="pg-btn active" onclick="setPage(this)">1</button>
+          <button class="pg-btn" onclick="setPage(this)">2</button>
+          <button class="pg-btn" onclick="setPage(this)">3</button>
+          <button class="pg-btn dots">…</button>
+          <button class="pg-btn" onclick="setPage(this)">24</button>
+          <button class="pg-btn" onclick="setPage(this)"><i class="fa fa-chevron-right"></i></button>
+        </div>
+
+      </main>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer>
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <p class="footer-brand">Mang<span>oria</span> <small style="font-family:'Sawarabi Mincho';color:var(--muted);font-size:0.8rem;">鬼</small></p>
+        <p class="footer-tagline">Манга і Ранобе — відкрита платформа</p>
+        <p class="mt-3" style="font-size:0.78rem;color:var(--muted);line-height:1.75;">Сообщество художников и писателей.</p>
+        <div class="d-flex gap-2 mt-3">
+          <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-discord"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+      <div class="col-6 col-lg-2 offset-lg-1 footer-links"><h6>Платформа</h6><a href="index.html">Главная</a><a href="catalog.html">Каталог</a><a href="#">Рейтинг</a><a href="#">Авторы</a></div>
+      <div class="col-6 col-lg-2 footer-links"><h6>Авторам</h6><a href="publish.html">Публикация</a><a href="static.html">Правила</a><a href="static.html">FAQ</a></div>
+      <div class="col-6 col-lg-2 footer-links"><h6>О нас</h6><a href="static.html">О платформе</a><a href="static.html">Политика</a><a href="static.html">Контакты</a></div>
+    </div>
+    <div class="footer-bottom d-flex justify-content-between flex-wrap gap-2">
+      <span class="footer-copy">© 2025 Mangoria. Все права защищены.</span>
+      <span style="color:rgba(94,94,94,0.6);">Сделано с <i class="fa fa-heart" style="color:var(--red);"></i> для авторов</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/main.js"></script>
+<script src="js/navbar.js"></script>
+<script>
+/* =====================================================
+   CATALOG JS
+   ===================================================== */
+
+/* Данные карточек (атрибуты из DOM) */
+var state = {
+  view:      'grid',
+  sort:      'popular',
+  typeFilter: null,   /* null | 'manga' | 'ranobe' */
+  ageFilter:  'all',
+  search:     '',
+  activeFilters: [],
+};
+
+/* ── Вид (сетка / список) ── */
+function setView(v) {
+  state.view = v;
+  var grid = document.getElementById('cardsGrid');
+  grid.classList.toggle('view-list', v === 'list');
+  document.getElementById('viewGrid').classList.toggle('active', v === 'grid');
+  document.getElementById('viewList').classList.toggle('active', v === 'list');
+}
+
+/* ── Сортировка ── */
+function setSort(btn) {
+  document.querySelectorAll('.sort-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  state.sort = btn.dataset.sort;
+  /* Имитация переупорядочивания */
+  showSkeleton();
+  setTimeout(hideSkeleton, 600);
+}
+
+/* ── Тип контента ── */
+function toggleType(t) {
+  var tile = document.getElementById('type' + (t === 'manga' ? 'Manga' : 'Ranobe'));
+  if (state.typeFilter === t) {
+    state.typeFilter = null;
+    tile.className = 'type-tile';
+  } else {
+    state.typeFilter = t;
+    /* Убираем у другого */
+    document.getElementById('typeManga').className = 'type-tile';
+    document.getElementById('typeRanobe').className = 'type-tile';
+    tile.className = 'type-tile active-' + t;
+  }
+  applyFilters();
+}
+
+/* ── Возраст ── */
+function setAge(el, val) {
+  document.querySelectorAll('.age-pill').forEach(function(p){ p.classList.remove('active'); });
+  el.classList.add('active');
+  state.ageFilter = val;
+  applyFilters();
+}
+
+/* ── Свернуть / развернуть секцию ── */
+function toggleSection(titleEl) {
+  titleEl.classList.toggle('collapsed');
+  var body = titleEl.nextElementSibling;
+  body.classList.toggle('collapsed');
+}
+
+/* ── Применить фильтры ── */
+function applyFilters() {
+  state.search = (document.getElementById('searchInput').value || '').toLowerCase();
+
+  var cards   = document.querySelectorAll('.c-card');
+  var visible = 0;
+
+  /* Собираем активные чекбоксы */
+  var checkedGenres   = getChecked('genreFilters');
+  var checkedStatuses = getChecked2(['ongoing','completed','frozen','announce']);
+  var checkedLangs    = getChecked2(['uk','ru','en']);
+  var minRating       = getRadioValue('ratingFilter');
+
+  cards.forEach(function(card) {
+    var genre  = (card.querySelector('.ctt-genres')  || {}).textContent || '';
+    var title  = (card.querySelector('.c-title')  || {}).textContent || '';
+    var author = (card.querySelector('.ctt-author-name') || {}).textContent || '';
+    var type   = card.querySelector('.c-badge-type') ?
+                 card.querySelector('.c-badge-type').textContent.trim().toLowerCase() : '';
+    var rating = parseFloat((card.querySelector('.ctt-rating') || {}).textContent) || 0;
+
+    /* Тип */
+    if (state.typeFilter && !type.includes(state.typeFilter === 'manga' ? 'манга' : 'ранобэ')) {
+      card.style.display = 'none'; return;
+    }
+    /* Поиск */
+    if (state.search && !title.toLowerCase().includes(state.search) && !author.toLowerCase().includes(state.search)) {
+      card.style.display = 'none'; return;
+    }
+    /* Жанры */
+    if (checkedGenres.length > 0 && !checkedGenres.some(function(g){ return genre.toLowerCase().includes(g); })) {
+      card.style.display = 'none'; return;
+    }
+    /* Рейтинг */
+    if (minRating && rating < parseFloat(minRating)) {
+      card.style.display = 'none'; return;
+    }
+
+    card.style.display = '';
+    visible++;
+  });
+
+  /* Пустое состояние */
+  document.getElementById('catalogEmpty').classList.toggle('visible', visible === 0);
+  document.getElementById('totalCount').textContent = visible === cards.length ? '2 400' : visible;
+
+  /* Активные теги */
+  renderActiveTags();
+}
+
+function getChecked(containerId) {
+  var inputs = document.querySelectorAll('#' + containerId + ' input:checked');
+  return Array.from(inputs).map(function(i){ return i.value; });
+}
+function getChecked2(values) {
+  return values.filter(function(v) {
+    var el = document.querySelector('input[value="' + v + '"]:checked');
+    return !!el;
+  });
+}
+function getRadioValue(name) {
+  var el = document.querySelector('input[name="' + name + '"]:checked');
+  return el ? el.value : '';
+}
+
+/* ── Теги активных фильтров ── */
+var FILTER_LABELS = {
+  fantasy:'Фэнтези', shounen:'Сёнэн', action:'Экшен', romance:'Романтика',
+  isekai:'Исэкай', horror:'Хоррор', scifi:'Sci-Fi', drama:'Драма',
+  mystery:'Детектив', psychological:'Психологическое', comedy:'Комедия', mecha:'Меха',
+  ongoing:'Онгоинг', completed:'Завершено', frozen:'Заморожено', announce:'Анонс',
+  uk:'Українська', ru:'Русский', en:'English',
+};
+
+function renderActiveTags() {
+  var wrap = document.getElementById('activeFilters');
+  wrap.innerHTML = '';
+
+  /* Тип */
+  if (state.typeFilter) {
+    addTag(wrap, state.typeFilter === 'manga' ? 'Манга' : 'Ранобэ', function(){ toggleType(state.typeFilter); });
+  }
+
+  /* Чекбоксы */
+  document.querySelectorAll('input[type="checkbox"]:checked').forEach(function(inp) {
+    var lbl = FILTER_LABELS[inp.value] || inp.value;
+    addTag(wrap, lbl, function(){ inp.checked = false; applyFilters(); });
+  });
+
+  /* Рейтинг */
+  var rv = getRadioValue('ratingFilter');
+  if (rv) {
+    addTag(wrap, '★ ' + rv + '+', function(){
+      document.querySelector('input[name="ratingFilter"][value=""]').checked = true;
+      applyFilters();
+    });
+  }
+
+  /* Возраст */
+  if (state.ageFilter !== 'all') {
+    addTag(wrap, state.ageFilter + '+', function(){
+      setAge(document.querySelector('.age-pill[data-age="all"]'), 'all');
+    });
+  }
+
+  /* Поиск */
+  if (state.search) {
+    addTag(wrap, '«' + state.search + '»', function(){
+      document.getElementById('searchInput').value = '';
+      applyFilters();
+    });
+  }
+}
+
+function addTag(wrap, text, onRemove) {
+  var tag = document.createElement('span');
+  tag.className = 'active-filter-tag';
+  tag.innerHTML = text + ' <i class="fa fa-xmark"></i>';
+  tag.addEventListener('click', onRemove);
+  wrap.appendChild(tag);
+}
+
+/* ── Сброс всех фильтров ── */
+function resetFilters() {
+  /* Чекбоксы */
+  document.querySelectorAll('#filterCard input[type="checkbox"]').forEach(function(cb){ cb.checked = false; });
+  /* Радио */
+  var defRating = document.querySelector('input[name="ratingFilter"][value=""]');
+  if (defRating) defRating.checked = true;
+  /* Тип */
+  state.typeFilter = null;
+  document.getElementById('typeManga').className  = 'type-tile';
+  document.getElementById('typeRanobe').className = 'type-tile';
+  /* Возраст */
+  setAge(document.querySelector('.age-pill[data-age="all"]'), 'all');
+  /* Поиск */
+  document.getElementById('searchInput').value = '';
+  state.search = '';
+  /* Показываем всё */
+  document.querySelectorAll('.c-card').forEach(function(c){ c.style.display = ''; });
+  document.getElementById('catalogEmpty').classList.remove('visible');
+  document.getElementById('totalCount').textContent = '2 400';
+  document.getElementById('activeFilters').innerHTML = '';
+}
+
+/* ── Пагинация ── */
+function setPage(btn) {
+  if (btn.classList.contains('dots') || btn.disabled) return;
+  document.querySelectorAll('.pg-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  showSkeleton();
+  setTimeout(hideSkeleton, 700);
+}
+
+/* ── Скелетон ── */
+function showSkeleton() {
+  document.getElementById('cardsGrid').style.opacity = '0.35';
+}
+function hideSkeleton() {
+  document.getElementById('cardsGrid').style.opacity = '1';
+  document.getElementById('cardsGrid').style.transition = 'opacity 0.25s';
+}
+
+/* ── URL-параметры при загрузке ── */
+document.addEventListener('DOMContentLoaded', function() {
+  var params = new URLSearchParams(window.location.search);
+  var t = params.get('type');
+  if (t === 'manga' || t === 'ranobe') toggleType(t);
+  var g = params.get('genre');
+  if (g) {
+    var cb = document.querySelector('input[value="' + g + '"]');
+    if (cb) { cb.checked = true; applyFilters(); }
+  }
+});
+</script>
+</body>
+</html>

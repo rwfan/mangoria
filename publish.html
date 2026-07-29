@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="ru" id="htmlRoot">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mangoria — Публикация</title>
+  <!-- External -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&family=Dela+Gothic+One&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <!-- Project -->
+  <link rel="stylesheet" href="css/publish.css"/>
+</head>
+<body>
+
+<!-- ══════════════════ NAVBAR ══════════════════ -->
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-inner">
+
+      <a class="navbar-brand" href="index.html">
+        <span class="brand-icon"><i class="fa-solid fa-torii-gate"></i></span>
+        Mang<span class="brand-oni">oria</span>
+      </a>
+
+      
+
+      <div class="nav-center" id="navCenter">
+        <div class="nav-type-switcher">
+          <a href="index.html#catalog" class="nav-type-btn active">
+            <i class="fa fa-image"></i>
+            <span data-i18n="nav_manga">Манга</span>
+          </a>
+          <a href="index.html#ranobe" class="nav-type-btn">
+            <i class="fa fa-book"></i>
+            <span data-i18n="nav_ranobe">Ранобэ</span>
+          </a>
+        </div>
+        <div class="nav-item-custom">
+          <a href="index.html#catalog" class="nav-link-custom ">
+            <i class="fa fa-compass"></i>
+            <span data-i18n="nav_catalog">Каталог</span>
+          </a>
+        </div>
+        <div class="nav-item-custom">
+          <a href="#" class="nav-link-custom">
+            <i class="fa fa-layer-group"></i>
+            <span data-i18n="nav_genres">Жанры</span>
+          </a>
+        </div>
+        <div class="nav-item-custom">
+          <a href="#" class="nav-link-custom">
+            <i class="fa fa-star"></i>
+            <span data-i18n="nav_rating">Рейтинг</span>
+          </a>
+        </div>
+        <div class="nav-item-custom">
+          <a href="#" class="nav-link-custom">
+            <i class="fa fa-users"></i>
+            <span data-i18n="nav_authors">Авторы</span>
+          </a>
+        </div>
+        <div class="nav-item-custom">
+          <a href="#" class="nav-link-custom">
+            <i class="fa fa-fire"></i>
+            <span data-i18n="nav_new">Новинки</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-right" id="navRight">
+
+        <div class="lang-dropdown" id="langDropdownWrap">
+          <button class="lang-dropdown-btn" id="langDropdownBtn">
+            <i class="fa fa-globe"></i>
+            <span id="langDropdownLabel">РУ</span>
+            <i class="fa fa-chevron-down lang-chevron"></i>
+          </button>
+          <div class="lang-dropdown-menu" id="langDropdownMenu">
+            <button class="lang-option" data-lang="uk">
+              <span class="lang-flag">🇺🇦</span>
+              <span class="lang-name">Українська</span>
+              <span class="lang-code">УК</span>
+            </button>
+            <button class="lang-option active" data-lang="ru">
+              <span class="lang-flag">🇷🇺</span>
+              <span class="lang-name">Русский</span>
+              <span class="lang-code">РУ</span>
+            </button>
+            <button class="lang-option" data-lang="en">
+              <span class="lang-flag">🇬🇧</span>
+              <span class="lang-name">English</span>
+              <span class="lang-code">EN</span>
+            </button>
+          </div>
+        </div>
+
+        <button class="nav-icon-btn nav-search-btn" data-action="search" title="Поиск (Ctrl+K)">
+          <i class="fa fa-search"></i>
+        </button>
+
+        <button class="btn-publish ms-1" id="btnSaveDraft">
+          <i class="fa fa-floppy-disk"></i>
+          <span data-i18n="nav_publish">Черновик</span>
+        </button>
+
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════ PAGE HERO ══════════════════ -->
+<div class="page-hero">
+  <div class="page-hero-bg" id="heroBg"></div>
+  <div class="page-hero-stripes">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="page-hero-kanji" id="heroKanji">投稿</div>
+
+  <div class="container page-hero-content">
+    <div class="hero-breadcrumb">
+      <a href="index.html"><i class="fa fa-house fa-xs me-1"></i> Главная</a>
+      <span class="sep">/</span>
+      <span>Публикация</span>
+    </div>
+    <p class="page-hero-eyebrow" id="heroEyebrow">Авторская публикация</p>
+    <h1 class="page-hero-title">
+      Поделитесь своим<br>
+      <span class="accent" id="heroAccent">произведением</span>
+    </h1>
+    <p class="page-hero-sub" id="heroSub">
+      Загрузите мангу или напишите ранобэ — Mangoria открыт для авторов любого уровня. Заполните форму и ваша история найдёт своих читателей.
+    </p>
+    <div class="hero-type-pills">
+      <button class="hero-type-pill manga active" id="heroPillManga" onclick="setType('manga')">
+        <i class="fa fa-image"></i> Манга
+      </button>
+      <button class="hero-type-pill ranobe" id="heroPillRanobe" onclick="setType('ranobe')">
+        <i class="fa fa-book"></i> Ранобэ
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ PUBLISH AREA ══════════════════ -->
+<section class="publish-area">
+  <div class="container">
+    <div class="publish-grid">
+
+      <!-- ═══ SIDEBAR ═══ -->
+      <aside class="publish-sidebar">
+        <div class="sidebar-card">
+          <div class="sidebar-type-section">
+            <p class="sidebar-heading" style="padding-top:0.2rem;">Тип</p>
+            <div class="type-toggle">
+              <button class="type-toggle-btn active" id="btnManga" onclick="setType('manga')">
+                <i class="fa fa-image"></i> Манга
+              </button>
+              <button class="type-toggle-btn ranobe" id="btnRanobe" onclick="setType('ranobe')">
+                <i class="fa fa-book"></i> Ранобэ
+              </button>
+            </div>
+          </div>
+
+          <div class="sidebar-steps-section">
+            <p class="sidebar-heading">Шаги заполнения</p>
+            <div class="stepper" id="stepper">
+              <div class="step-item active" onclick="goStep(1)">
+                <div class="step-num">1</div>
+                <div class="step-meta">
+                  <div class="step-label">Основное</div>
+                  <div class="step-sublabel">Название, обложка</div>
+                </div>
+              </div>
+              <div class="step-connector"></div>
+              <div class="step-item" onclick="goStep(2)">
+                <div class="step-num">2</div>
+                <div class="step-meta">
+                  <div class="step-label">Классификация</div>
+                  <div class="step-sublabel">Жанры, теги, рейтинг</div>
+                </div>
+              </div>
+              <div class="step-connector"></div>
+              <div class="step-item" onclick="goStep(3)">
+                <div class="step-num">3</div>
+                <div class="step-meta">
+                  <div class="step-label" id="stepLabel3">Первая глава</div>
+                  <div class="step-sublabel" id="stepSub3">Страницы манги</div>
+                </div>
+              </div>
+              <div class="step-connector"></div>
+              <div class="step-item" onclick="goStep(4)">
+                <div class="step-num">4</div>
+                <div class="step-meta">
+                  <div class="step-label">Настройки</div>
+                  <div class="step-sublabel">Права, публикация</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sidebar-progress-section">
+            <div class="progress-label">
+              <span>Прогресс</span>
+              <span id="progressPct">25%</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" id="progressFill" style="width:25%"></div>
+            </div>
+          </div>
+
+          <div class="sidebar-tip">
+            <i class="fa fa-lightbulb"></i>
+            Хорошая обложка и описание увеличивают количество читателей в 3–5 раз.
+          </div>
+        </div>
+      </aside>
+
+      <!-- ═══ MAIN ═══ -->
+      <main class="publish-main">
+
+        <!-- ══ ШАГ 1: Основное ══ -->
+        <div class="step-content active" id="step1">
+          <div class="step-header">
+            <div class="step-header-left">
+              <div class="content-type-tag" id="typeTag"><i class="fa fa-image"></i> Манга</div>
+              <h2 class="form-section-title">Основная информация</h2>
+              <p class="form-section-sub">Название, описание и обложка — первое, что увидят читатели.</p>
+            </div>
+            <div class="step-counter">01</div>
+          </div>
+
+          <div class="form-panel">
+            <div class="form-panel-title"><i class="fa fa-pen-nib"></i> Название и описание</div>
+            <div class="field-group">
+              <label class="field-label">Название произведения <span class="req">*</span></label>
+              <input type="text" class="field-input" placeholder="Введите название…" id="titleInput"/>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Альтернативное название <span class="opt">(необязательно)</span></label>
+              <input type="text" class="field-input" placeholder="На другом языке или оригинальное…"/>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Краткое описание <span class="req">*</span></label>
+              <textarea class="field-input" id="descTextarea" placeholder="Опишите сюжет, мир и персонажей…" style="min-height:105px;"></textarea>
+              <div style="text-align:right; margin-top:0.3rem;"><span class="char-count" id="descCount">0 / 1000</span></div>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Ссылка на оригинал <span class="opt">(если есть)</span></label>
+              <input type="url" class="field-input" placeholder="https://…"/>
+            </div>
+          </div>
+
+          <div class="form-panel">
+            <div class="form-panel-title"><i class="fa fa-image"></i> Обложка и баннер</div>
+            <div class="cover-banner-grid">
+              <div>
+                <div class="field-label" style="margin-bottom:0.45rem;">Обложка <span class="req">*</span></div>
+                <div class="upload-zone cover-zone" id="coverZone">
+                  <input type="file" accept="image/*" id="coverInput" onchange="previewCover(event)"/>
+                  <div class="upload-zone-icon"><i class="fa fa-image"></i></div>
+                  <div class="upload-zone-label"><span>Выберите файл</span><br>или перетащите</div>
+                  <div class="upload-zone-hint">JPG, PNG · до 5 МБ<br>рекомендовано 400×600</div>
+                </div>
+              </div>
+              <div>
+                <div class="field-label" style="margin-bottom:0.45rem;">Баннер <span class="opt">(опционально)</span></div>
+                <div class="upload-zone" style="height:100%; min-height:170px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                  <input type="file" accept="image/*"/>
+                  <div class="upload-zone-icon"><i class="fa fa-panorama"></i></div>
+                  <div class="upload-zone-label"><span>Выберите файл</span><br>или перетащите</div>
+                  <div class="upload-zone-hint">JPG, PNG · до 10 МБ · 1200×350</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn-primary" onclick="goStep(2)">Далее <i class="fa fa-arrow-right"></i></button>
+            <button class="btn-draft"><i class="fa fa-floppy-disk me-1"></i> Черновик</button>
+          </div>
+        </div>
+
+        <!-- ══ ШАГ 2: Классификация ══ -->
+        <div class="step-content" id="step2">
+          <div class="step-header">
+            <div class="step-header-left">
+              <div class="content-type-tag" id="typeTag2"><i class="fa fa-image"></i> Манга</div>
+              <h2 class="form-section-title">Классификация</h2>
+              <p class="form-section-sub">Точные жанры и теги помогут читателям найти ваше произведение.</p>
+            </div>
+            <div class="step-counter">02</div>
+          </div>
+
+          <div class="form-panel">
+            <div class="form-panel-title"><i class="fa fa-layer-group"></i> Параметры</div>
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <div class="field-group" style="margin-bottom:0;">
+                  <label class="field-label">Статус <span class="req">*</span></label>
+                  <div class="select-wrap">
+                    <select class="field-input">
+                      <option value="">Выберите…</option>
+                      <option>Онгоинг</option>
+                      <option>Завершено</option>
+                      <option>Заморожено</option>
+                      <option>Анонс</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="field-group" style="margin-bottom:0;">
+                  <label class="field-label">Возрастной рейтинг <span class="req">*</span></label>
+                  <div class="select-wrap">
+                    <select class="field-input">
+                      <option value="">Выберите…</option>
+                      <option value="0">0+ — Для всех</option>
+                      <option value="6">6+ — Для детей</option>
+                      <option value="12">12+ — Подростки</option>
+                      <option value="16">16+ — Старшие подростки</option>
+                      <option value="18">18+ — Только взрослые</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="field-group" style="margin-bottom:0;">
+                  <label class="field-label">Язык оригинала <span class="req">*</span></label>
+                  <div class="select-wrap">
+                    <select class="field-input">
+                      <option>Украинский</option>
+                      <option>Русский</option>
+                      <option>Английский</option>
+                      <option>Японский</option>
+                      <option>Корейский</option>
+                      <option>Китайский</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="field-group" style="margin-bottom:0;">
+                  <label class="field-label">Тип создания <span class="req">*</span></label>
+                  <div class="select-wrap">
+                    <select class="field-input">
+                      <option value="">Выберите…</option>
+                      <option>Оригинал</option>
+                      <option>Фанфик</option>
+                      <option>Адаптация</option>
+                      <option>Перевод</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-panel">
+            <div class="form-panel-title"><i class="fa fa-tags"></i> Жанры и теги</div>
+            <div class="field-group">
+              <label class="field-label">Жанры <span class="req">*</span></label>
+              <select id="genresSelect" multiple>
+                <option value="shounen">Сёнэн</option>
+                <option value="shoujo">Сёдзё</option>
+                <option value="seinen">Сэйнэн</option>
+                <option value="josei">Дзёсэй</option>
+                <option value="fantasy">Фэнтези</option>
+                <option value="isekai">Ісекай</option>
+                <option value="horror">Хоррор</option>
+                <option value="action">Екшен</option>
+                <option value="romance">Романтика</option>
+                <option value="comedy">Комедія</option>
+                <option value="drama">Драма</option>
+                <option value="mystery">Детектив</option>
+                <option value="scifi">Sci-Fi</option>
+                <option value="mecha">Меха</option>
+                <option value="psychological">Психологічне</option>
+                <option value="adventure">Пригоди</option>
+                <option value="slice">Повсякденність</option>
+                <option value="sport">Спорт</option>
+                <option value="historical">Історичне</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Теги <span class="opt">(необязательно)</span></label>
+              <input id="tagsInput" type="text" placeholder="Добавляйте теги через Enter или запятую…"/>
+              <div style="margin-top:0.3rem; font-size:0.68rem; color:rgba(221,214,200,0.22);">Например: магія, школа, попаданець, антигерой…</div>
+            </div>
+          </div>
+
+          <!-- ПРЕДУПРЕЖДЕНИЯ О КОНТЕНТЕ -->
+          <div class="form-panel">
+            <div class="form-panel-title"><i class="fa fa-triangle-exclamation"></i> Предупреждения о контенте</div>
+            <p style="font-size:0.79rem; color:rgba(221,214,200,0.42); line-height:1.65; margin-bottom:1.1rem;">
+              Отметьте, если произведение содержит следующие элементы. Это помогает читателям сделать осознанный выбор.
+            </p>
+            <div class="row g-2">
+              <div class="col-6 col-md-4">
+                <label class="warn-option">
+                  <input type="checkbox" class="warn-checkbox"/>
+                  <span class="warn-box">
+                    <i class="fa fa-skull-crossbones warn-icon"></i>
+                    <span class="warn-label">Насилие</span>
+                  </span>
+                </label>
+              </div>
+              <div class="col-6 col-md-4">
+                <label class="warn-option">
+                  <input type="checkbox" class="warn-checkbox"/>
+                  <span class="warn-box">
+                    <i class="fa fa-droplet warn-icon"></i>
+                    <span class="warn-label">Кровь</span>
+                  </span>
+                </label>
+              </div>
+              <div class="col-6 col-md-4">
+                <label class="warn-option">
+                  <input type="checkbox" class="warn-checkbox"/>
+                  <span class="warn-box">
+                    <i class="fa fa-fire warn-icon"></i>
+                    <span class="warn-label">Ненормативная лексика</span>
+                  </span>
+                </label>
+              </div>
+              <div class="col-6 col-md-4">
+                <label class="warn-option">
+                  <input type="checkbox" class="warn-checkbox"/>
+                  <span class="warn-box">
+                    <i class="fa fa-heart warn-icon"></i>
+                    <span class="warn-label">Эротические сцены</span>
+                  </span>
+                </label>
+              </div>
+              <div class="col-6 col-md-4">
+                <label class="warn-option">
+                  <input type="checkbox" class="warn-checkbox"/>
+                  <span class="warn-box">
+                    <i class="fa fa-brain warn-icon"></i>
+                    <span class="warn-label">Психологически тяжёлые темы</span>
+                  </span>
+                </label>
+              </div>
+              <div class="col-6 col-md-4">
+                <label class="warn-option">
+                  <input type="checkbox" class="warn-checkbox"/>
+                  <span class="warn-box">
+                    <i class="fa fa-pills warn-icon"></i>
+                    <span class="warn-label">Употребление веществ</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI-КОНТЕНТ -->
+          <div class="form-panel">
+            <div class="form-panel-title"><i class="fa fa-robot"></i> Использование ИИ <span class="req">*</span></div>
+            <p style="font-size:0.79rem; color:rgba(221,214,200,0.42); line-height:1.65; margin-bottom:1.1rem;">
+              Mangoria допускает публикацию контента с использованием ИИ. Укажите честно — это не влияет на возможность публикации.
+            </p>
+            <div class="ai-options">
+              <label class="ai-option">
+                <input type="radio" name="aiUsage" value="manual" checked/>
+                <span class="ai-box">
+                  <span class="ai-icon"><i class="fa fa-hand"></i></span>
+                  <span class="ai-name">Полностью вручную</span>
+                  <span class="ai-desc">Весь контент создан автором без ИИ-инструментов</span>
+                </span>
+              </label>
+              <label class="ai-option">
+                <input type="radio" name="aiUsage" value="partial"/>
+                <span class="ai-box">
+                  <span class="ai-icon"><i class="fa fa-code-merge"></i></span>
+                  <span class="ai-name">Частично с ИИ</span>
+                  <span class="ai-desc">ИИ использовался для отдельных элементов (фоны, текстуры, вспомогательные элементы)</span>
+                </span>
+              </label>
+              <label class="ai-option">
+                <input type="radio" name="aiUsage" value="full"/>
+                <span class="ai-box">
+                  <span class="ai-icon"><i class="fa fa-robot"></i></span>
+                  <span class="ai-name">Полностью ИИ</span>
+                  <span class="ai-desc">Основной контент сгенерирован с помощью ИИ</span>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn-secondary" onclick="goStep(1)"><i class="fa fa-arrow-left"></i> Назад</button>
+            <button class="btn-primary"   onclick="goStep(3)">Далее <i class="fa fa-arrow-right"></i></button>
+            <button class="btn-draft"><i class="fa fa-floppy-disk"></i> Черновик</button>
+          </div>
+        </div>
+
+        <!-- ══ ШАГ 3: Глава — Манга ══ -->
+        <div class="step-content" id="step3manga">
+          <div class="step-header">
+            <div class="step-header-left">
+              <div class="content-type-tag"><i class="fa fa-image"></i> Манга</div>
+              <h2 class="form-section-title">Первая глава</h2>
+              <p class="form-section-sub">Загрузите страницы. Поддерживаются JPG, PNG, WebP.</p>
+            </div>
+            <div class="step-counter">03</div>
+          </div>
+
+          <div class="info-tip">
+            <i class="fa fa-circle-info"></i>
+            Страницы отображаются в порядке загрузки. После публикации можно изменить порядок перетаскиванием.
+          </div>
+
+          <div class="form-panel">
+            <div class="form-panel-title"><i class="fa fa-circle-info"></i> Информация о главе</div>
+            <div class="row g-3">
+              <div class="col-12 col-md-8">
+                <div class="field-group" style="margin-bottom:0;">
+                  <label class="field-label">Название главы <span class="opt">(необязательно)</span></label>
+                  <input type="text" class="field-input" placeholder="Например: Пробуждение…"/>
+                </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="field-group" style="margin-bottom:0;">
+                  <label class="field-label">Номер главы <span class="req">*</span></label>
+                  <div class="num-field-wrap">
+                    <input type="number" class="field-input num-field" value="1" min="0" step="0.5" id="chapterNum"/>
+                    <div class="num-btns">
+                      <button class="num-btn" onclick="changeNum(0.5)"><i class="fa fa-chevron-up"></i></button>
+                      <button class="num-btn" onclick="changeNum(-0.5)"><i class="fa fa-chevron-down"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="field-group" style="margin-bottom:0;">
+                  <label class="field-label">Режим чтения</label>
+                  <div class="select-wrap">
+                    <select class="field-input">
+                      <option>Слева направо (Вебтун)</option>
+                      <option>Справа налево (Манга)</option>
+                      <option>Вертикальный (Манхва)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="field-group" style="margin-bottom:0;">
+                  <label class="field-label">Описание главы <span class="opt">(необязательно)</span></label>
+                  <textarea class="field-input" placeholder="Краткий синопсис…" style="min-height:65px;"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-panel">
+            <div class="form-panel-title"><i class="fa fa-images"></i> Страницы</div>
+            <div class="pages-drop-zone" id="pagesZone">
+              <input type="file" multiple accept="image/*" id="pagesInput" onchange="previewPages(event)"/>
+              <i class="fa fa-cloud-arrow-up" style="font-size:1.8rem; color:rgba(221,214,200,0.14); display:block; margin-bottom:0.6rem;"></i>
+              <div class="upload-zone-label"><span>Перетащите страницы</span> или нажмите</div>
+              <div class="upload-zone-hint" style="margin-top:0.35rem;">JPG, PNG, WebP · до 20 МБ каждая</div>
+            </div>
+            <div class="pages-thumbnails" id="pagesThumbs"></div>
+          </div>
+
+          <div class="form-panel">
+            <div class="form-panel-title"><i class="fa fa-pen"></i> Примечание автора</div>
+            <textarea class="field-input" placeholder="Поделитесь мыслями с читателями…" style="min-height:75px;"></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn-secondary" onclick="goStep(2)"><i class="fa fa-arrow-left"></i> Назад</button>
+            <button class="btn-primary"   onclick="goStep(4)">Далее <i class="fa fa-arrow-right"></i></button>
+            <button class="btn-draft"><i class="fa fa-floppy-disk"></i> Черновик</button>
+          </div>
+        </div>
+
+        <!-- ══ ШАГ 3: Глава — Ранобэ ══ -->
+        <div class="step-content" id="step3ranobe">
+          <div class="step-header">
+            <div class="step-header-left">
+              <div class="content-type-tag ranobe"><i class="fa fa-book"></i> Ранобэ</div>
+              <h2 class="form-section-title">Первая глава</h2>
+              <p class="form-section-sub">Напишите или вставьте текст первой главы.</p>
+            </div>
+            <div class="step-counter">03</div>
+          </div>
+
+          <div class="form-panel">
+            <div class="form-panel-title"><i class="fa fa-circle-info"></i> Информация о главе</div>
+            <div class="row g-3">
+              <div class="col-12 col-md-8">
+                <div class="field-group" style="margin-bottom:0;">
+                  <label class="field-label">Название главы <span class="opt">(необязательно)</span></label>
+                  <input type="text" class="field-input" placeholder="Например: Начало пути…"/>
+                </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="field-group" style="margin-bottom:0;">
+                  <label class="field-label">Номер главы <span class="req">*</span></label>
+                  <div class="num-field-wrap">
+                    <input type="number" class="field-input num-field" value="1" min="0" step="0.5" id="rChapterNum"/>
+                    <div class="num-btns">
+                      <button class="num-btn" onclick="changeNumR(0.5)"><i class="fa fa-chevron-up"></i></button>
+                      <button class="num-btn" onclick="changeNumR(-0.5)"><i class="fa fa-chevron-down"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="field-group" style="margin-bottom:0;">
+                  <label class="field-label">Краткое описание главы <span class="opt">(необязательно)</span></label>
+                  <textarea class="field-input" placeholder="Краткий синопсис…" style="min-height:65px;"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-panel">
+            <div class="form-panel-title"><i class="fa fa-align-left"></i> Текст главы <span style="color:var(--red); margin-left:3px; font-size:0.65rem; letter-spacing:0; text-transform:none;">*</span></div>
+            <div class="rte-toolbar">
+              <button class="rte-btn active"><i class="fa fa-bold"></i></button>
+              <button class="rte-btn"><i class="fa fa-italic"></i></button>
+              <button class="rte-btn"><i class="fa fa-underline"></i></button>
+              <button class="rte-btn"><i class="fa fa-strikethrough"></i></button>
+              <div class="rte-sep"></div>
+              <button class="rte-btn"><i class="fa fa-heading"></i></button>
+              <button class="rte-btn"><i class="fa fa-quote-left"></i></button>
+              <button class="rte-btn"><i class="fa fa-minus"></i></button>
+              <div class="rte-sep"></div>
+              <button class="rte-btn"><i class="fa fa-align-left"></i></button>
+              <button class="rte-btn"><i class="fa fa-align-center"></i></button>
+              <button class="rte-btn"><i class="fa fa-align-right"></i></button>
+              <div class="rte-sep"></div>
+              <button class="rte-btn"><i class="fa fa-link"></i></button>
+              <button class="rte-btn"><i class="fa fa-rotate-left"></i></button>
+              <button class="rte-btn"><i class="fa fa-rotate-right"></i></button>
+            </div>
+            <textarea class="rte-area" id="rteArea" placeholder="Начните вводить текст главы…"></textarea>
+            <div style="display:flex; justify-content:flex-end; margin-top:0.35rem;">
+              <span class="char-count" id="rteCount">0 знаков</span>
+            </div>
+          </div>
+
+          <div class="form-panel">
+            <div class="form-panel-title"><i class="fa fa-pen"></i> Примечание автора</div>
+            <textarea class="field-input" placeholder="Поделитесь мыслями с читателями…" style="min-height:75px;"></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn-secondary" onclick="goStep(2)"><i class="fa fa-arrow-left"></i> Назад</button>
+            <button class="btn-primary"   onclick="goStep(4)">Далее <i class="fa fa-arrow-right"></i></button>
+            <button class="btn-draft"><i class="fa fa-floppy-disk"></i> Черновик</button>
+          </div>
+        </div>
+
+        <!-- ══ ШАГ 4: Настройки ══ -->
+        <div class="step-content" id="step4">
+          <div class="step-header">
+            <div class="step-header-left">
+              <div class="content-type-tag" id="typeTag4"><i class="fa fa-image"></i> Манга</div>
+              <h2 class="form-section-title">Настройки публикации</h2>
+              <p class="form-section-sub">Права, взаимодействие с аудиторией и уникальные функции Mangoria.</p>
+            </div>
+            <div class="step-counter">04</div>
+          </div>
+
+          <div class="form-panel">
+            <div class="form-panel-title"><i class="fa fa-sliders"></i> Взаимодействие</div>
+            <div class="toggle-group">
+              <div class="toggle-meta">
+                <div class="toggle-label">Разрешить комментарии</div>
+                <div class="toggle-desc">Читатели смогут оставлять комментарии под главами</div>
+              </div>
+              <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-track"></span></label>
+            </div>
+            <div class="toggle-group">
+              <div class="toggle-meta">
+                <div class="toggle-label">Опубликовать сейчас</div>
+                <div class="toggle-desc">Если выключено — сохранится как черновик до ручной публикации</div>
+              </div>
+              <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-track"></span></label>
+            </div>
+          </div>
+
+          <!-- АДАПТАЦИЯ -->
+          <div class="form-panel">
+            <div class="form-panel-title"><i class="fa fa-wand-magic-sparkles"></i> Адаптация произведения</div>
+            <p style="font-size:0.79rem; color:rgba(221,214,200,0.42); line-height:1.65; margin-bottom:1.1rem;">
+              Одна из ключевых функций Mangoria — развитие проектов. Укажите, может ли ваше произведение быть адаптировано в другой формат.
+            </p>
+            <div class="field-group">
+              <label class="field-label">Статус адаптации</label>
+              <div class="select-wrap">
+                <select class="field-input" id="adaptationSelect" onchange="updateAdaptationHint(this)">
+                  <option value="forbidden">Адаптация запрещена</option>
+                  <option value="allowed">Разрешена адаптация (с указанием автора)</option>
+                  <option value="seeking">Ищем художника / автора ранобэ</option>
+                  <option value="found">Художник найден — манга создаётся</option>
+                </select>
+              </div>
+              <div class="field-hint" id="adaptationHint" style="margin-top:0.45rem;">Адаптация запрещена — другие пользователи не смогут предлагать адаптацию.</div>
+            </div>
+          </div>
+
+          <!-- ПОИСК КОМАНДЫ -->
+          <div class="form-panel" id="teamPanel" style="display:none;">
+            <div class="form-panel-title"><i class="fa fa-users"></i> Поиск команды</div>
+            <p style="font-size:0.79rem; color:rgba(221,214,200,0.42); line-height:1.65; margin-bottom:1.1rem;">
+              Выберите, кого вы ищете для развития проекта. Заявки будут отображаться на странице произведения.
+            </p>
+            <div class="row g-2">
+              <div class="col-6 col-md-3">
+                <label class="warn-option">
+                  <input type="checkbox" class="warn-checkbox" name="team"/>
+                  <span class="warn-box">
+                    <i class="fa fa-palette warn-icon" style="color:var(--gold);"></i>
+                    <span class="warn-label">Художник</span>
+                  </span>
+                </label>
+              </div>
+              <div class="col-6 col-md-3">
+                <label class="warn-option">
+                  <input type="checkbox" class="warn-checkbox" name="team"/>
+                  <span class="warn-box">
+                    <i class="fa fa-pen-nib warn-icon" style="color:var(--gold);"></i>
+                    <span class="warn-label">Автор ранобэ</span>
+                  </span>
+                </label>
+              </div>
+              <div class="col-6 col-md-3">
+                <label class="warn-option">
+                  <input type="checkbox" class="warn-checkbox" name="team"/>
+                  <span class="warn-box">
+                    <i class="fa fa-language warn-icon" style="color:var(--gold);"></i>
+                    <span class="warn-label">Переводчик</span>
+                  </span>
+                </label>
+              </div>
+              <div class="col-6 col-md-3">
+                <label class="warn-option">
+                  <input type="checkbox" class="warn-checkbox" name="team"/>
+                  <span class="warn-box">
+                    <i class="fa fa-people-group warn-icon" style="color:var(--gold);"></i>
+                    <span class="warn-label">Соавтор</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+            <div class="field-group" style="margin-top:1rem;">
+              <label class="field-label">Описание для заявок <span class="opt">(необязательно)</span></label>
+              <textarea class="field-input" placeholder="Опишите, какой человек вам нужен, какой опыт желателен…" style="min-height:80px;"></textarea>
+            </div>
+          </div>
+
+          <!-- ПРАВА -->
+          <div class="form-panel">
+            <div class="form-panel-title"><i class="fa fa-shield-halved"></i> Права и черновик</div>
+            <div class="toggle-group">
+              <div class="toggle-meta">
+                <div class="toggle-label">Сохранить первую главу как черновик</div>
+                <div class="toggle-desc">Глава будет скрыта от читателей до ручной публикации</div>
+              </div>
+              <label class="toggle-switch"><input type="checkbox"/><span class="toggle-track"></span></label>
+            </div>
+          </div>
+
+          <!-- СОГЛАШЕНИЕ -->
+          <div class="form-panel">
+            <div class="form-panel-title"><i class="fa fa-gavel"></i> Согласие с правилами</div>
+            <div class="agree-row">
+              <label class="custom-checkbox">
+                <input type="checkbox" id="agree1"/>
+                <span class="check-box"><i class="fa fa-check"></i></span>
+              </label>
+              <p class="agree-text">Подтверждаю, что являюсь автором произведения или имею права на его публикацию, а контент не нарушает <a href="static.html">правила платформы</a> и авторские права третьих лиц.</p>
+            </div>
+            <div class="agree-row">
+              <label class="custom-checkbox">
+                <input type="checkbox" id="agree2"/>
+                <span class="check-box"><i class="fa fa-check"></i></span>
+              </label>
+              <p class="agree-text">Принимаю <a href="static.html">Пользовательское соглашение</a> и <a href="static.html">Политику конфиденциальности</a> Mangoria.</p>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn-secondary" onclick="goStep(3)"><i class="fa fa-arrow-left"></i> Назад</button>
+            <button class="btn-primary"   onclick="handleSubmit()"><i class="fa fa-paper-plane"></i> Опубликовать</button>
+            <button class="btn-draft"><i class="fa fa-floppy-disk"></i> Черновик</button>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+</section>
+
+<!-- Toast -->
+<div id="toast">
+  <i class="fa fa-circle-check" style="color:var(--red); font-size:1rem; flex-shrink:0;"></i>
+  <div>
+    <div style="font-size:0.83rem; color:var(--paper); margin-bottom:2px;" id="toastTitle">Готово!</div>
+    <div style="font-size:0.72rem; color:rgba(221,214,200,0.42);" id="toastMsg">Черновик сохранён</div>
+  </div>
+</div>
+
+<!-- External JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+<!-- Project JS -->
+<script src="js/publish.js"></script>
+<script src="js/navbar.js"></script>
+</body>
+</html>

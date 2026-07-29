@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="ru" id="htmlRoot">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mangoria — Настройки</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&family=Dela+Gothic+One&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/settings.css"/>
+</head>
+<body>
+
+<!-- ══════════════════ NAVBAR ══════════════════ -->
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-inner">
+      <a class="navbar-brand" href="index.html">
+        <span class="brand-icon"><i class="fa-solid fa-torii-gate"></i></span>
+        Mang<span class="brand-oni">oria</span>
+      </a>
+      <button class="navbar-toggler-custom" id="navToggle"><i class="fa fa-bars"></i></button>
+      <div class="nav-center" id="navCenter">
+        <div class="nav-type-switcher">
+          <a href="index.html#catalog" class="nav-type-btn active"><i class="fa fa-image"></i><span data-i18n="nav_manga">Манга</span></a>
+          <a href="index.html#ranobe"  class="nav-type-btn"><i class="fa fa-book"></i><span data-i18n="nav_ranobe">Ранобэ</span></a>
+        </div>
+        <div class="nav-item-custom"><a href="index.html#catalog" class="nav-link-custom"><i class="fa fa-compass"></i><span data-i18n="nav_catalog">Каталог</span></a></div>
+        <div class="nav-item-custom"><a href="#" class="nav-link-custom"><i class="fa fa-layer-group"></i><span data-i18n="nav_genres">Жанры</span></a></div>
+        <div class="nav-item-custom"><a href="#" class="nav-link-custom"><i class="fa fa-star"></i><span data-i18n="nav_rating">Рейтинг</span></a></div>
+        <div class="nav-item-custom"><a href="#" class="nav-link-custom"><i class="fa fa-users"></i><span data-i18n="nav_authors">Авторы</span></a></div>
+        <div class="nav-item-custom"><a href="#" class="nav-link-custom"><i class="fa fa-fire"></i><span data-i18n="nav_new">Новинки</span></a></div>
+      </div>
+      <div class="nav-right" id="navRight">
+        <div class="lang-dropdown" id="langDropdownWrap">
+          <button class="lang-dropdown-btn" id="langDropdownBtn">
+            <i class="fa fa-globe"></i><span id="langDropdownLabel">РУ</span>
+            <i class="fa fa-chevron-down lang-chevron"></i>
+          </button>
+          <div class="lang-dropdown-menu" id="langDropdownMenu">
+            <button class="lang-option" data-lang="uk"><span class="lang-flag">🇺🇦</span><span class="lang-name">Українська</span><span class="lang-code">УК</span></button>
+            <button class="lang-option active" data-lang="ru"><span class="lang-flag">🇷🇺</span><span class="lang-name">Русский</span><span class="lang-code">РУ</span></button>
+            <button class="lang-option" data-lang="en"><span class="lang-flag">🇬🇧</span><span class="lang-name">English</span><span class="lang-code">EN</span></button>
+          </div>
+        </div>
+        <button class="nav-icon-btn nav-search-btn" data-action="search" title="Поиск (Ctrl+K)"><i class="fa fa-search"></i></button>
+        <a href="publish.html" class="btn-publish ms-1"><i class="fa fa-upload"></i><span data-i18n="nav_publish">Публиковать</span></a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════ PAGE HEADER ══════════════════ -->
+<div class="settings-hero">
+  <div class="container">
+    <div class="settings-breadcrumb">
+      <a href="index.html"><i class="fa fa-house fa-xs"></i> Главная</a>
+      <span class="sep">/</span>
+      <a href="profile.html">ShadowBrush</a>
+      <span class="sep">/</span>
+      <span style="color:rgba(221,214,200,0.55);">Настройки</span>
+    </div>
+    <h1 class="settings-title">Настройки профиля</h1>
+    <p class="settings-sub">Управляйте профилем, ролями, безопасностью и приватностью аккаунта.</p>
+  </div>
+</div>
+
+<!-- ══════════════════ BODY ══════════════════ -->
+<div class="settings-body">
+  <div class="container">
+    <div class="settings-layout">
+
+      <!-- ══ SIDEBAR NAV ══ -->
+      <aside class="settings-sidebar">
+        <div class="settings-nav-card" id="settingsNav">
+          <button class="settings-nav-item active" data-panel="profile">
+            <i class="fa fa-user"></i> Профиль
+          </button>
+          <button class="settings-nav-item" data-panel="media">
+            <i class="fa fa-image"></i> Аватар и баннер
+          </button>
+          <button class="settings-nav-item" data-panel="roles">
+            <i class="fa fa-id-badge"></i> Роли
+          </button>
+          <div class="settings-nav-sep"></div>
+          <button class="settings-nav-item" data-panel="account">
+            <i class="fa fa-at"></i> Аккаунт
+          </button>
+          <button class="settings-nav-item" data-panel="notifications">
+            <i class="fa fa-bell"></i> Уведомления
+          </button>
+          <button class="settings-nav-item" data-panel="privacy">
+            <i class="fa fa-lock"></i> Приватность
+          </button>
+          <button class="settings-nav-item" data-panel="security">
+            <i class="fa fa-shield-halved"></i> Безопасность
+          </button>
+          <div class="settings-nav-sep"></div>
+          <button class="settings-nav-item danger" data-panel="danger">
+            <i class="fa fa-triangle-exclamation"></i> Удаление аккаунта
+          </button>
+        </div>
+      </aside>
+
+      <!-- ══ MAIN ══ -->
+      <main class="settings-main">
+
+        <!-- ═══════════ ПАНЕЛЬ: ПРОФИЛЬ ═══════════ -->
+        <div class="settings-panel active" id="panel-profile">
+          <div class="spanel-header">
+            <h2 class="spanel-title">Профиль</h2>
+            <p class="spanel-sub">Основная информация, которую видят другие пользователи.</p>
+          </div>
+
+          <div class="scard">
+            <div class="scard-header"><i class="fa fa-id-card"></i> Основное</div>
+            <div class="scard-body">
+              <div class="field-group">
+                <div class="field-label">Имя</div>
+                <input type="text" class="field-input" value="Александр" placeholder="Ваше имя"/>
+              </div>
+              <div class="field-group">
+                <div class="field-label">Никнейм <span class="opt">публичный, виден всем</span></div>
+                <input type="text" class="field-input" value="ShadowBrush" placeholder="Никнейм"/>
+                <div class="field-hint">mangoria.com/profile/shadowbrush</div>
+              </div>
+              <div class="field-group">
+                <div class="field-label">О себе <span class="char-count">128 / 300</span></div>
+                <textarea class="field-input" rows="3">Рисую тёмное фэнтези и пишу истории о людях на грани. Люблю демонов, кузнецов и антигероев. Открыт к коллаборациям.</textarea>
+              </div>
+              <div class="field-group">
+                <div class="field-label">Местоположение <span class="opt">необязательно</span></div>
+                <input type="text" class="field-input" value="Киев, Украина" placeholder="Город, страна"/>
+              </div>
+              <div class="field-group">
+                <div class="field-label">Веб-сайт <span class="opt">необязательно</span></div>
+                <input type="url" class="field-input" value="https://pixiv.net/shadowbrush" placeholder="https://…"/>
+              </div>
+              <div class="field-group">
+                <div class="field-label">Язык интерфейса</div>
+                <div class="select-wrap">
+                  <select class="field-input">
+                    <option>Русский</option>
+                    <option>Українська</option>
+                    <option>English</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scard">
+            <div class="scard-header"><i class="fa fa-share-nodes"></i> Социальные сети</div>
+            <div class="scard-body">
+              <div class="social-link-row">
+                <div class="social-link-icon telegram"><i class="fab fa-telegram"></i></div>
+                <input type="text" class="field-input" placeholder="t.me/username" value="t.me/shadowbrush_art"/>
+              </div>
+              <div class="social-link-row">
+                <div class="social-link-icon discord"><i class="fab fa-discord"></i></div>
+                <input type="text" class="field-input" placeholder="username#0000" value="shadowbrush#1234"/>
+              </div>
+              <div class="social-link-row">
+                <div class="social-link-icon pixiv"><i class="fa fa-paintbrush"></i></div>
+                <input type="text" class="field-input" placeholder="pixiv.net/users/…" value="pixiv.net/shadowbrush"/>
+              </div>
+              <div class="social-link-row">
+                <div class="social-link-icon twitter"><i class="fab fa-twitter"></i></div>
+                <input type="text" class="field-input" placeholder="twitter.com/username"/>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-actions">
+            <button class="btn-save" onclick="saveSettings(this)">
+              <i class="fa fa-floppy-disk"></i>
+              <i class="fa fa-circle-notch fa-spin"></i>
+              <span>Сохранить изменения</span>
+            </button>
+            <button class="btn-cancel">Отменить</button>
+            <span class="save-status" id="saveStatus1"></span>
+          </div>
+        </div>
+
+        <!-- ═══════════ ПАНЕЛЬ: АВАТАР И БАННЕР ═══════════ -->
+        <div class="settings-panel" id="panel-media">
+          <div class="spanel-header">
+            <h2 class="spanel-title">Аватар и баннер</h2>
+            <p class="spanel-sub">Визуальное оформление вашего профиля.</p>
+          </div>
+
+          <div class="scard">
+            <div class="scard-header"><i class="fa fa-circle-user"></i> Аватар</div>
+            <div class="scard-body">
+              <div class="avatar-upload-row">
+                <div class="avatar-preview-wrap">
+                  <div class="avatar-preview" id="avatarPreview">
+                    <img src="img/avatar/ava_10.jpg" alt="Аватар"/>
+                  </div>
+                  <label class="avatar-upload-btn">
+                    <i class="fa fa-camera"></i>
+                    <input type="file" accept="image/*" style="display:none;" onchange="previewImage(event, 'avatarPreview')"/>
+                  </label>
+                </div>
+                <div class="avatar-upload-actions">
+                  <label class="btn-upload-text">
+                    <i class="fa fa-upload"></i> Загрузить новый
+                    <input type="file" accept="image/*" style="display:none;" onchange="previewImage(event, 'avatarPreview')"/>
+                  </label>
+                  <button class="btn-upload-text danger"><i class="fa fa-trash"></i> Удалить аватар</button>
+                  <span class="upload-hint">JPG, PNG, WebP · до 5 МБ · минимум 200×200</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scard">
+            <div class="scard-header"><i class="fa fa-panorama"></i> Баннер профиля</div>
+            <div class="scard-body">
+              <div class="banner-upload-wrap">
+                <div class="banner-preview" id="bannerPreview">
+                  <img src="img/banner/profile_banner.jpg" alt="Баннер"/>
+                  <div class="banner-preview-overlay">
+                    <label class="banner-change-btn" style="cursor:pointer;">
+                      <i class="fa fa-camera"></i> Сменить баннер
+                      <input type="file" accept="image/*" style="display:none;" onchange="previewImage(event, 'bannerPreview')"/>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex gap-2 mt-3">
+                <label class="btn-upload-text">
+                  <i class="fa fa-upload"></i> Загрузить новый
+                  <input type="file" accept="image/*" style="display:none;" onchange="previewImage(event, 'bannerPreview')"/>
+                </label>
+                <button class="btn-upload-text danger"><i class="fa fa-trash"></i> Удалить баннер</button>
+              </div>
+              <span class="upload-hint d-block mt-2">JPG, PNG · до 10 МБ · рекомендовано 1600×400</span>
+            </div>
+          </div>
+
+          <div class="settings-actions">
+            <button class="btn-save" onclick="saveSettings(this)">
+              <i class="fa fa-floppy-disk"></i>
+              <i class="fa fa-circle-notch fa-spin"></i>
+              <span>Сохранить изменения</span>
+            </button>
+            <button class="btn-cancel">Отменить</button>
+            <span class="save-status" id="saveStatus2"></span>
+          </div>
+        </div>
+
+        <!-- ═══════════ ПАНЕЛЬ: РОЛИ ═══════════ -->
+        <div class="settings-panel" id="panel-roles">
+          <div class="spanel-header">
+            <h2 class="spanel-title">Роли на платформе</h2>
+            <p class="spanel-sub">Роли определяют, какие функции доступны на платформе.</p>
+          </div>
+
+          <div class="scard">
+            <div class="scard-header"><i class="fa fa-circle-check"></i> Текущие роли</div>
+            <div class="scard-body">
+              <div class="current-roles-row">
+                <span class="current-role-badge author"><i class="fa fa-circle-check"></i> Автор</span>
+                <span class="current-role-badge artist"><i class="fa fa-circle-check"></i> Художник</span>
+                <span class="current-role-badge reader"><i class="fa fa-circle-check"></i> Читатель</span>
+              </div>
+              <p style="font-size:0.78rem;color:rgba(221,214,200,0.4);line-height:1.6;">
+                Эти роли уже подтверждены и активны на вашем аккаунте. Ниже вы можете запросить дополнительные роли.
+              </p>
+            </div>
+          </div>
+
+          <div class="scard">
+            <div class="scard-header"><i class="fa fa-id-badge"></i> Доступные роли</div>
+            <div class="scard-body">
+              <div class="role-grid">
+
+                <div class="role-card">
+                  <input type="checkbox" id="rc-author" checked/>
+                  <label class="role-card-label" for="rc-author">
+                    <div class="role-card-icon">✍️</div>
+                    <div>
+                      <div class="role-card-name">Автор</div>
+                      <div class="role-card-desc">Публикация ранобэ и текстовых произведений</div>
+                    </div>
+                  </label>
+                  <div class="role-card-check"><i class="fa fa-check"></i></div>
+                </div>
+
+                <div class="role-card">
+                  <input type="checkbox" id="rc-artist" checked/>
+                  <label class="role-card-label" for="rc-artist">
+                    <div class="role-card-icon">🎨</div>
+                    <div>
+                      <div class="role-card-name">Художник</div>
+                      <div class="role-card-desc">Публикация манги и графического контента</div>
+                    </div>
+                  </label>
+                  <div class="role-card-check"><i class="fa fa-check"></i></div>
+                </div>
+
+                <div class="role-card">
+                  <input type="checkbox" id="rc-translator"/>
+                  <label class="role-card-label" for="rc-translator">
+                    <div class="role-card-icon">🌐</div>
+                    <div>
+                      <div class="role-card-name">Переводчик</div>
+                      <div class="role-card-desc">Участие в переводе чужих произведений</div>
+                    </div>
+                  </label>
+                  <div class="role-card-check"><i class="fa fa-check"></i></div>
+                </div>
+
+                <div class="role-card">
+                  <input type="checkbox" id="rc-reader" checked/>
+                  <label class="role-card-label" for="rc-reader">
+                    <div class="role-card-icon">📖</div>
+                    <div>
+                      <div class="role-card-name">Читатель</div>
+                      <div class="role-card-desc">Базовая роль — доступна всем пользователям</div>
+                    </div>
+                  </label>
+                  <div class="role-card-check"><i class="fa fa-check"></i></div>
+                </div>
+
+              </div>
+
+              <div class="role-request-box">
+                <div class="role-request-icon"><i class="fa fa-shield-halved"></i></div>
+                <div class="role-request-text">
+                  Хотите стать <strong>модератором</strong>? Эта роль выдаётся вручную администрацией после рассмотрения заявки.
+                  <br>
+                  <button class="btn-request-role"><i class="fa fa-paper-plane"></i> Подать заявку на модератора</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-actions">
+            <button class="btn-save" onclick="saveSettings(this)">
+              <i class="fa fa-floppy-disk"></i>
+              <i class="fa fa-circle-notch fa-spin"></i>
+              <span>Сохранить изменения</span>
+            </button>
+            <button class="btn-cancel">Отменить</button>
+            <span class="save-status" id="saveStatus3"></span>
+          </div>
+        </div>
+
+        <!-- ═══════════ ПАНЕЛЬ: АККАУНТ ═══════════ -->
+        <div class="settings-panel" id="panel-account">
+          <div class="spanel-header">
+            <h2 class="spanel-title">Аккаунт</h2>
+            <p class="spanel-sub">Email, пароль и способы входа.</p>
+          </div>
+
+          <div class="scard">
+            <div class="scard-header"><i class="fa fa-at"></i> Email</div>
+            <div class="scard-body">
+              <div class="field-group">
+                <div class="field-label">Текущий email</div>
+                <input type="email" class="field-input" value="shadowbrush@gmail.com" disabled style="opacity:0.6;"/>
+                <div class="field-hint"><i class="fa fa-circle-check" style="color:#4ade80;"></i> Подтверждён</div>
+              </div>
+              <div class="field-group">
+                <div class="field-label">Новый email</div>
+                <input type="email" class="field-input" placeholder="Введите новый email…"/>
+                <div class="field-hint">Потребуется подтверждение по ссылке в письме</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scard">
+            <div class="scard-header"><i class="fa fa-lock"></i> Пароль</div>
+            <div class="scard-body">
+              <div class="security-item">
+                <div class="security-meta">
+                  <div class="security-label">Изменить пароль</div>
+                  <div class="security-desc">Последнее изменение: 3 месяца назад</div>
+                </div>
+                <button class="btn-security-action"><i class="fa fa-key"></i> Изменить</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="scard">
+            <div class="scard-header"><i class="fa fa-link"></i> Подключённые аккаунты</div>
+            <div class="scard-body">
+              <div class="security-item">
+                <div class="security-meta">
+                  <div class="security-label"><i class="fab fa-google" style="color:#ea4335;"></i> Google</div>
+                  <div class="security-desc">Подключён · shadowbrush@gmail.com</div>
+                </div>
+                <button class="btn-security-action">Отключить</button>
+              </div>
+              <div class="security-item">
+                <div class="security-meta">
+                  <div class="security-label"><i class="fab fa-discord" style="color:#7289da;"></i> Discord</div>
+                  <div class="security-desc">Не подключён</div>
+                </div>
+                <button class="btn-security-action">Подключить</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-actions">
+            <button class="btn-save" onclick="saveSettings(this)">
+              <i class="fa fa-floppy-disk"></i>
+              <i class="fa fa-circle-notch fa-spin"></i>
+              <span>Сохранить изменения</span>
+            </button>
+            <button class="btn-cancel">Отменить</button>
+            <span class="save-status" id="saveStatus4"></span>
+          </div>
+        </div>
+
+        <!-- ═══════════ ПАНЕЛЬ: УВЕДОМЛЕНИЯ ═══════════ -->
+        <div class="settings-panel" id="panel-notifications">
+          <div class="spanel-header">
+            <h2 class="spanel-title">Уведомления</h2>
+            <p class="spanel-sub">Настройте, о чём вы хотите получать уведомления.</p>
+          </div>
+
+          <div class="scard">
+            <div class="scard-header"><i class="fa fa-bell"></i> На платформе</div>
+            <div class="scard-body">
+              <div class="toggle-group">
+                <div class="toggle-meta">
+                  <div class="toggle-label">Новые комментарии</div>
+                  <div class="toggle-desc">Когда кто-то комментирует ваши произведения</div>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-track"></span></label>
+              </div>
+              <div class="toggle-group">
+                <div class="toggle-meta">
+                  <div class="toggle-label">Новые подписчики</div>
+                  <div class="toggle-desc">Когда на вас подписывается новый читатель</div>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-track"></span></label>
+              </div>
+              <div class="toggle-group">
+                <div class="toggle-meta">
+                  <div class="toggle-label">Обновления глав</div>
+                  <div class="toggle-desc">Когда автор, на которого вы подписаны, выпускает новую главу</div>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-track"></span></label>
+              </div>
+              <div class="toggle-group">
+                <div class="toggle-meta">
+                  <div class="toggle-label">Заявки в команду проекта</div>
+                  <div class="toggle-desc">Когда кто-то откликается на поиск команды</div>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-track"></span></label>
+              </div>
+              <div class="toggle-group">
+                <div class="toggle-meta">
+                  <div class="toggle-label">Лайки и оценки</div>
+                  <div class="toggle-desc">Когда ваше произведение лайкают или оценивают</div>
+                </div>
+                <label class="toggle-switch"><input type="checkbox"/><span class="toggle-track"></span></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="scard">
+            <div class="scard-header"><i class="fa fa-envelope"></i> Email-уведомления</div>
+            <div class="scard-body">
+              <div class="toggle-group">
+                <div class="toggle-meta">
+                  <div class="toggle-label">Еженедельный дайджест</div>
+                  <div class="toggle-desc">Подборка новинок и обновлений раз в неделю</div>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-track"></span></label>
+              </div>
+              <div class="toggle-group">
+                <div class="toggle-meta">
+                  <div class="toggle-label">Важные объявления платформы</div>
+                  <div class="toggle-desc">Изменения правил, технические работы и т.п.</div>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-track"></span></label>
+              </div>
+              <div class="toggle-group">
+                <div class="toggle-meta">
+                  <div class="toggle-label">Маркетинговые письма</div>
+                  <div class="toggle-desc">Новости, акции и рекомендации</div>
+                </div>
+                <label class="toggle-switch"><input type="checkbox"/><span class="toggle-track"></span></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-actions">
+            <button class="btn-save" onclick="saveSettings(this)">
+              <i class="fa fa-floppy-disk"></i>
+              <i class="fa fa-circle-notch fa-spin"></i>
+              <span>Сохранить изменения</span>
+            </button>
+            <button class="btn-cancel">Отменить</button>
+            <span class="save-status" id="saveStatus5"></span>
+          </div>
+        </div>
+
+        <!-- ═══════════ ПАНЕЛЬ: ПРИВАТНОСТЬ ═══════════ -->
+        <div class="settings-panel" id="panel-privacy">
+          <div class="spanel-header">
+            <h2 class="spanel-title">Приватность</h2>
+            <p class="spanel-sub">Кто и что может видеть в вашем профиле.</p>
+          </div>
+
+          <div class="scard">
+            <div class="scard-header"><i class="fa fa-eye"></i> Видимость профиля</div>
+            <div class="scard-body">
+              <div class="field-group">
+                <div class="field-label">Кто может видеть мой профиль</div>
+                <div class="select-wrap">
+                  <select class="field-input">
+                    <option>Все пользователи</option>
+                    <option>Только зарегистрированные</option>
+                    <option>Только подписчики</option>
+                  </select>
+                </div>
+              </div>
+              <div class="toggle-group">
+                <div class="toggle-meta">
+                  <div class="toggle-label">Показывать активность в профиле</div>
+                  <div class="toggle-desc">Лента публикаций, комментариев и подписок</div>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-track"></span></label>
+              </div>
+              <div class="toggle-group">
+                <div class="toggle-meta">
+                  <div class="toggle-label">Показывать статус «онлайн»</div>
+                  <div class="toggle-desc">Другие пользователи видят, когда вы на платформе</div>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-track"></span></label>
+              </div>
+              <div class="toggle-group">
+                <div class="toggle-meta">
+                  <div class="toggle-label">Показывать список подписчиков</div>
+                  <div class="toggle-desc">Видно ли количество и список подписчиков другим</div>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-track"></span></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="scard">
+            <div class="scard-header"><i class="fa fa-comment-dots"></i> Сообщения и комментарии</div>
+            <div class="scard-body">
+              <div class="field-group">
+                <div class="field-label">Кто может писать мне сообщения</div>
+                <div class="select-wrap">
+                  <select class="field-input">
+                    <option>Все пользователи</option>
+                    <option selected>Только подписчики</option>
+                    <option>Никто</option>
+                  </select>
+                </div>
+              </div>
+              <div class="toggle-group">
+                <div class="toggle-meta">
+                  <div class="toggle-label">Разрешить комментарии на моих работах</div>
+                  <div class="toggle-desc">Можно отключить для конкретных произведений отдельно</div>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-track"></span></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-actions">
+            <button class="btn-save" onclick="saveSettings(this)">
+              <i class="fa fa-floppy-disk"></i>
+              <i class="fa fa-circle-notch fa-spin"></i>
+              <span>Сохранить изменения</span>
+            </button>
+            <button class="btn-cancel">Отменить</button>
+            <span class="save-status" id="saveStatus6"></span>
+          </div>
+        </div>
+
+        <!-- ═══════════ ПАНЕЛЬ: БЕЗОПАСНОСТЬ ═══════════ -->
+        <div class="settings-panel" id="panel-security">
+          <div class="spanel-header">
+            <h2 class="spanel-title">Безопасность</h2>
+            <p class="spanel-sub">Защита аккаунта и управление активными сессиями.</p>
+          </div>
+
+          <div class="scard">
+            <div class="scard-header"><i class="fa fa-shield-halved"></i> Защита аккаунта</div>
+            <div class="scard-body">
+              <div class="security-item">
+                <div class="security-meta">
+                  <div class="security-label">Двухфакторная аутентификация</div>
+                  <div class="security-desc">Дополнительный код при входе с нового устройства</div>
+                </div>
+                <button class="btn-security-action"><i class="fa fa-plus"></i> Подключить</button>
+              </div>
+              <div class="security-item">
+                <div class="security-meta">
+                  <div class="security-label">История входов</div>
+                  <div class="security-desc">Просмотр последних входов в аккаунт</div>
+                </div>
+                <button class="btn-security-action"><i class="fa fa-clock-rotate-left"></i> Просмотреть</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="scard">
+            <div class="scard-header"><i class="fa fa-laptop"></i> Активные сессии</div>
+            <div class="scard-body">
+              <div class="session-item">
+                <div class="session-icon current"><i class="fa fa-desktop"></i></div>
+                <div class="session-info">
+                  <div class="session-device">Chrome · Windows <span class="session-current-tag">Текущая</span></div>
+                  <div class="session-meta">Киев, Украина · последняя активность сейчас</div>
+                </div>
+              </div>
+              <div class="session-item">
+                <div class="session-icon"><i class="fa fa-mobile-screen"></i></div>
+                <div class="session-info">
+                  <div class="session-device">Safari · iPhone</div>
+                  <div class="session-meta">Киев, Украина · 2 дня назад</div>
+                </div>
+                <button class="btn-session-end" onclick="endSession(this)">Завершить</button>
+              </div>
+              <div class="session-item">
+                <div class="session-icon"><i class="fa fa-laptop"></i></div>
+                <div class="session-info">
+                  <div class="session-device">Firefox · macOS</div>
+                  <div class="session-meta">Черновцы, Украина· 9 дней назад</div>
+                </div>
+                <button class="btn-session-end" onclick="endSession(this)">Завершить</button>
+              </div>
+            </div>
+            <div class="scard-body" style="padding-top:0;">
+              <button class="btn-upload-text danger"><i class="fa fa-power-off"></i> Завершить все остальные сессии</button>
+            </div>
+          </div>
+
+          <div class="settings-actions">
+            <button class="btn-save" onclick="saveSettings(this)">
+              <i class="fa fa-floppy-disk"></i>
+              <i class="fa fa-circle-notch fa-spin"></i>
+              <span>Сохранить изменения</span>
+            </button>
+            <button class="btn-cancel">Отменить</button>
+            <span class="save-status" id="saveStatus7"></span>
+          </div>
+        </div>
+
+        <!-- ═══════════ ПАНЕЛЬ: УДАЛЕНИЕ АККАУНТА ═══════════ -->
+        <div class="settings-panel" id="panel-danger">
+          <div class="spanel-header">
+            <h2 class="spanel-title">Удаление аккаунта</h2>
+            <p class="spanel-sub">Необратимые действия с вашим аккаунтом.</p>
+          </div>
+
+          <div class="scard">
+            <div class="scard-header"><i class="fa fa-pause"></i> Деактивация</div>
+            <div class="scard-body">
+              <p style="font-size:0.82rem;color:rgba(221,214,200,0.5);line-height:1.7;margin-bottom:1rem;">
+                Временно скрывает ваш профиль и произведения. Вы можете восстановить аккаунт в любой момент, просто войдя снова.
+              </p>
+              <button class="btn-security-action"><i class="fa fa-pause"></i> Деактивировать аккаунт</button>
+            </div>
+          </div>
+
+          <div class="scard">
+            <div class="scard-body">
+              <div class="danger-zone">
+                <div class="danger-zone-title"><i class="fa fa-triangle-exclamation"></i> Удалить аккаунт навсегда</div>
+                <p class="danger-zone-text">
+                  Это действие <strong>необратимо</strong>. Будут удалены: профиль, все произведения, главы, комментарии и подписки.
+                  Восстановить данные после удаления будет невозможно.
+                </p>
+                <button class="btn-danger" onclick="confirmDelete()"><i class="fa fa-trash"></i> Удалить аккаунт навсегда</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer>
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <p class="footer-brand">Mang<span>oria</span> <small style="font-family:'Sawarabi Mincho';color:var(--muted);font-size:0.8rem;">鬼</small></p>
+        <p class="footer-tagline">Манга і Ранобе — відкрита платформа</p>
+        <p class="mt-3" style="font-size:0.78rem;color:var(--muted);line-height:1.75;">Сообщество художников и писателей.</p>
+        <div class="d-flex gap-2 mt-3">
+          <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-discord"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+      <div class="col-6 col-lg-2 offset-lg-1 footer-links">
+        <h6>Платформа</h6>
+        <a href="index.html">Манга</a>
+        <a href="index.html#ranobe">Ранобэ</a>
+        <a href="#">Новинки</a>
+        <a href="#">Рейтинг</a>
+      </div>
+      <div class="col-6 col-lg-2 footer-links">
+        <h6>Авторам</h6>
+        <a href="publish.html">Публикация</a>
+        <a href="static.html">Правила</a>
+        <a href="static.html">FAQ</a>
+      </div>
+      <div class="col-6 col-lg-2 footer-links">
+        <h6>О нас</h6>
+        <a href="static.html">О платформе</a>
+        <a href="static.html">Политика</a>
+        <a href="static.html">Контакты</a>
+      </div>
+    </div>
+    <div class="footer-bottom d-flex justify-content-between flex-wrap gap-2">
+      <span class="footer-copy">© 2025 Mangoria. Все права защищены.</span>
+      <span style="color:rgba(94,94,94,0.6);">Сделано с <i class="fa fa-heart" style="color:var(--red);"></i> для авторов</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast -->
+<div id="settingsToast">
+  <i class="fa fa-circle-check" style="color:#4ade80; font-size:1rem; flex-shrink:0;"></i>
+  <div>
+    <div style="font-size:0.83rem; color:var(--paper); margin-bottom:2px;" id="toastTitle">Сохранено</div>
+    <div style="font-size:0.72rem; color:rgba(221,214,200,0.42);" id="toastMsg">Изменения успешно применены</div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/navbar.js"></script>
+<script src="js/settings.js"></script>
+</body>
+</html>

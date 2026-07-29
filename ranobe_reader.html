@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="ru" id="htmlRoot">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mangoria — Призыватель Бездны · Глава 12</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+  <!-- Шрифты: три варианта для чтения + UI-шрифт -->
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Nunito:wght@300;400;500&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Dela+Gothic+One&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+/* =====================================================
+   Mangoria — reader-ranobe.html
+   Читалка ранобэ (текстовый режим)
+   ===================================================== */
+
+:root {
+  /* Основная палитра */
+  --ink:          #0d0d0d;
+  --red:          #c0392b;
+  --red-dim:      #8b1e14;
+  --gold:         #d4a017;
+  --teal:         #1a9b8a;
+  --r:            12px;
+  --r-sm:         8px;
+  --r-pill:       50px;
+  --topbar-h:     54px;
+  --botbar-h:     58px;
+  --panel-w:      340px;
+
+  /* Настройки чтения (переключаются JS-ом) */
+  --read-font:        'Lora', Georgia, serif;
+  --read-size:        18px;
+  --read-line:        1.85;
+  --read-col-width:   680px;
+  --read-padding:     2rem;
+  --read-bg:          #0f0f0f;
+  --read-text:        rgba(228,222,212,0.88);
+  --read-text-dim:    rgba(228,222,212,0.45);
+  --read-heading:     #f0ebe0;
+  --read-accent:      #c0392b;
+  --read-surface:     #161616;
+  --read-border:      rgba(255,255,255,0.08);
+}
+
+/* ── Темы ── */
+body.theme-dark   { --read-bg:#0f0f0f; --read-text:rgba(228,222,212,0.88); --read-text-dim:rgba(228,222,212,0.45); --read-heading:#f0ebe0; --read-surface:#161616; --read-border:rgba(255,255,255,0.08); }
+body.theme-sepia  { --read-bg:#1a1408; --read-text:rgba(235,218,185,0.90); --read-text-dim:rgba(235,218,185,0.5);  --read-heading:#f0ddb0; --read-surface:#231b0f; --read-border:rgba(235,218,185,0.12); }
+body.theme-light  { --read-bg:#f5f0e8; --read-text:rgba(30,24,18,0.85);    --read-text-dim:rgba(30,24,18,0.45);   --read-heading:#18120a; --read-surface:#ece6da; --read-border:rgba(30,24,18,0.12); }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; height: 100%; }
+
+body {
+  background: var(--read-bg);
+  color: var(--read-text);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  min-height: 100vh;
+  transition: background 0.35s ease, color 0.35s ease;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--red); }
+
+@keyframes fadeIn   { from { opacity:0; }              to { opacity:1; } }
+@keyframes slideDown{ from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
+@keyframes slideLeft{ from { opacity:0; transform:translateX(20px);  } to { opacity:1; transform:translateX(0); } }
+
+/* =====================================================
+   TOP BAR
+   ===================================================== */
+#topBar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: var(--topbar-h);
+  background: rgba(8,8,8,0.92);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  display: flex; align-items: center; padding: 0 1.2rem; gap: 0;
+  z-index: 100;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+#topBar.hidden { transform: translateY(-100%); opacity: 0; pointer-events: none; }
+
+.tb-left { display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; }
+.tb-back {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: var(--r-sm);
+  background: rgba(255,255,255,0.06); border: none;
+  color: rgba(221,214,200,0.65); font-size: 0.9rem; cursor: pointer;
+  transition: background 0.18s, color 0.18s; text-decoration: none;
+}
+.tb-back:hover { background: rgba(255,255,255,0.1); color: #f0ebe0; }
+.tb-brand {
+  font-family: 'Dela Gothic One', sans-serif; font-size: 1rem;
+  color: #f0ebe0; text-decoration: none; display: flex; align-items: center; gap: 0.35rem;
+}
+.tb-brand-dot { width: 8px; height: 8px; background: var(--teal); border-radius: 2px; }
+.tb-sep { width: 1px; height: 20px; background: rgba(255,255,255,0.1); margin: 0 0.3rem; }
+
+.tb-center { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 1px; overflow: hidden; }
+.tb-title   { font-size: 0.85rem; color: #f0ebe0; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px; }
+.tb-chapter { font-size: 0.7rem; color: rgba(221,214,200,0.38); letter-spacing: 0.04em; }
+
+.tb-right { display: flex; align-items: center; gap: 0.45rem; flex-shrink: 0; }
+.tb-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: var(--r-sm);
+  background: rgba(255,255,255,0.06); border: none;
+  color: rgba(221,214,200,0.55); font-size: 0.88rem; cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+.tb-btn:hover { background: rgba(255,255,255,0.1); color: #f0ebe0; }
+.tb-btn.active    { background: rgba(26,155,138,0.18); color: #5dcfc2; }
+.tb-btn.bookmarked{ background: rgba(212,160,23,0.16); color: var(--gold); }
+
+/* Прогресс */
+#chapterProgress {
+  position: fixed; top: var(--topbar-h); left: 0; right: 0; height: 2px;
+  background: rgba(255,255,255,0.06); z-index: 99;
+  transition: opacity 0.25s;
+}
+#chapterProgress.hidden { opacity: 0; }
+#chapterProgressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), #3dcfbc);
+  width: 0%; transition: width 0.1s linear;
+}
+
+/* =====================================================
+   SETTINGS PANEL
+   ===================================================== */
+#settingsPanel {
+  position: fixed; top: var(--topbar-h); left: 50%; transform: translateX(-50%) translateY(-10px);
+  width: 540px; max-width: calc(100vw - 2rem);
+  background: #161616;
+  border: 1px solid rgba(255,255,255,0.09);
+  border-top: none; border-radius: 0 0 var(--r) var(--r);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.75);
+  z-index: 200; padding: 1.4rem 1.5rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+#settingsPanel.open { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
+
+.sp-section-title {
+  font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(221,214,200,0.28); margin-bottom: 0.85rem; margin-top: 1.1rem;
+}
+.sp-section-title:first-child { margin-top: 0; }
+
+/* Шрифты — три карточки */
+.sp-fonts {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+  margin-bottom: 0;
+}
+.sp-font-card {
+  border: 1.5px solid rgba(255,255,255,0.08);
+  border-radius: var(--r-sm); padding: 0.75rem 0.7rem;
+  cursor: pointer; transition: border-color 0.18s, background 0.18s;
+  background: rgba(255,255,255,0.03); text-align: center;
+}
+.sp-font-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.14); }
+.sp-font-card.active { border-color: var(--teal); background: rgba(26,155,138,0.1); }
+.sp-font-preview {
+  font-size: 1.4rem; margin-bottom: 0.35rem; color: rgba(228,222,212,0.9); line-height: 1.2;
+  /* Превью буквы — каждая карточка применяет нужный шрифт */
+}
+.sp-font-preview.lora    { font-family: 'Lora', serif; font-style: italic; }
+.sp-font-preview.nunito  { font-family: 'Nunito', sans-serif; font-weight: 400; }
+.sp-font-preview.ptserif { font-family: 'PT Serif', serif; }
+.sp-font-name { font-size: 0.7rem; color: rgba(221,214,200,0.5); letter-spacing: 0.04em; }
+.sp-font-desc { font-size: 0.62rem; color: rgba(221,214,200,0.28); margin-top: 2px; line-height: 1.4; }
+
+/* Строка с лейблом + контролами */
+.sp-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; margin-bottom: 0.9rem;
+}
+.sp-row:last-child { margin-bottom: 0; }
+.sp-label { font-size: 0.82rem; color: rgba(221,214,200,0.65); white-space: nowrap; flex-shrink: 0; }
+
+/* Слайдер */
+.sp-slider-group { display: flex; align-items: center; gap: 0.7rem; flex: 1; }
+.sp-slider {
+  flex: 1; -webkit-appearance: none; appearance: none; height: 3px;
+  background: rgba(255,255,255,0.1); border-radius: 2px; outline: none; cursor: pointer;
+}
+.sp-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 15px; height: 15px; border-radius: 50%;
+  background: var(--teal); cursor: pointer;
+  box-shadow: 0 0 0 3px rgba(26,155,138,0.25);
+  transition: box-shadow 0.18s;
+}
+.sp-slider::-webkit-slider-thumb:hover { box-shadow: 0 0 0 5px rgba(26,155,138,0.2); }
+.sp-val {
+  font-size: 0.78rem; color: rgba(221,214,200,0.5);
+  min-width: 44px; text-align: right; font-variant-numeric: tabular-nums;
+}
+
+/* Кнопки-переключатели */
+.sp-toggle-group { display: flex; gap: 5px; }
+.sp-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem;
+  padding: 0.32rem 0.8rem; border-radius: var(--r-sm);
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09);
+  color: rgba(221,214,200,0.5); font-size: 0.75rem; cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  font-family: 'Noto Sans JP', sans-serif; white-space: nowrap;
+}
+.sp-btn:hover { background: rgba(255,255,255,0.1); color: #f0ebe0; }
+.sp-btn.active { background: rgba(26,155,138,0.16); border-color: rgba(26,155,138,0.35); color: #5dcfc2; }
+
+/* Темы */
+.sp-themes { display: flex; gap: 8px; }
+.sp-theme {
+  flex: 1; border-radius: var(--r-sm); padding: 0.6rem 0.5rem;
+  border: 1.5px solid rgba(255,255,255,0.08); cursor: pointer;
+  text-align: center; transition: border-color 0.18s;
+}
+.sp-theme:hover { border-color: rgba(255,255,255,0.18); }
+.sp-theme.active { border-color: var(--teal); }
+.sp-theme-dot {
+  width: 28px; height: 28px; border-radius: 50%; margin: 0 auto 0.4rem;
+  border: 2px solid rgba(255,255,255,0.12);
+}
+.sp-theme-dot.dark  { background: #0f0f0f; }
+.sp-theme-dot.sepia { background: #1a1408; }
+.sp-theme-dot.light { background: #f5f0e8; }
+.sp-theme-label { font-size: 0.68rem; color: rgba(221,214,200,0.5); }
+.sp-theme.active .sp-theme-label { color: #5dcfc2; }
+
+/* Разделитель */
+.sp-hr { height: 1px; background: rgba(255,255,255,0.07); margin: 1rem 0; }
+
+/* =====================================================
+   CHAPTER INTRO (такой же как в manga reader)
+   ===================================================== */
+#chapterIntro {
+  position: relative; overflow: hidden;
+  margin-top: calc(var(--topbar-h) + 2px);
+}
+.ci-banner { position: relative; height: 220px; overflow: hidden; }
+.ci-banner img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; filter: brightness(0.18) saturate(0.5); display: block; }
+.ci-banner::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(15,15,15,0.1) 0%, rgba(15,15,15,0.8) 70%, var(--read-bg) 100%),
+              linear-gradient(to right, rgba(15,15,15,0.4) 0%, transparent 60%);
+  transition: background 0.35s;
+}
+.ci-kanji { position: absolute; right: 4%; top: 50%; transform: translateY(-50%); font-family: 'PT Serif', serif; font-size: 7rem; color: rgba(245,240,232,0.04); writing-mode: vertical-rl; user-select: none; pointer-events: none; z-index: 1; }
+.ci-content { position: relative; z-index: 2; width: var(--read-col-width); max-width: calc(100% - 2 * var(--read-padding)); margin: 0 auto; margin-top: -80px; padding-bottom: 1.5rem; }
+.ci-cover-row { display: flex; align-items: flex-end; gap: 1.3rem; padding-bottom: 1.3rem; }
+.ci-cover { width: 70px; flex-shrink: 0; aspect-ratio: 2/3; border-radius: 7px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.1); }
+.ci-cover img { width: 100%; height: 100%; object-fit: cover; }
+.ci-meta { flex: 1; padding-bottom: 0.1rem; }
+.ci-manga-title { font-size: 0.7rem; color: rgba(228,222,212,0.4); margin-bottom: 0.3rem; }
+.ci-manga-title a { color: rgba(228,222,212,0.4); text-decoration: none; }
+.ci-manga-title a:hover { color: var(--read-text); }
+.ci-chapter-name { font-family: 'Dela Gothic One', sans-serif; font-size: clamp(1rem, 2.2vw, 1.5rem); color: var(--read-heading); line-height: 1.1; margin-bottom: 0.65rem; }
+.ci-stats { display: flex; align-items: center; gap: 0; flex-wrap: wrap; }
+.ci-stat { display: flex; align-items: center; gap: 0.35rem; font-size: 0.76rem; color: var(--read-text-dim); padding: 0 0.7rem; border-right: 1px solid var(--read-border); }
+.ci-stat:first-child { padding-left: 0; }
+.ci-stat:last-child { border-right: none; }
+.ci-stat strong { color: var(--read-text); font-weight: 500; }
+.ci-stars { display: flex; align-items: center; gap: 2px; color: var(--gold); font-size: 0.72rem; }
+.ci-end-line { height: 1px; background: linear-gradient(to right, transparent, rgba(26,155,138,0.4), transparent); }
+.ci-start-btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.85rem 0 1.1rem; font-size: 0.7rem; color: var(--read-text-dim); letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: color 0.18s; border: none; background: transparent; width: 100%; font-family: 'Noto Sans JP', sans-serif; }
+.ci-start-btn:hover { color: var(--read-text); }
+
+/* =====================================================
+   READING AREA — текст
+   ===================================================== */
+#readingArea {
+  padding-bottom: 120px;
+  transition: padding-right 0.3s cubic-bezier(.22,.68,0,1.1), background 0.35s;
+}
+#readingArea.panel-open { padding-right: var(--panel-w); }
+
+/* Обёртка текста */
+#textWrap {
+  margin: 0 auto;
+  width: var(--read-col-width);
+  max-width: calc(100% - 2 * var(--read-padding));
+  padding: 0;
+  transition: width 0.3s ease;
+}
+
+/* ── ТИПОГРАФИКА ТЕКСТА ── */
+.ranobe-chapter {
+  font-family: var(--read-font);
+  font-size: var(--read-size);
+  line-height: var(--read-line);
+  color: var(--read-text);
+  transition: font-family 0.25s, font-size 0.2s, line-height 0.2s, color 0.35s;
+}
+
+/* Заголовок главы внутри текста */
+.ranobe-chapter-title {
+  font-family: var(--read-font);
+  font-size: calc(var(--read-size) * 1.55);
+  font-weight: 700;
+  color: var(--read-heading);
+  text-align: center;
+  margin: 0 0 0.35em;
+  line-height: 1.2;
+  transition: font-family 0.25s, font-size 0.2s, color 0.35s;
+}
+.ranobe-chapter-num {
+  display: block; font-size: calc(var(--read-size) * 0.75);
+  color: var(--read-text-dim); text-align: center;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  margin-bottom: 0.5em; font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 300;
+}
+.chapter-divider {
+  display: flex; align-items: center; gap: 1rem;
+  margin: 1.8em 0 2em;
+}
+.chapter-divider::before, .chapter-divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, var(--read-border));
+}
+.chapter-divider::after { background: linear-gradient(to left, transparent, var(--read-border)); }
+.chapter-divider span {
+  font-family: 'PT Serif', serif; font-size: 1rem;
+  color: rgba(26,155,138,0.5); letter-spacing: 0.3em;
+}
+
+/* Параграфы */
+.ranobe-chapter p {
+  margin: 0 0 1em;
+  text-indent: 2em;
+  word-break: break-word;
+  hyphens: auto;
+}
+.ranobe-chapter p:first-of-type { text-indent: 0; }
+
+/* Первая буква первого параграфа */
+.ranobe-chapter p.drop-cap::first-letter {
+  font-size: 3.5em; font-weight: 700; float: left;
+  margin: 0.05em 0.12em 0 0; line-height: 0.8;
+  color: var(--teal); font-family: 'PT Serif', serif;
+}
+
+/* Диалоги — выделены другим оттенком */
+.ranobe-chapter p.dialog {
+  color: var(--read-text);
+  padding-left: 1em;
+  border-left: 2px solid rgba(26,155,138,0.25);
+  text-indent: 0;
+  margin-left: 0.5em;
+}
+
+/* Авторское примечание */
+.author-note {
+  background: rgba(26,155,138,0.06); border: 1px solid rgba(26,155,138,0.16);
+  border-left: 3px solid var(--teal);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  padding: 0.9rem 1.1rem; margin: 2em 0;
+  font-size: calc(var(--read-size) * 0.88);
+  color: var(--read-text-dim); line-height: 1.65;
+  font-family: 'Noto Sans JP', sans-serif; font-weight: 300;
+}
+.author-note strong { color: var(--read-text); font-weight: 500; }
+.author-note-label {
+  font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--teal); margin-bottom: 0.5rem; font-family: 'Noto Sans JP', sans-serif;
+}
+
+/* Сцена-брейк */
+.scene-break {
+  text-align: center; margin: 2em 0;
+  font-family: 'PT Serif', serif;
+  font-size: 1.2rem; letter-spacing: 0.5em;
+  color: rgba(26,155,138,0.3);
+  user-select: none;
+}
+
+/* =====================================================
+   КОНЕЦ ГЛАВЫ
+   ===================================================== */
+#chapterEnd {
+  display: none; text-align: center;
+  padding: 3.5rem var(--read-padding) 5rem;
+  width: var(--read-col-width); max-width: calc(100% - 2 * var(--read-padding));
+  margin: 0 auto;
+  animation: fadeIn 0.4s ease;
+}
+#chapterEnd.visible { display: block; }
+.end-icon { width: 56px; height: 56px; border-radius: 50%; background: rgba(26,155,138,0.1); border: 1px solid rgba(26,155,138,0.22); color: var(--teal); font-size: 1.2rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.1rem; }
+.end-title { font-family: 'Dela Gothic One', sans-serif; font-size: 1.2rem; color: var(--read-heading); margin-bottom: 0.4rem; }
+.end-sub { font-size: 0.84rem; color: var(--read-text-dim); margin-bottom: 1.8rem; line-height: 1.65; }
+.end-actions { display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap; }
+.btn-end-primary { display: inline-flex; align-items: center; gap: 0.45rem; background: var(--teal); color: #fff; border: none; border-radius: var(--r-sm); padding: 0.7rem 1.6rem; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; box-shadow: 0 4px 14px rgba(26,155,138,0.4); transition: background 0.18s, transform 0.15s; }
+.btn-end-primary:hover { background: #137a6c; transform: translateY(-1px); }
+.btn-end-ghost { display: inline-flex; align-items: center; gap: 0.45rem; background: rgba(255,255,255,0.06); border: 1px solid var(--read-border); color: var(--read-text-dim); border-radius: var(--r-sm); padding: 0.7rem 1.3rem; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; transition: background 0.18s, color 0.18s; }
+.btn-end-ghost:hover { background: rgba(255,255,255,0.1); color: var(--read-text); }
+.adaptation-badge { display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(192,57,43,0.1); border: 1px solid rgba(192,57,43,0.22); color: #e8726a; border-radius: var(--r-pill); font-size: 0.72rem; padding: 0.28rem 0.85rem; margin-bottom: 1.2rem; }
+
+/* =====================================================
+   COMMENTS PANEL
+   ===================================================== */
+#commentsPanel {
+  position: fixed; top: 0; right: -360px; bottom: 0; width: 340px;
+  background: #141414;
+  border-left: 1px solid rgba(255,255,255,0.08);
+  z-index: 150; display: flex; flex-direction: column;
+  transition: right 0.3s cubic-bezier(.22,.68,0,1.1);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.5);
+}
+#commentsPanel.open { right: 0; }
+#cpResizeHandle { position: absolute; top: 0; left: 0; bottom: 0; width: 5px; cursor: ew-resize; z-index: 10; transition: background 0.18s; }
+#cpResizeHandle:hover, #cpResizeHandle.dragging { background: rgba(26,155,138,0.35); }
+#cpResizeHandle::after { content: ''; position: absolute; top: 50%; left: 1px; transform: translateY(-50%); width: 3px; height: 32px; border-radius: 2px; background: rgba(255,255,255,0.1); }
+#cpResizeHandle.dragging::after { background: rgba(26,155,138,0.7); }
+.cp-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.2rem; border-bottom: 1px solid rgba(255,255,255,0.07); flex-shrink: 0; }
+.cp-title { font-size: 0.85rem; color: #f0ebe0; font-weight: 500; }
+.cp-count { font-size: 0.72rem; color: rgba(221,214,200,0.35); margin-left: 0.4rem; }
+.cp-close { width: 28px; height: 28px; border-radius: var(--r-sm); background: rgba(255,255,255,0.06); border: none; color: rgba(221,214,200,0.5); font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s, color 0.15s; }
+.cp-close:hover { background: rgba(255,255,255,0.1); color: #f0ebe0; }
+.cp-body { flex: 1; overflow-y: auto; padding: 0.8rem 1.2rem; }
+.cp-body::-webkit-scrollbar { width: 3px; }
+.cp-body::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 2px; }
+.comment-item { display: flex; gap: 0.65rem; margin-bottom: 1.1rem; padding-bottom: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.comment-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.c-ava { width: 28px; height: 28px; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: #1e1e1e; border: 1px solid rgba(255,255,255,0.07); }
+.c-ava img { width: 100%; height: 100%; object-fit: cover; }
+.c-body { flex: 1; }
+.c-user { font-size: 0.78rem; color: #f0ebe0; font-weight: 500; margin-bottom: 3px; }
+.c-text { font-size: 0.8rem; color: rgba(221,214,200,0.6); line-height: 1.65; }
+.c-meta { display: flex; align-items: center; gap: 0.7rem; margin-top: 0.4rem; }
+.c-date { font-size: 0.68rem; color: rgba(221,214,200,0.28); }
+.c-like { display: inline-flex; align-items: center; gap: 0.28rem; background: none; border: none; color: rgba(221,214,200,0.3); font-size: 0.7rem; cursor: pointer; transition: color 0.18s; font-family: 'Noto Sans JP', sans-serif; padding: 0; }
+.c-like:hover { color: rgba(221,214,200,0.7); }
+.c-like.liked { color: var(--teal); }
+.cp-footer { padding: 0.9rem 1.2rem; border-top: 1px solid rgba(255,255,255,0.07); flex-shrink: 0; }
+.cp-input-wrap { display: flex; flex-direction: column; gap: 8px; }
+.cp-input { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09); border-radius: var(--r-sm); color: #f0ebe0; font-family: 'Noto Sans JP', sans-serif; font-size: 0.82rem; font-weight: 300; padding: 0.6rem 0.85rem; outline: none; resize: none; min-height: 64px; line-height: 1.55; transition: border-color 0.2s; }
+.cp-input:focus { border-color: rgba(26,155,138,0.4); box-shadow: 0 0 0 2px rgba(26,155,138,0.08); }
+.cp-send { align-self: flex-end; display: inline-flex; align-items: center; gap: 0.4rem; background: var(--teal); border: none; border-radius: var(--r-sm); color: #fff; font-family: 'Noto Sans JP', sans-serif; font-size: 0.75rem; letter-spacing: 0.07em; text-transform: uppercase; padding: 0.46rem 1.1rem; cursor: pointer; transition: background 0.18s, transform 0.15s; box-shadow: 0 2px 8px rgba(26,155,138,0.3); }
+.cp-send:hover { background: #137a6c; transform: translateY(-1px); }
+
+/* =====================================================
+   OVERLAY + BOTTOM NAV + TOAST
+   ===================================================== */
+#overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 140; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+#overlay.visible { opacity: 1; pointer-events: all; }
+
+#bottomNav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  height: var(--botbar-h);
+  background: rgba(8,8,8,0.92);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border-top: 1px solid rgba(255,255,255,0.07);
+  display: flex; align-items: center; padding: 0 1.2rem; gap: 0.8rem;
+  z-index: 100; transition: transform 0.25s ease, opacity 0.25s ease;
+}
+#bottomNav.hidden { transform: translateY(100%); opacity: 0; pointer-events: none; }
+.bn-nav { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
+.bn-btn { display: flex; align-items: center; gap: 0.4rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.09); color: rgba(221,214,200,0.6); border-radius: var(--r-sm); padding: 0.45rem 0.9rem; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: background 0.18s, color 0.18s; font-family: 'Noto Sans JP', sans-serif; white-space: nowrap; }
+.bn-btn:hover { background: rgba(255,255,255,0.1); color: #f0ebe0; }
+.bn-btn.primary { background: rgba(26,155,138,0.14); border-color: rgba(26,155,138,0.28); color: #5dcfc2; }
+.bn-chapter-picker { flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.6rem; }
+.bn-chapter-select { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09); color: #f0ebe0; font-family: 'Noto Sans JP', sans-serif; font-size: 0.8rem; padding: 0.38rem 1.8rem 0.38rem 0.75rem; border-radius: var(--r-sm); outline: none; appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='rgba(221,214,200,0.3)' d='M4 6l4 4 4-4'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.5rem center; background-size: 14px; }
+.bn-chapter-select option { background: #1a1a1a; }
+.bn-words-label { font-size: 0.72rem; color: rgba(221,214,200,0.28); white-space: nowrap; }
+
+#readerToast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: rgba(22,22,22,0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--r-pill); padding: 0.55rem 1.2rem; font-size: 0.78rem; color: rgba(221,214,200,0.85); display: flex; align-items: center; gap: 0.5rem; z-index: 500; opacity: 0; pointer-events: none; transition: opacity 0.22s ease; white-space: nowrap; }
+#readerToast.show { opacity: 1; }
+#readerToast .fa { color: var(--teal); }
+
+/* ── Кинорежим ── */
+body.cinema-mode #topBar, body.cinema-mode #bottomNav, body.cinema-mode #chapterProgress { opacity: 0; pointer-events: none; }
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+@media (max-width: 768px) {
+  :root { --read-col-width: 100%; --read-padding: 1.2rem; }
+  #textWrap { padding: 0 var(--read-padding); }
+  #commentsPanel { width: 100%; }
+  .bn-btn span { display: none; }
+  .bn-btn { padding: 0.45rem 0.65rem; }
+  .sp-fonts { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+}
+  </style>
+</head>
+<body class="theme-dark">
+
+<!-- ══════════════════ TOP BAR ══════════════════ -->
+<div id="topBar">
+  <div class="tb-left">
+    <a href="title.html" class="tb-back" title="Назад к произведению"><i class="fa fa-arrow-left"></i></a>
+    <span class="tb-brand">
+      <span class="tb-brand-dot"></span>
+      Mang<span style="color:var(--teal);">oria</span>
+    </span>
+    <div class="tb-sep"></div>
+  </div>
+
+  <div class="tb-center">
+    <div class="tb-title">Призыватель Бездны</div>
+    <div class="tb-chapter">Глава 12 · Голос из тьмы</div>
+  </div>
+
+  <div class="tb-right">
+    <button class="tb-btn" id="btnBookmark" onclick="toggleBookmark()" title="Закладка"><i class="fa-regular fa-bookmark"></i></button>
+    <button class="tb-btn" id="btnSettings" onclick="toggleSettings()" title="Настройки чтения"><i class="fa fa-sliders"></i></button>
+    <button class="tb-btn" id="btnComments" onclick="toggleComments()" title="Комментарии"><i class="fa fa-comments"></i></button>
+    <button class="tb-btn" id="btnCinema" onclick="toggleCinema()" title="Кинорежим"><i class="fa fa-expand"></i></button>
+  </div>
+</div>
+
+<div id="chapterProgress"><div id="chapterProgressFill"></div></div>
+
+<!-- ══════════════════ SETTINGS PANEL ══════════════════ -->
+<div id="settingsPanel">
+
+  <!-- ШРИФТ -->
+  <div class="sp-section-title">Шрифт</div>
+  <div class="sp-fonts">
+    <div class="sp-font-card active" onclick="setFont('lora', this)">
+      <div class="sp-font-preview lora">Аа</div>
+      <div class="sp-font-name">Lora</div>
+      <div class="sp-font-desc">Serif · классика для длинных текстов</div>
+    </div>
+    <div class="sp-font-card" onclick="setFont('nunito', this)">
+      <div class="sp-font-preview nunito">Аа</div>
+      <div class="sp-font-name">Nunito</div>
+      <div class="sp-font-desc">Sans · мягкий, современный</div>
+    </div>
+    <div class="sp-font-card" onclick="setFont('ptserif', this)">
+      <div class="sp-font-preview ptserif">Аа</div>
+      <div class="sp-font-name">PT Serif</div>
+      <div class="sp-font-desc">Serif · создан для кириллицы</div>
+    </div>
+  </div>
+
+  <div class="sp-hr"></div>
+
+  <!-- РАЗМЕР -->
+  <div class="sp-section-title">Размер и интервалы</div>
+
+  <div class="sp-row">
+    <span class="sp-label">Размер текста</span>
+    <div class="sp-slider-group">
+      <span style="font-size:0.7rem;color:rgba(221,214,200,0.3);">А</span>
+      <input type="range" class="sp-slider" id="fontSizeSlider" min="14" max="26" value="18" step="1" oninput="setFontSize(this.value)"/>
+      <span style="font-size:1rem;color:rgba(221,214,200,0.3);">А</span>
+      <span class="sp-val" id="fontSizeVal">18px</span>
+    </div>
+  </div>
+
+  <div class="sp-row">
+    <span class="sp-label">Межстрочный интервал</span>
+    <div class="sp-slider-group">
+      <i class="fa fa-align-justify" style="font-size:0.65rem;color:rgba(221,214,200,0.3);"></i>
+      <input type="range" class="sp-slider" id="lineHeightSlider" min="1.4" max="2.4" value="1.85" step="0.05" oninput="setLineHeight(this.value)"/>
+      <span class="sp-val" id="lineHeightVal">1.85</span>
+    </div>
+  </div>
+
+  <div class="sp-row">
+    <span class="sp-label">Ширина колонки</span>
+    <div class="sp-slider-group">
+      <input type="range" class="sp-slider" id="colWidthSlider" min="480" max="860" value="680" step="20" oninput="setColWidth(this.value)"/>
+      <span class="sp-val" id="colWidthVal">680px</span>
+    </div>
+  </div>
+
+  <div class="sp-row">
+    <span class="sp-label">Отступы по краям</span>
+    <div class="sp-toggle-group">
+      <button class="sp-btn" onclick="setPadding('1rem', this)">Мало</button>
+      <button class="sp-btn active" onclick="setPadding('2rem', this)">Средне</button>
+      <button class="sp-btn" onclick="setPadding('3.5rem', this)">Много</button>
+    </div>
+  </div>
+
+  <div class="sp-hr"></div>
+
+  <!-- ТЕМА -->
+  <div class="sp-section-title">Цветовая тема</div>
+  <div class="sp-themes">
+    <div class="sp-theme active" onclick="setTheme('dark', this)">
+      <div class="sp-theme-dot dark"></div>
+      <div class="sp-theme-label">Тёмная</div>
+    </div>
+    <div class="sp-theme" onclick="setTheme('sepia', this)">
+      <div class="sp-theme-dot sepia"></div>
+      <div class="sp-theme-label">Сепия</div>
+    </div>
+    <div class="sp-theme" onclick="setTheme('light', this)">
+      <div class="sp-theme-dot light"></div>
+      <div class="sp-theme-label">Светлая</div>
+    </div>
+  </div>
+
+  <div class="sp-hr"></div>
+
+  <!-- СКРЫТИЕ UI -->
+  <div class="sp-row">
+    <span class="sp-label">Скрывать интерфейс при прокрутке</span>
+    <div class="sp-toggle-group">
+      <button class="sp-btn active" id="autoHideBtn" onclick="toggleAutoHide(this)"><i class="fa fa-check fa-xs"></i> Вкл</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════ COMMENTS PANEL ══════════════════ -->
+<div id="commentsPanel">
+  <div id="cpResizeHandle"></div>
+  <div class="cp-header">
+    <div><span class="cp-title">Комментарии</span><span class="cp-count">94</span></div>
+    <button class="cp-close" onclick="closeComments()"><i class="fa fa-xmark"></i></button>
+  </div>
+  <div class="cp-body">
+    <div class="comment-item">
+      <div class="c-ava"><img src="https://api.dicebear.com/8.x/bottts/svg?seed=reader1&backgroundColor=0e1a1e" alt=""/></div>
+      <div class="c-body"><div class="c-user">VoidHunter</div><div class="c-text">Сцена в библиотеке просто убила. Автор мастерски строит атмосферу через детали.</div><div class="c-meta"><span class="c-date">5 июн.</span><button class="c-like" onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i> 34</button></div></div>
+    </div>
+    <div class="comment-item">
+      <div class="c-ava"><img src="https://api.dicebear.com/8.x/bottts/svg?seed=user2&backgroundColor=120a1e" alt=""/></div>
+      <div class="c-body"><div class="c-user">NightPage</div><div class="c-text">Монолог Кирэна в конце главы — это что-то на уровне классической литературы. Серьёзно.</div><div class="c-meta"><span class="c-date">3 июн.</span><button class="c-like" onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i> 21</button></div></div>
+    </div>
+    <div class="comment-item">
+      <div class="c-ava"><img src="https://api.dicebear.com/8.x/bottts/svg?seed=user3&backgroundColor=061a17" alt=""/></div>
+      <div class="c-body"><div class="c-user">DarkScribe</div><div class="c-text">Читал не отрываясь, хотя уже полночь. Когда следующая глава?</div><div class="c-meta"><span class="c-date">1 июн.</span><button class="c-like" onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i> 18</button></div></div>
+    </div>
+    <div class="comment-item">
+      <div class="c-ava"><img src="https://api.dicebear.com/8.x/bottts/svg?seed=user4&backgroundColor=1a1505" alt=""/></div>
+      <div class="c-body"><div class="c-user">AbyssalReader</div><div class="c-text">Описание голоса из глубины бездны — я прям физически почувствовал этот холод. Мурашки.</div><div class="c-meta"><span class="c-date">29 мая</span><button class="c-like" onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i> 47</button></div></div>
+    </div>
+  </div>
+  <div class="cp-footer">
+    <div class="cp-input-wrap">
+      <textarea class="cp-input" rows="2" placeholder="Написать комментарий…" id="commentInput"></textarea>
+      <button class="cp-send" onclick="sendComment()"><i class="fa fa-paper-plane"></i> Отправить</button>
+    </div>
+  </div>
+</div>
+
+<div id="overlay" onclick="closeAll()"></div>
+
+<!-- ══════════════════ CHAPTER INTRO ══════════════════ -->
+<div id="chapterIntro">
+  <div class="ci-banner">
+    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1400&q=80&fit=crop" alt="Баннер"/>
+    <div class="ci-kanji">深</div>
+  </div>
+  <div class="ci-content">
+    <div class="ci-cover-row">
+      <div class="ci-cover">
+        <img src="https://images.unsplash.com/photo-1560169897-fc0cdbdfa4d5?w=200&q=80&fit=crop" alt="Обложка"/>
+      </div>
+      <div class="ci-meta">
+        <div class="ci-manga-title">
+          <a href="title.html">Призыватель Бездны</a>
+          <span style="opacity:0.3;margin:0 0.3rem;">/</span>
+          <span>Том 2</span>
+        </div>
+        <div class="ci-chapter-name">Глава 12 · Голос из тьмы</div>
+        <div class="ci-stats">
+          <div class="ci-stat" style="color:var(--gold);">
+            <div class="ci-stars"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></div>
+            <strong>4.9</strong>
+          </div>
+          <div class="ci-stat"><i class="fa fa-eye"></i><strong>61 400</strong> просм.</div>
+          <div class="ci-stat"><i class="fa fa-comments"></i><strong>94</strong> комм.</div>
+          <div class="ci-stat"><i class="fa fa-calendar"></i>5 июня 2025</div>
+          <div class="ci-stat"><i class="fa fa-file-lines"></i>~18 мин. чтения</div>
+        </div>
+      </div>
+    </div>
+    <div class="ci-end-line"></div>
+    <button class="ci-start-btn" onclick="scrollToText()">Начать чтение<span style="display:inline-block;width:1px;height:20px;background:rgba(255,255,255,0.12);margin:0 0.5rem;vertical-align:middle;"></span>~4 200 слов</button>
+  </div>
+</div>
+
+<!-- ══════════════════ READING AREA ══════════════════ -->
+<div id="readingArea">
+  <div id="textWrap">
+    <div class="ranobe-chapter" id="ranobeText">
+
+      <span class="ranobe-chapter-num">Глава двенадцатая</span>
+      <h1 class="ranobe-chapter-title">Голос из тьмы</h1>
+
+      <div class="chapter-divider"><span>✦</span></div>
+
+      <div class="author-note">
+        <div class="author-note-label">Примечание автора</div>
+        Друзья, эта глава далась мне труднее всего. Писал её три раза. Надеюсь, вы почувствуете то, что я пытался передать. <strong>Осторожно: психологически тяжёлые сцены.</strong>
+      </div>
+
+      <p class="drop-cap">Библиотека Академии пустела к полуночи. Кирэн знал это по особому качеству тишины — она становилась плотной, почти осязаемой, как старый бархат, которым накрывают зеркала в домах, где кто-то умер. Он сидел в дальнем углу третьего яруса, среди стеллажей с запрещёнными трактатами, и слышал, как за окном гаснут фонари один за другим.</p>
+
+      <p>Перед ним лежала раскрытая книга — «Архивы Бездонного», экземпляр настолько старый, что страницы казались сделанными не из бумаги, а из прессованного времени. Буквы на них не были напечатаны. Они вырастали из самого материала, как плесень, меняли форму, если смотреть краем зрения.</p>
+
+      <p>Кирэн не читал. Он слушал.</p>
+
+      <p>— Ты снова здесь, — произнёс голос. Не голос вслух. Голос внутри, в том месте за левым виском, где раньше был просто тихий звон, а теперь — кто-то. — Я думал, ты испугаешься после прошлого раза.</p>
+
+      <p class="dialog">— Я испугался, — сказал Кирэн вслух. Один из охранников мог бы услышать. Кирэну было всё равно. — Просто это не помогло.</p>
+
+      <p class="dialog">— Интересно. Большинство людей, когда понимают, что страх бесполезен, либо уходят в отрицание, либо сходят с ума. Ты выбрал третье.</p>
+
+      <p class="dialog">— Какое третье?</p>
+
+      <p class="dialog">— Продолжаешь. — Пауза. В этой паузе было что-то живое, дышащее. — Это редкость.</p>
+
+      <p>Кирэн закрыл книгу. Пальцы не слушались — не от страха, а от холода. Холод шёл изнутри, из-за того самого места за виском. Он надел перчатки ещё час назад, но это не помогло.</p>
+
+      <p>— Чего ты от меня хочешь? — спросил он. — На этот раз скажи прямо. Без иносказаний.</p>
+
+      <scene-break>* * *</scene-break>
+
+      <p>Тишина длилась долго. Дольше, чем Кирэн ожидал. За окном прошли чьи-то шаги по гравию — тихие, размеренные, патрульные. Он не пошевелился.</p>
+
+      <p>— Ты хочешь знать о своей матери, — сказал голос наконец. Не спросил. Констатировал. — Не о том, как она умерла. О том, что она нашла, прежде чем умерла. О том, что она открыла, и почему это стоило ей жизни.</p>
+
+      <p>Кирэн почувствовал, как что-то сдвинулось у него в груди. Не больно. Просто сдвинулось, как бывает, когда долго стоишь в одной позе, а потом меняешь позицию — и кости отзываются тихим щелчком.</p>
+
+      <p class="dialog">— Ты знаешь, — произнёс он. Не вопрос. Утверждение.</p>
+
+      <p class="dialog">— Я <em>был</em> там, — ответил голос. — Я был тем, что она нашла.</p>
+
+      <p>Это должно было прозвучать как угроза. Или как откровение. Но прозвучало как усталость — глубокая, почти геологическая усталость чего-то очень старого, что слишком долго ждало.</p>
+
+      <p>Кирэн поднялся. Колени затекли — он сидел неподвижно больше трёх часов. В темноте третьего яруса книги смотрели на него корешками, как выстроенная в ряд аудитория. Он прошёл между стеллажами к окну. Кампус внизу был пуст, только патруль удалялся к северным воротам.</p>
+
+      <p class="dialog">— Расскажи мне, — сказал Кирэн. Тихо. Без пафоса. Просто попросил.</p>
+
+      <p class="dialog">— Тебе не понравится, — предупредил голос.</p>
+
+      <p class="dialog">— Мне уже не нравится, — ответил он. — Но я хочу знать.</p>
+
+      <p>Снова тишина. Потом что-то изменилось в качестве темноты за окном — не стало темнее, нет. Просто темнота стала <em>ближе</em>. Как будто пространство между Кирэном и ночью схлопнулось на несколько сантиметров.</p>
+
+      <p>И голос начал говорить.</p>
+
+      <div class="scene-break">✦ ✦ ✦</div>
+
+      <p>Кирэн слушал долго. Несколько раз ему хотелось остановить голос, сказать «подожди» или «этого не может быть» — но он не останавливал. Слова падали в него, как камни в воду — одни тонули сразу, другие продолжали медленно уходить вглубь ещё долго после.</p>
+
+      <p>Когда голос замолчал, за окном начинало светать. Едва — полоска на горизонте, тонкая как нить, серо-фиолетовая, цвета синяка на третий день. Кирэн стоял, держась за холодный подоконник. Руки дрожали. Он не пытался их остановить.</p>
+
+      <p class="dialog">— Значит, она знала, — сказал он. — Знала всё это — и всё равно продолжала.</p>
+
+      <p class="dialog">— Да.</p>
+
+      <p class="dialog">— И поэтому её убили.</p>
+
+      <p class="dialog">— Не совсем, — сказал голос. — Её убили, потому что она нашла способ воспользоваться этим знанием. Просто знать — не опасно. Опасно — знать <em>и уметь</em>.</p>
+
+      <p>Кирэн медленно повернулся от окна. Библиотека была пуста. Рассвет полз по стеллажам, и книги постепенно обретали цвет.</p>
+
+      <p class="dialog">— Ты научишь меня? — спросил он.</p>
+
+      <p>Голос не ответил сразу. И в этой паузе Кирэн понял: что бы голос ни сказал — да или нет — его жизнь уже разделилась на до и после. Этой ночью. Этим разговором. Этим вопросом.</p>
+
+      <p class="dialog">— Я уже начал, — сказал голос наконец. — Ещё в тот момент, когда ты решил вернуться, несмотря на страх.</p>
+
+      <p>Кирэн кивнул. Взял книгу со стола, сунул под плащ. Пошёл к лестнице. На третьей ступеньке остановился.</p>
+
+      <p class="dialog">— Как тебя зовут? — спросил он в темноту позади себя.</p>
+
+      <p>Долгая пауза.</p>
+
+      <p class="dialog">— У меня было много имён, — ответил голос. — Все они принадлежали тем, кто меня призвал. Кто ты дашь мне — то и будет моим, пока ты жив.</p>
+
+      <p>Кирэн думал несколько секунд.</p>
+
+      <p class="dialog">— Тогда пока никакого, — сказал он. — Подожди, пока я пойму, кто ты на самом деле.</p>
+
+      <p>Что-то в темноте тихо засмеялось. Не зловеще. Почти тепло.</p>
+
+      <p class="dialog">— Справедливо, — сказал голос. — Справедливо.</p>
+
+      <p>Кирэн спустился по лестнице и вышел в пустой коридор. Снаружи светало. Он шёл к своей комнате и думал о том, что завтра нужно найти документы матери — те, которые профессор Аэлис спрятала в архиве под чужим именем.</p>
+
+      <p>Голос молчал. Но Кирэн знал: голос никуда не ушёл. Просто ждал. Как будет ждать теперь всегда.</p>
+
+    </div><!-- /ranobe-chapter -->
+
+    <!-- КОНЕЦ ГЛАВЫ -->
+    <div id="chapterEnd">
+      <div class="end-icon"><i class="fa fa-feather-alt"></i></div>
+      <div class="adaptation-badge"><i class="fa fa-image fa-xs"></i> Планируется манга-адаптация</div>
+      <h2 class="end-title">Конец главы 12</h2>
+      <p class="end-sub">«Голос из тьмы» прочитан · ~4 200 слов · ~18 мин.<br>Следующая глава: <strong>«Архив под чужим именем»</strong></p>
+      <div class="end-actions">
+        <button class="btn-end-primary" onclick="nextChapter()"><i class="fa fa-forward"></i> Глава 13</button>
+        <a href="title.html" class="btn-end-ghost"><i class="fa fa-list"></i> Все главы</a>
+        <button class="btn-end-ghost" onclick="toggleComments()"><i class="fa fa-comments"></i> Комментарии</button>
+      </div>
+    </div>
+
+  </div><!-- /textWrap -->
+</div><!-- /readingArea -->
+
+<!-- ══════════════════ BOTTOM NAV ══════════════════ -->
+<div id="bottomNav">
+  <div class="bn-nav">
+    <button class="bn-btn" onclick="prevChapter()"><i class="fa fa-backward-step"></i><span> Пред.</span></button>
+  </div>
+  <div class="bn-chapter-picker">
+    <select class="bn-chapter-select" id="chapterSelect">
+      <option value="10">Глава 10 · Первый контакт</option>
+      <option value="11">Глава 11 · Цена знания</option>
+      <option value="12" selected>Глава 12 · Голос из тьмы</option>
+      <option value="13">Глава 13 · Архив</option>
+    </select>
+    <span class="bn-words-label" id="progressLabel">~18 мин. · 0%</span>
+  </div>
+  <div class="bn-nav">
+    <button class="bn-btn primary" onclick="nextChapter()"><span>След. </span><i class="fa fa-forward-step"></i></button>
+  </div>
+</div>
+
+<div id="readerToast"><i class="fa fa-bookmark"></i> <span id="toastText"></span></div>
+
+<script>
+/* =====================================================
+   СОСТОЯНИЕ
+   ===================================================== */
+var state = {
+  bookmarked:   false,
+  settingsOpen: false,
+  commentsOpen: false,
+  cinemaMode:   false,
+  autoHide:     true,
+  uiVisible:    true,
+  currentFont:  'lora',
+  theme:        'dark',
+};
+var lastScrollY = 0;
+
+/* =====================================================
+   ПРОГРЕСС
+   ===================================================== */
+function updateProgress() {
+  var scrollBottom = window.scrollY + window.innerHeight;
+  var docHeight    = document.body.scrollHeight;
+  var pct = Math.min(100, Math.max(0, (scrollBottom / docHeight) * 100));
+
+  document.getElementById('chapterProgressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent =
+    '~18 мин. · ' + Math.round(pct) + '%';
+
+  /* Конец главы */
+  document.getElementById('chapterEnd').classList.toggle('visible', pct > 96);
+
+  /* Авто-скрытие */
+  if (state.autoHide) {
+    var delta = window.scrollY - lastScrollY;
+    if (delta > 40  && state.uiVisible)  hideUI();
+    if (delta < -30 && !state.uiVisible) showUI();
+    lastScrollY = window.scrollY;
+  }
+}
+
+function hideUI() {
+  if (state.settingsOpen || state.commentsOpen) return;
+  state.uiVisible = false;
+  document.getElementById('topBar').classList.add('hidden');
+  document.getElementById('bottomNav').classList.add('hidden');
+  document.getElementById('chapterProgress').classList.add('hidden');
+}
+function showUI() {
+  state.uiVisible = true;
+  document.getElementById('topBar').classList.remove('hidden');
+  document.getElementById('bottomNav').classList.remove('hidden');
+  document.getElementById('chapterProgress').classList.remove('hidden');
+}
+
+window.addEventListener('scroll', updateProgress, { passive: true });
+
+/* =====================================================
+   НАСТРОЙКИ
+   ===================================================== */
+function toggleSettings() {
+  state.settingsOpen = !state.settingsOpen;
+  document.getElementById('settingsPanel').classList.toggle('open', state.settingsOpen);
+  document.getElementById('btnSettings').classList.toggle('active', state.settingsOpen);
+  if (state.settingsOpen) {
+    closeComments();
+    document.getElementById('overlay').classList.add('visible');
+    showUI();
+  } else {
+    document.getElementById('overlay').classList.remove('visible');
+  }
+}
+function closeSettings() {
+  state.settingsOpen = false;
+  document.getElementById('settingsPanel').classList.remove('open');
+  document.getElementById('btnSettings').classList.remove('active');
+}
+
+/* Шрифт */
+var FONTS = {
+  lora:    "'Lora', Georgia, serif",
+  nunito:  "'Nunito', sans-serif",
+  ptserif: "'PT Serif', Georgia, serif",
+};
+function setFont(key, card) {
+  state.currentFont = key;
+  document.querySelectorAll('.sp-font-card').forEach(function(c){ c.classList.remove('active'); });
+  card.classList.add('active');
+  document.getElementById('ranobeText').style.fontFamily = FONTS[key];
+  document.querySelector('.ranobe-chapter-title').style.fontFamily = FONTS[key];
+  /* Также применяем к CSS-переменной */
+  document.documentElement.style.setProperty('--read-font', FONTS[key]);
+  showToast('Шрифт изменён: ' + card.querySelector('.sp-font-name').textContent);
+}
+
+/* Размер текста */
+function setFontSize(val) {
+  document.documentElement.style.setProperty('--read-size', val + 'px');
+  document.getElementById('fontSizeVal').textContent = val + 'px';
+}
+
+/* Межстрочный интервал */
+function setLineHeight(val) {
+  var rounded = parseFloat(val).toFixed(2);
+  document.documentElement.style.setProperty('--read-line', rounded);
+  document.getElementById('lineHeightVal').textContent = rounded;
+}
+
+/* Ширина колонки */
+function setColWidth(val) {
+  document.documentElement.style.setProperty('--read-col-width', val + 'px');
+  document.getElementById('colWidthVal').textContent = val + 'px';
+  /* Синхронизируем textWrap и chapterEnd */
+  document.getElementById('textWrap').style.width = val + 'px';
+  document.getElementById('chapterEnd').style.width = val + 'px';
+}
+
+/* Отступы */
+function setPadding(val, btn) {
+  document.querySelectorAll('.sp-btn').forEach(function(b){
+    if (b.onclick && b.onclick.toString().includes('setPadding')) b.classList.remove('active');
+  });
+  btn.classList.add('active');
+  document.documentElement.style.setProperty('--read-padding', val);
+}
+
+/* Тема */
+function setTheme(name, card) {
+  document.body.classList.remove('theme-dark', 'theme-sepia', 'theme-light');
+  document.body.classList.add('theme-' + name);
+  state.theme = name;
+  document.querySelectorAll('.sp-theme').forEach(function(c){ c.classList.remove('active'); });
+  card.classList.add('active');
+  showToast('Тема: ' + card.querySelector('.sp-theme-label').textContent);
+}
+
+/* Авто-скрытие */
+function toggleAutoHide(btn) {
+  state.autoHide = !state.autoHide;
+  btn.classList.toggle('active', state.autoHide);
+  btn.innerHTML = state.autoHide ? '<i class="fa fa-check fa-xs"></i> Вкл' : 'Выкл';
+  if (!state.autoHide) showUI();
+}
+
+/* =====================================================
+   ЗАКЛАДКА
+   ===================================================== */
+function toggleBookmark() {
+  state.bookmarked = !state.bookmarked;
+  var btn = document.getElementById('btnBookmark');
+  btn.classList.toggle('bookmarked', state.bookmarked);
+  btn.querySelector('i').className = state.bookmarked ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark';
+  showToast(state.bookmarked ? 'Закладка добавлена' : 'Закладка удалена');
+}
+
+/* =====================================================
+   КОММЕНТАРИИ
+   ===================================================== */
+function toggleComments() {
+  if (state.commentsOpen) {
+    closeComments();
+    document.getElementById('overlay').classList.remove('visible');
+  } else {
+    state.commentsOpen = true;
+    var panel = document.getElementById('commentsPanel');
+    panel.style.right = '';
+    panel.classList.add('open');
+    document.getElementById('btnComments').classList.add('active');
+    document.getElementById('readingArea').classList.add('panel-open');
+    closeSettings();
+    document.getElementById('overlay').classList.add('visible');
+    showUI();
+  }
+}
+function closeComments() {
+  state.commentsOpen = false;
+  var panel = document.getElementById('commentsPanel');
+  var currentW = panel.offsetWidth;
+  panel.style.right = '-' + (currentW + 10) + 'px';
+  setTimeout(function () {
+    panel.style.width = '';
+    panel.style.right = '';
+    document.documentElement.style.setProperty('--panel-w', '340px');
+  }, 320);
+  panel.classList.remove('open');
+  document.getElementById('btnComments').classList.remove('active');
+  document.getElementById('readingArea').classList.remove('panel-open');
+}
+function closeAll() {
+  closeSettings();
+  closeComments();
+  document.getElementById('overlay').classList.remove('visible');
+}
+
+function sendComment() {
+  var inp = document.getElementById('commentInput');
+  if (!inp.value.trim()) return;
+  inp.value = '';
+  showToast('Комментарий отправлен');
+}
+
+/* =====================================================
+   КИНОРЕЖИМ
+   ===================================================== */
+function toggleCinema() {
+  state.cinemaMode = !state.cinemaMode;
+  document.body.classList.toggle('cinema-mode', state.cinemaMode);
+  var icon = document.getElementById('btnCinema').querySelector('i');
+  icon.className = state.cinemaMode ? 'fa fa-compress' : 'fa fa-expand';
+  document.getElementById('btnCinema').classList.toggle('active', state.cinemaMode);
+  showToast(state.cinemaMode ? 'Кинорежим · Esc для выхода' : 'Кинорежим выключен');
+}
+
+/* =====================================================
+   ЛАЙКИ
+   ===================================================== */
+function toggleLike(btn) {
+  var on = btn.classList.toggle('liked');
+  var n  = parseInt(btn.textContent.replace(/\D/g,'')) || 0;
+  var icon = btn.querySelector('i');
+  icon.className = on ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
+  btn.innerHTML  = icon.outerHTML + ' ' + (on ? n+1 : Math.max(0,n-1));
+}
+
+/* =====================================================
+   НАВИГАЦИЯ
+   ===================================================== */
+function prevChapter() { showToast('Глава 11 — Цена знания'); }
+function nextChapter()  { showToast('Глава 13 — скоро'); }
+function scrollToText() {
+  document.getElementById('readingArea').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+/* =====================================================
+   РЕСАЙЗ ПАНЕЛИ КОММЕНТАРИЕВ
+   ===================================================== */
+(function(){
+  var handle = document.getElementById('cpResizeHandle');
+  var panel  = document.getElementById('commentsPanel');
+  var MIN_W = 280, MAX_W = 600, dragging=false, startX, startW;
+  handle.addEventListener('mousedown', function(e){ dragging=true; startX=e.clientX; startW=panel.offsetWidth; handle.classList.add('dragging'); document.body.style.userSelect='none'; document.body.style.cursor='ew-resize'; e.preventDefault(); });
+  document.addEventListener('mousemove', function(e){ if(!dragging) return; var newW=Math.min(MAX_W,Math.max(MIN_W,startW+(startX-e.clientX))); panel.style.width=newW+'px'; document.documentElement.style.setProperty('--panel-w',newW+'px'); });
+  document.addEventListener('mouseup', function(){ if(!dragging) return; dragging=false; handle.classList.remove('dragging'); document.body.style.userSelect=''; document.body.style.cursor=''; });
+})();
+
+/* =====================================================
+   ТОСТ
+   ===================================================== */
+function showToast(msg) {
+  var t = document.getElementById('readerToast');
+  document.getElementById('toastText').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._toastT);
+  window._toastT = setTimeout(function(){ t.classList.remove('show'); }, 2500);
+}
+
+/* =====================================================
+   КЛАВИАТУРА
+   ===================================================== */
+document.addEventListener('keydown', function(e){
+  switch(e.key){
+    case 'Escape': if(state.cinemaMode){ toggleCinema(); break; } closeAll(); break;
+    case 'f': case 'F': toggleCinema(); break;
+    case 'b': case 'B': toggleBookmark(); break;
+    case 'c': case 'C': if(!e.ctrlKey) toggleComments(); break;
+    case 's': case 'S': if(!e.ctrlKey) toggleSettings(); break;
+    case '+': case '=': var s=document.getElementById('fontSizeSlider'); s.value=Math.min(26,+s.value+1); setFontSize(s.value); break;
+    case '-': var s2=document.getElementById('fontSizeSlider'); s2.value=Math.max(14,+s2.value-1); setFontSize(s2.value); break;
+  }
+});
+
+/* =====================================================
+   INIT
+   ===================================================== */
+document.addEventListener('DOMContentLoaded', function(){
+  /* Восстановить позицию */
+  var saved = localStorage.getItem('mangoria_ranobe_ch12');
+  if (saved) setTimeout(function(){ window.scrollTo({top:parseInt(saved),behavior:'smooth'}); showToast('Позиция восстановлена'); }, 400);
+  /* Сохранять каждые 5с */
+  setInterval(function(){ localStorage.setItem('mangoria_ranobe_ch12', String(Math.round(window.scrollY))); }, 5000);
+  updateProgress();
+});
+</script>
+</body>
+</html>

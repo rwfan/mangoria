@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="ru" id="htmlRoot">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mangoria — О платформе</title>
+  <!-- External -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&family=Dela+Gothic+One&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <!-- Project -->
+  <link rel="stylesheet" href="css/main.css"/>
+</head>
+<body>
+
+<!-- ══════════════════ NAVBAR ══════════════════ -->
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-inner">
+
+      <a class="navbar-brand" href="index.html">
+        <span class="brand-icon"><i class="fa-solid fa-torii-gate"></i></span>
+        Mang<span class="brand-oni">oria</span>
+      </a>
+
+      <button class="navbar-toggler-custom" id="navToggle">
+        <i class="fa fa-bars"></i>
+      </button>
+
+      <div class="nav-center" id="navCenter">
+        <div class="nav-type-switcher">
+          <a href="index.html#catalog" class="nav-type-btn active">
+            <i class="fa fa-image"></i>
+            <span data-i18n="nav_manga">Манга</span>
+          </a>
+          <a href="index.html#ranobe" class="nav-type-btn">
+            <i class="fa fa-book"></i>
+            <span data-i18n="nav_ranobe">Ранобэ</span>
+          </a>
+        </div>
+        <div class="nav-item-custom">
+          <a href="index.html#catalog" class="nav-link-custom ">
+            <i class="fa fa-compass"></i>
+            <span data-i18n="nav_catalog">Каталог</span>
+          </a>
+        </div>
+        <div class="nav-item-custom">
+          <a href="#" class="nav-link-custom">
+            <i class="fa fa-layer-group"></i>
+            <span data-i18n="nav_genres">Жанры</span>
+          </a>
+        </div>
+        <div class="nav-item-custom">
+          <a href="#" class="nav-link-custom">
+            <i class="fa fa-star"></i>
+            <span data-i18n="nav_rating">Рейтинг</span>
+          </a>
+        </div>
+        <div class="nav-item-custom">
+          <a href="#" class="nav-link-custom">
+            <i class="fa fa-users"></i>
+            <span data-i18n="nav_authors">Авторы</span>
+          </a>
+        </div>
+        <div class="nav-item-custom">
+          <a href="#" class="nav-link-custom">
+            <i class="fa fa-fire"></i>
+            <span data-i18n="nav_new">Новинки</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-right" id="navRight">
+
+        <div class="lang-dropdown" id="langDropdownWrap">
+          <button class="lang-dropdown-btn" id="langDropdownBtn">
+            <i class="fa fa-globe"></i>
+            <span id="langDropdownLabel">РУ</span>
+            <i class="fa fa-chevron-down lang-chevron"></i>
+          </button>
+          <div class="lang-dropdown-menu" id="langDropdownMenu">
+            <button class="lang-option" data-lang="uk">
+              <span class="lang-flag">🇺🇦</span>
+              <span class="lang-name">Українська</span>
+              <span class="lang-code">УК</span>
+            </button>
+            <button class="lang-option active" data-lang="ru">
+              <span class="lang-flag">🇷🇺</span>
+              <span class="lang-name">Русский</span>
+              <span class="lang-code">РУ</span>
+            </button>
+            <button class="lang-option" data-lang="en">
+              <span class="lang-flag">🇬🇧</span>
+              <span class="lang-name">English</span>
+              <span class="lang-code">EN</span>
+            </button>
+          </div>
+        </div>
+
+        <button class="nav-icon-btn nav-search-btn" data-action="search" title="Поиск (Ctrl+K)">
+          <i class="fa fa-search"></i>
+        </button>
+
+        <a href="publish.html" class="btn-publish ms-1">
+          <i class="fa fa-upload"></i>
+          <span data-i18n="nav_publish">Публиковать</span>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════ PAGE SWITCHER ══════════════════
+     Один шаблон, разные страницы — меняем data-page
+     и JS подставляет нужный контент.
+     Для простоты все страницы показаны сразу через
+     display/hidden — в реальном проекте роутинг.
+  ════════════════════════════════════════════════════ -->
+
+<!-- ══════════════════ SUB-NAV ══════════════════ -->
+<div style="background:var(--ink2); border-bottom:1px solid rgba(255,255,255,0.05); position:sticky; top:62px; z-index:100;">
+  <div class="container">
+    <div style="display:flex; gap:0; overflow-x:auto; scrollbar-width:none;">
+      <a href="#about"   class="subnav-link active" data-target="about">О платформе</a>
+      <a href="#rules"   class="subnav-link" data-target="rules">Правила публикации</a>
+      <a href="#faq"     class="subnav-link" data-target="faq">FAQ</a>
+      <a href="#privacy" class="subnav-link" data-target="privacy">Политика</a>
+      <a href="#terms"   class="subnav-link" data-target="terms">Соглашение</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .subnav-link {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.75rem 1.1rem; white-space: nowrap;
+    font-size: 0.77rem; letter-spacing: 0.06em; text-transform: uppercase;
+    color: rgba(224,216,204,0.42); text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .subnav-link:hover { color: rgba(224,216,204,0.75); }
+  .subnav-link.active { color: var(--paper); border-bottom-color: var(--red); }
+</style>
+
+<!-- ══════════════════ ABOUT ══════════════════ -->
+<div id="page-about" class="static-page-content">
+
+  <!-- Hero -->
+  <div class="static-hero">
+    <div class="static-hero-bg"></div>
+    <div class="static-hero-stripes">
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <div class="static-hero-kanji">物語</div>
+    <div class="container static-hero-content">
+      <div class="static-breadcrumb">
+        <a href="index.html"><i class="fa fa-house fa-xs"></i> Главная</a>
+        <span class="sep">/</span>
+        <span class="current">О платформе</span>
+      </div>
+      <p class="static-hero-eyebrow">О Mangoria</p>
+      <h1 class="static-hero-title">
+        Место, где рождаются<br><span class="accent">истории</span>
+      </h1>
+      <p class="static-hero-sub">
+        Mangoria — открытая платформа для публикации авторской манги и ранобэ. Мы верим, что каждая история заслуживает своего читателя.
+      </p>
+      <div class="static-updated">
+        <i class="fa fa-calendar-alt"></i> Обновлено: июнь 2025
+      </div>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <section class="static-body">
+    <div class="container">
+      <div class="static-layout">
+
+        <!-- TOC -->
+        <nav class="static-toc">
+          <div class="static-toc-card">
+            <div class="static-toc-header">Содержание</div>
+            <div class="static-toc-nav">
+              <a href="#about-mission" class="toc-item active">
+                <span class="toc-num">1</span> Миссия
+              </a>
+              <a href="#about-stats" class="toc-item">
+                <span class="toc-num">2</span> Платформа в цифрах
+              </a>
+              <a href="#about-team" class="toc-item">
+                <span class="toc-num">3</span> Команда
+              </a>
+              <a href="#about-values" class="toc-item">
+                <span class="toc-num">4</span> Наши ценности
+              </a>
+              <a href="#about-contacts" class="toc-item">
+                <span class="toc-num">5</span> Контакты
+              </a>
+            </div>
+          </div>
+        </nav>
+
+        <!-- Content -->
+        <div class="static-content">
+
+          <!-- 1. Миссия -->
+          <div class="static-section" id="about-mission">
+            <div class="static-section-header">
+              <div class="static-section-icon"><i class="fa fa-torii-gate"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 01</div>
+                <h2 class="static-section-title">Наша миссия</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <p class="static-text">
+                <strong>Mangoria</strong> появился в 2024 году как ответ на запрос русскоязычных авторов: нигде не было удобного и красивого места, где можно публиковать оригинальную мангу и ранобэ без цензуры, монетизации за читаемость и бюрократии.
+              </p>
+              <p class="static-text">
+                Мы строим сообщество вокруг двух форматов — <strong>визуальная манга</strong> и <strong>текстовое ранобэ</strong>. Оба жанра равноправны на платформе, оба имеют одинаковые инструменты публикации и одинаковое внимание со стороны редакции.
+              </p>
+              <div class="static-highlight gold">
+                <i class="fa fa-quote-left"></i>
+                <strong>«Мы не издательство. Мы — площадка.</strong> Решение о качестве принимает читатель, а не редактор.»
+              </div>
+              <p class="static-text">
+                Главный принцип: <strong>минимум барьеров для автора</strong>. Регистрация бесплатна, публикация бесплатна, никаких минимальных требований к объёму или уровню рисунка.
+              </p>
+            </div>
+          </div>
+
+          <!-- 2. Цифры -->
+          <div class="static-section" id="about-stats">
+            <div class="static-section-header">
+              <div class="static-section-icon gold"><i class="fa fa-chart-bar"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 02</div>
+                <h2 class="static-section-title">Платформа в цифрах</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <div class="static-stats-row">
+                <div class="static-stat-box">
+                  <div class="static-stat-num">2 400+</div>
+                  <div class="static-stat-label">Произведений</div>
+                </div>
+                <div class="static-stat-box">
+                  <div class="static-stat-num">890+</div>
+                  <div class="static-stat-label">Авторов</div>
+                </div>
+                <div class="static-stat-box">
+                  <div class="static-stat-num">18 k+</div>
+                  <div class="static-stat-label">Читателей</div>
+                </div>
+                <div class="static-stat-box">
+                  <div class="static-stat-num">47 k+</div>
+                  <div class="static-stat-label">Глав</div>
+                </div>
+                <div class="static-stat-box">
+                  <div class="static-stat-num">320 k+</div>
+                  <div class="static-stat-label">Прочтений</div>
+                </div>
+                <div class="static-stat-box">
+                  <div class="static-stat-num">19</div>
+                  <div class="static-stat-label">Жанров</div>
+                </div>
+              </div>
+              <p class="static-text" style="margin-top:1rem;">
+                Данные обновляются ежемесячно. Рост аудитории составляет около <strong>18% в месяц</strong> с момента запуска.
+              </p>
+            </div>
+          </div>
+
+          <!-- 3. Команда -->
+          <div class="static-section" id="about-team">
+            <div class="static-section-header">
+              <div class="static-section-icon teal"><i class="fa fa-users"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 03</div>
+                <h2 class="static-section-title">Команда</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <p class="static-text">
+                Мы небольшая команда энтузиастов, которые сами читают мангу и ранобэ. Каждое решение по дизайну и функциям продиктовано опытом использования, а не корпоративными метриками.
+              </p>
+              <div class="static-team-grid">
+                <div class="static-team-card">
+                  <div class="static-team-avatar">鬼</div>
+                  <div class="static-team-name">Артём К.</div>
+                  <div class="static-team-role">Основатель & CEO</div>
+                </div>
+                <div class="static-team-card">
+                  <div class="static-team-avatar" style="background:linear-gradient(135deg,#061a17,#0c2e28); color:rgba(26,155,138,0.5);">水</div>
+                  <div class="static-team-name">Дарья М.</div>
+                  <div class="static-team-role">Арт-директор</div>
+                </div>
+                <div class="static-team-card">
+                  <div class="static-team-avatar" style="background:linear-gradient(135deg,#120a1e,#2a1040); color:rgba(107,63,160,0.6);">月</div>
+                  <div class="static-team-name">Никита Р.</div>
+                  <div class="static-team-role">Backend-разработчик</div>
+                </div>
+                <div class="static-team-card">
+                  <div class="static-team-avatar" style="background:linear-gradient(135deg,#1a1505,#2a2008); color:rgba(212,160,23,0.5);">星</div>
+                  <div class="static-team-name">Анна В.</div>
+                  <div class="static-team-role">Модератор</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Ценности -->
+          <div class="static-section" id="about-values">
+            <div class="static-section-header">
+              <div class="static-section-icon"><i class="fa fa-heart"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 04</div>
+                <h2 class="static-section-title">Наши ценности</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <div class="static-rules-grid">
+                <div class="static-rule-card">
+                  <div class="static-rule-card-icon"><i class="fa fa-lock-open"></i></div>
+                  <div class="static-rule-card-title">Открытость</div>
+                  <div class="static-rule-card-text">Публикация без цензуры, без минимального порога качества, без скрытых условий.</div>
+                </div>
+                <div class="static-rule-card">
+                  <div class="static-rule-card-icon gold"><i class="fa fa-star"></i></div>
+                  <div class="static-rule-card-title">Качество UX</div>
+                  <div class="static-rule-card-text">Удобный интерфейс важен так же, как и контент. Читать и публиковать должно быть приятно.</div>
+                </div>
+                <div class="static-rule-card">
+                  <div class="static-rule-card-icon teal"><i class="fa fa-shield-halved"></i></div>
+                  <div class="static-rule-card-title">Безопасность</div>
+                  <div class="static-rule-card-text">Защита авторства, возрастная маркировка, работа с жалобами — приоритет команды.</div>
+                </div>
+                <div class="static-rule-card">
+                  <div class="static-rule-card-icon"><i class="fa fa-comments"></i></div>
+                  <div class="static-rule-card-title">Сообщество</div>
+                  <div class="static-rule-card-text">Авторы и читатели — не разные категории. Мы строим диалог между ними.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. Контакты -->
+          <div class="static-section" id="about-contacts">
+            <div class="static-section-header">
+              <div class="static-section-icon gold"><i class="fa fa-envelope"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 05</div>
+                <h2 class="static-section-title">Контакты</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <div class="static-highlight teal">
+                <i class="fa fa-circle-info"></i>
+                По вопросам сотрудничества, рекламы и партнёрства — пишите на почту или в Telegram.
+              </div>
+              <ul class="static-list">
+                <li>
+                  <span class="li-icon teal"><i class="fa fa-envelope"></i></span>
+                  <span><strong>Общие вопросы:</strong> hello@Mangoria.ru</span>
+                </li>
+                <li>
+                  <span class="li-icon teal"><i class="fa fa-shield-halved"></i></span>
+                  <span><strong>Жалобы и модерация:</strong> abuse@Mangoria.ru</span>
+                </li>
+                <li>
+                  <span class="li-icon teal"><i class="fa fa-handshake"></i></span>
+                  <span><strong>Партнёрство:</strong> partner@Mangoria.ru</span>
+                </li>
+                <li>
+                  <span class="li-icon"><i class="fab fa-telegram"></i></span>
+                  <span><strong>Telegram:</strong> <a href="#" style="color:var(--red);">@Mangoria_support</a></span>
+                </li>
+                <li>
+                  <span class="li-icon"><i class="fab fa-discord"></i></span>
+                  <span><strong>Discord:</strong> <a href="#" style="color:var(--red);">discord.gg/Mangoria</a></span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </div><!-- /static-content -->
+      </div><!-- /static-layout -->
+    </div>
+  </section>
+
+</div><!-- /page-about -->
+
+
+<!-- ══════════════════ RULES ══════════════════ -->
+<div id="page-rules" class="static-page-content" style="display:none;">
+
+  <div class="static-hero">
+    <div class="static-hero-bg"></div>
+    <div class="static-hero-stripes"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="static-hero-kanji">規則</div>
+    <div class="container static-hero-content">
+      <div class="static-breadcrumb">
+        <a href="index.html"><i class="fa fa-house fa-xs"></i> Главная</a>
+        <span class="sep">/</span>
+        <span class="current">Правила публикации</span>
+      </div>
+      <p class="static-hero-eyebrow">Правила платформы</p>
+      <h1 class="static-hero-title">Правила <span class="accent">публикации</span></h1>
+      <p class="static-hero-sub">
+        Прочитайте внимательно перед первой публикацией. Незнание правил не освобождает от ответственности.
+      </p>
+      <div class="static-updated">
+        <i class="fa fa-calendar-alt"></i> Редакция от 12 июня 2025
+      </div>
+    </div>
+  </div>
+
+  <section class="static-body">
+    <div class="container">
+      <div class="static-layout">
+        <nav class="static-toc">
+          <div class="static-toc-card">
+            <div class="static-toc-header">Содержание</div>
+            <div class="static-toc-nav">
+              <a href="#rules-general" class="toc-item active"><span class="toc-num">1</span> Общие положения</a>
+              <a href="#rules-content" class="toc-item"><span class="toc-num">2</span> Требования к контенту</a>
+              <a href="#rules-forbidden" class="toc-item"><span class="toc-num">3</span> Запрещённый контент</a>
+              <a href="#rules-age" class="toc-item"><span class="toc-num">4</span> Возрастная маркировка</a>
+              <a href="#rules-ip" class="toc-item"><span class="toc-num">5</span> Авторские права</a>
+              <a href="#rules-violations" class="toc-item"><span class="toc-num">6</span> Нарушения и санкции</a>
+            </div>
+          </div>
+        </nav>
+
+        <div class="static-content">
+
+          <div class="static-section" id="rules-general">
+            <div class="static-section-header">
+              <div class="static-section-icon"><i class="fa fa-scroll"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 01</div>
+                <h2 class="static-section-title">Общие положения</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <p class="static-text">
+                Публикуя материалы на Mangoria, вы соглашаетесь соблюдать настоящие правила. Правила распространяются на все типы контента: мангу, ранобэ, комментарии, описания и аватары.
+              </p>
+              <ul class="static-list">
+                <li><span class="li-icon"><i class="fa fa-check"></i></span><span>Публиковать могут только зарегистрированные пользователи.</span></li>
+                <li><span class="li-icon"><i class="fa fa-check"></i></span><span>Один аккаунт — одному человеку. Мультиаккаунтинг запрещён.</span></li>
+                <li><span class="li-icon"><i class="fa fa-check"></i></span><span>Автор несёт ответственность за весь публикуемый контент.</span></li>
+                <li><span class="li-icon"><i class="fa fa-check"></i></span><span>Администрация вправе удалить любой контент без предупреждения, если он нарушает правила.</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="static-section" id="rules-content">
+            <div class="static-section-header">
+              <div class="static-section-icon gold"><i class="fa fa-pen-nib"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 02</div>
+                <h2 class="static-section-title">Требования к контенту</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <h3 class="static-subtitle">Манга</h3>
+              <ul class="static-list">
+                <li><span class="li-icon"><i class="fa fa-image"></i></span><span>Форматы: JPG, PNG, WebP. Максимум 20 МБ на страницу.</span></li>
+                <li><span class="li-icon"><i class="fa fa-image"></i></span><span>Минимальное разрешение: 800px по ширине. Рекомендовано 1200–2000px.</span></li>
+                <li><span class="li-icon"><i class="fa fa-image"></i></span><span>Страницы должны быть читаемы: текст не должен сливаться с фоном.</span></li>
+                <li><span class="li-icon"><i class="fa fa-image"></i></span><span>Рекомендуется загружать главы целиком, а не по одной странице.</span></li>
+              </ul>
+              <h3 class="static-subtitle">Ранобэ</h3>
+              <ul class="static-list">
+                <li><span class="li-icon"><i class="fa fa-book"></i></span><span>Минимальный объём главы: 500 знаков с пробелами.</span></li>
+                <li><span class="li-icon"><i class="fa fa-book"></i></span><span>Текст должен быть написан на русском или английском языке.</span></li>
+                <li><span class="li-icon"><i class="fa fa-book"></i></span><span>Использование машинного перевода без редактуры запрещено.</span></li>
+                <li><span class="li-icon"><i class="fa fa-book"></i></span><span>Рекомендуемый объём главы: 3 000–8 000 знаков.</span></li>
+              </ul>
+              <div class="static-highlight">
+                <i class="fa fa-circle-info"></i>
+                <strong>Совет:</strong> Хорошая обложка и детальное описание в разы увеличивают шанс попасть в рекомендации редакции.
+              </div>
+            </div>
+          </div>
+
+          <div class="static-section" id="rules-forbidden">
+            <div class="static-section-header">
+              <div class="static-section-icon" style="background:rgba(224,94,80,0.1); color:#e05a50;"><i class="fa fa-ban"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 03</div>
+                <h2 class="static-section-title">Запрещённый контент</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <div class="static-highlight" style="background:rgba(224,94,80,0.07); border-color:rgba(224,94,80,0.18); border-left-color:#e05a50;">
+                <i class="fa fa-triangle-exclamation"></i>
+                <strong>Нарушение этих правил ведёт к немедленной блокировке аккаунта</strong> без возможности восстановления.
+              </div>
+              <ul class="static-list forbidden">
+                <li><span class="li-icon"><i class="fa fa-xmark"></i></span><span>Сексуальный контент с участием несовершеннолетних (абсолютное табу).</span></li>
+                <li><span class="li-icon"><i class="fa fa-xmark"></i></span><span>Пропаганда насилия, терроризма, экстремизма.</span></li>
+                <li><span class="li-icon"><i class="fa fa-xmark"></i></span><span>Разжигание ненависти по расовому, национальному или религиозному признаку.</span></li>
+                <li><span class="li-icon"><i class="fa fa-xmark"></i></span><span>Реальные персональные данные других людей без их согласия (доксинг).</span></li>
+                <li><span class="li-icon"><i class="fa fa-xmark"></i></span><span>Вредоносный код, фишинговые ссылки, спам в любом виде.</span></li>
+                <li><span class="li-icon"><i class="fa fa-xmark"></i></span><span>Контент, нарушающий законодательство РФ и международные нормы.</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="static-section" id="rules-age">
+            <div class="static-section-header">
+              <div class="static-section-icon gold"><i class="fa fa-id-card"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 04</div>
+                <h2 class="static-section-title">Возрастная маркировка</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <p class="static-text">Автор обязан корректно указывать возрастной рейтинг. Редакция вправе изменить рейтинг, если посчитает указанный некорректным.</p>
+              <div class="static-rules-grid">
+                <div class="static-rule-card">
+                  <div class="static-rule-card-icon teal"><i class="fa fa-child"></i></div>
+                  <div class="static-rule-card-title">G — Для всех</div>
+                  <div class="static-rule-card-text">Нет насилия, пугающих сцен, романтики. Подходит для любого возраста.</div>
+                </div>
+                <div class="static-rule-card">
+                  <div class="static-rule-card-icon teal"><i class="fa fa-user"></i></div>
+                  <div class="static-rule-card-title">PG — 12+</div>
+                  <div class="static-rule-card-text">Лёгкое насилие, ненормативная лексика редко. Без сексуальных сцен.</div>
+                </div>
+                <div class="static-rule-card">
+                  <div class="static-rule-card-icon gold"><i class="fa fa-user-clock"></i></div>
+                  <div class="static-rule-card-title">PG-13 — 16+</div>
+                  <div class="static-rule-card-text">Умеренное насилие, романтические сцены без явной эротики.</div>
+                </div>
+                <div class="static-rule-card">
+                  <div class="static-rule-card-icon" style="background:rgba(224,94,80,0.1);color:#e05a50;"><i class="fa fa-user-shield"></i></div>
+                  <div class="static-rule-card-title">R — 18+</div>
+                  <div class="static-rule-card-text">Жёсткое насилие, сексуальный контент. Только для совершеннолетних.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="static-section" id="rules-ip">
+            <div class="static-section-header">
+              <div class="static-section-icon teal"><i class="fa fa-copyright"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 05</div>
+                <h2 class="static-section-title">Авторские права</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <p class="static-text">
+                Публикуя произведение, вы подтверждаете, что являетесь его автором или имеете права на публикацию. Mangoria не претендует на ваш контент — <strong>права остаются у автора</strong>.
+              </p>
+              <ul class="static-list">
+                <li><span class="li-icon teal"><i class="fa fa-check"></i></span><span>Fanart и фанфики по существующим произведениям разрешены при указании источника.</span></li>
+                <li><span class="li-icon teal"><i class="fa fa-check"></i></span><span>Перевод чужих работ — только с письменного разрешения оригинального автора.</span></li>
+                <li><span class="li-icon"><i class="fa fa-xmark"></i></span><span>Копирование контента с других платформ без прав строго запрещено.</span></li>
+                <li><span class="li-icon"><i class="fa fa-xmark"></i></span><span>Нарушение авторских прав → удаление произведения и предупреждение аккаунту.</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="static-section" id="rules-violations">
+            <div class="static-section-header">
+              <div class="static-section-icon" style="background:rgba(224,94,80,0.1);color:#e05a50;"><i class="fa fa-gavel"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 06</div>
+                <h2 class="static-section-title">Нарушения и санкции</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <div class="static-rules-grid">
+                <div class="static-rule-card">
+                  <div class="static-rule-card-icon gold"><i class="fa fa-triangle-exclamation"></i></div>
+                  <div class="static-rule-card-title">Предупреждение</div>
+                  <div class="static-rule-card-text">Первичное нарушение правил оформления или описания. Контент скрывается до исправления.</div>
+                </div>
+                <div class="static-rule-card">
+                  <div class="static-rule-card-icon" style="background:rgba(192,57,43,0.1);color:var(--red);"><i class="fa fa-eye-slash"></i></div>
+                  <div class="static-rule-card-title">Скрытие контента</div>
+                  <div class="static-rule-card-text">Нарушение рейтинговой маркировки или прав. Произведение скрыто до рассмотрения.</div>
+                </div>
+                <div class="static-rule-card">
+                  <div class="static-rule-card-icon" style="background:rgba(192,57,43,0.1);color:var(--red);"><i class="fa fa-clock"></i></div>
+                  <div class="static-rule-card-title">Временная блокировка</div>
+                  <div class="static-rule-card-text">Повторные нарушения. Бан на 7–30 дней в зависимости от тяжести.</div>
+                </div>
+                <div class="static-rule-card">
+                  <div class="static-rule-card-icon" style="background:rgba(224,94,80,0.1);color:#e05a50;"><i class="fa fa-ban"></i></div>
+                  <div class="static-rule-card-title">Перманентный бан</div>
+                  <div class="static-rule-card-text">Грубые нарушения (запрещённый контент, доксинг). Без возможности восстановления.</div>
+                </div>
+              </div>
+              <p class="static-text" style="margin-top:1rem;">
+                Апелляция возможна в течение 14 дней после санкции — пишите на <strong>abuse@Mangoria.ru</strong>.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ══════════════════ FAQ ══════════════════ -->
+<div id="page-faq" class="static-page-content" style="display:none;">
+
+  <div class="static-hero">
+    <div class="static-hero-bg"></div>
+    <div class="static-hero-stripes"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="static-hero-kanji">問答</div>
+    <div class="container static-hero-content">
+      <div class="static-breadcrumb">
+        <a href="index.html"><i class="fa fa-house fa-xs"></i> Главная</a>
+        <span class="sep">/</span>
+        <span class="current">FAQ</span>
+      </div>
+      <p class="static-hero-eyebrow">Часто задаваемые вопросы</p>
+      <h1 class="static-hero-title">Ответы на <span class="accent">вопросы</span></h1>
+      <p class="static-hero-sub">Не нашли ответ? Напишите нам в Telegram или на почту.</p>
+    </div>
+  </div>
+
+  <section class="static-body">
+    <div class="container">
+      <div class="static-layout">
+        <nav class="static-toc">
+          <div class="static-toc-card">
+            <div class="static-toc-header">Разделы</div>
+            <div class="static-toc-nav">
+              <a href="#faq-general" class="toc-item active"><span class="toc-num">1</span> Общие</a>
+              <a href="#faq-publish" class="toc-item"><span class="toc-num">2</span> Публикация</a>
+              <a href="#faq-account" class="toc-item"><span class="toc-num">3</span> Аккаунт</a>
+            </div>
+          </div>
+        </nav>
+
+        <div class="static-content">
+
+          <div class="static-section" id="faq-general">
+            <div class="static-section-header">
+              <div class="static-section-icon"><i class="fa fa-circle-question"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 01</div>
+                <h2 class="static-section-title">Общие вопросы</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <div class="static-faq">
+                <div class="faq-item">
+                  <div class="faq-question" onclick="toggleFaq(this)">
+                    Что такое Mangoria?
+                    <span class="faq-chevron"><i class="fa fa-chevron-down"></i></span>
+                  </div>
+                  <div class="faq-answer">
+                    Mangoria — открытая платформа для публикации авторской манги и ранобэ на русском и английском языках. Любой желающий может зарегистрироваться и бесплатно публиковать свои работы.
+                  </div>
+                </div>
+                <div class="faq-item">
+                  <div class="faq-question" onclick="toggleFaq(this)">
+                    Это бесплатно?
+                    <span class="faq-chevron"><i class="fa fa-chevron-down"></i></span>
+                  </div>
+                  <div class="faq-answer">
+                    Да. Регистрация, чтение и публикация — всё бесплатно. Мы планируем добавить опциональную поддержку авторов от читателей, но это останется добровольным.
+                  </div>
+                </div>
+                <div class="faq-item">
+                  <div class="faq-question" onclick="toggleFaq(this)">
+                    Чем манга отличается от ранобэ на платформе?
+                    <span class="faq-chevron"><i class="fa fa-chevron-down"></i></span>
+                  </div>
+                  <div class="faq-answer">
+                    Манга — это графический формат: вы загружаете изображения страниц. Ранобэ — текстовый формат: вы пишете или вставляете текст в редактор. Оба жанра имеют одинаковые инструменты продвижения и рекомендации.
+                  </div>
+                </div>
+                <div class="faq-item">
+                  <div class="faq-question" onclick="toggleFaq(this)">
+                    Есть ли мобильное приложение?
+                    <span class="faq-chevron"><i class="fa fa-chevron-down"></i></span>
+                  </div>
+                  <div class="faq-answer">
+                    Пока нет, но сайт полностью адаптирован для мобильных устройств. Приложение в планах на 2026 год.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="static-section" id="faq-publish">
+            <div class="static-section-header">
+              <div class="static-section-icon gold"><i class="fa fa-upload"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 02</div>
+                <h2 class="static-section-title">Публикация</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <div class="static-faq">
+                <div class="faq-item">
+                  <div class="faq-question" onclick="toggleFaq(this)">
+                    Какие форматы изображений поддерживаются?
+                    <span class="faq-chevron"><i class="fa fa-chevron-down"></i></span>
+                  </div>
+                  <div class="faq-answer">
+                    Для страниц манги: JPG, PNG, WebP. Максимальный размер файла — 20 МБ. Для обложки: JPG, PNG, до 5 МБ. Рекомендуемое разрешение обложки — 400×600 пикселей.
+                  </div>
+                </div>
+                <div class="faq-item">
+                  <div class="faq-question" onclick="toggleFaq(this)">
+                    Сколько глав можно опубликовать?
+                    <span class="faq-chevron"><i class="fa fa-chevron-down"></i></span>
+                  </div>
+                  <div class="faq-answer">
+                    Без ограничений. Публикуйте столько глав, сколько нужно вашей истории.
+                  </div>
+                </div>
+                <div class="faq-item">
+                  <div class="faq-question" onclick="toggleFaq(this)">
+                    Можно ли редактировать уже опубликованные главы?
+                    <span class="faq-chevron"><i class="fa fa-chevron-down"></i></span>
+                  </div>
+                  <div class="faq-answer">
+                    Да. В личном кабинете вы можете редактировать описание, заменять страницы и менять порядок уже после публикации.
+                  </div>
+                </div>
+                <div class="faq-item">
+                  <div class="faq-question" onclick="toggleFaq(this)">
+                    Как попасть в раздел «Выбор редакции»?
+                    <span class="faq-chevron"><i class="fa fa-chevron-down"></i></span>
+                  </div>
+                  <div class="faq-answer">
+                    Редакция отбирает произведения вручную раз в неделю, ориентируясь на качество оформления, оригинальность сюжета и активность аудитории. Специальной формы заявки нет — просто публикуйте регулярно.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="static-section" id="faq-account">
+            <div class="static-section-header">
+              <div class="static-section-icon teal"><i class="fa fa-user-circle"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 03</div>
+                <h2 class="static-section-title">Аккаунт</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <div class="static-faq">
+                <div class="faq-item">
+                  <div class="faq-question" onclick="toggleFaq(this)">
+                    Как удалить аккаунт?
+                    <span class="faq-chevron"><i class="fa fa-chevron-down"></i></span>
+                  </div>
+                  <div class="faq-answer">
+                    Перейдите в Настройки → Аккаунт → Удалить аккаунт. Все ваши произведения будут удалены вместе с аккаунтом. Действие необратимо.
+                  </div>
+                </div>
+                <div class="faq-item">
+                  <div class="faq-question" onclick="toggleFaq(this)">
+                    Забыл пароль — что делать?
+                    <span class="faq-chevron"><i class="fa fa-chevron-down"></i></span>
+                  </div>
+                  <div class="faq-answer">
+                    На странице входа нажмите «Забыли пароль?» и введите email. Ссылка для восстановления придёт в течение нескольких минут.
+                  </div>
+                </div>
+                <div class="faq-item">
+                  <div class="faq-question" onclick="toggleFaq(this)">
+                    Можно ли иметь несколько аккаунтов?
+                    <span class="faq-chevron"><i class="fa fa-chevron-down"></i></span>
+                  </div>
+                  <div class="faq-answer">
+                    Нет. Один человек — один аккаунт. При обнаружении мультиаккаунтинга все связанные аккаунты блокируются.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ══════════════════ PRIVACY ══════════════════ -->
+<div id="page-privacy" class="static-page-content" style="display:none;">
+  <div class="static-hero">
+    <div class="static-hero-bg"></div>
+    <div class="static-hero-stripes"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="static-hero-kanji">守秘</div>
+    <div class="container static-hero-content">
+      <div class="static-breadcrumb">
+        <a href="index.html"><i class="fa fa-house fa-xs"></i> Главная</a>
+        <span class="sep">/</span><span class="current">Политика конфиденциальности</span>
+      </div>
+      <p class="static-hero-eyebrow">Приватность</p>
+      <h1 class="static-hero-title">Политика <span class="accent">конфиденциальности</span></h1>
+      <p class="static-hero-sub">Как мы собираем, используем и защищаем ваши данные.</p>
+      <div class="static-updated"><i class="fa fa-calendar-alt"></i> Редакция от 1 мая 2025</div>
+    </div>
+  </div>
+  <section class="static-body">
+    <div class="container">
+      <div class="static-layout">
+        <nav class="static-toc">
+          <div class="static-toc-card">
+            <div class="static-toc-header">Содержание</div>
+            <div class="static-toc-nav">
+              <a href="#priv-collect"  class="toc-item active"><span class="toc-num">1</span> Что мы собираем</a>
+              <a href="#priv-use"      class="toc-item"><span class="toc-num">2</span> Как используем</a>
+              <a href="#priv-cookies"  class="toc-item"><span class="toc-num">3</span> Cookies</a>
+              <a href="#priv-rights"   class="toc-item"><span class="toc-num">4</span> Ваши права</a>
+            </div>
+          </div>
+        </nav>
+        <div class="static-content">
+          <div class="static-section" id="priv-collect">
+            <div class="static-section-header">
+              <div class="static-section-icon teal"><i class="fa fa-database"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 01</div>
+                <h2 class="static-section-title">Что мы собираем</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <p class="static-text">При регистрации и использовании платформы мы получаем следующие данные:</p>
+              <ul class="static-list">
+                <li><span class="li-icon teal"><i class="fa fa-envelope"></i></span><span><strong>Email-адрес</strong> — для входа и уведомлений.</span></li>
+                <li><span class="li-icon teal"><i class="fa fa-user"></i></span><span><strong>Никнейм и аватар</strong> — публичные данные профиля.</span></li>
+                <li><span class="li-icon teal"><i class="fa fa-globe"></i></span><span><strong>IP-адрес и user-agent</strong> — для защиты от спама и аналитики.</span></li>
+                <li><span class="li-icon teal"><i class="fa fa-chart-line"></i></span><span><strong>Статистика действий</strong> — просмотры, закладки, лайки (анонимно).</span></li>
+              </ul>
+              <div class="static-highlight teal">
+                <i class="fa fa-shield-halved"></i>
+                Мы <strong>не продаём</strong> ваши данные третьим лицам. Никогда.
+              </div>
+            </div>
+          </div>
+          <div class="static-section" id="priv-use">
+            <div class="static-section-header">
+              <div class="static-section-icon gold"><i class="fa fa-wrench"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 02</div>
+                <h2 class="static-section-title">Как мы используем данные</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <ul class="static-list">
+                <li><span class="li-icon"><i class="fa fa-check"></i></span><span>Аутентификация и восстановление доступа.</span></li>
+                <li><span class="li-icon"><i class="fa fa-check"></i></span><span>Отправка уведомлений о новых главах подписок.</span></li>
+                <li><span class="li-icon"><i class="fa fa-check"></i></span><span>Формирование персональных рекомендаций.</span></li>
+                <li><span class="li-icon"><i class="fa fa-check"></i></span><span>Обеспечение безопасности и предотвращение злоупотреблений.</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="static-section" id="priv-cookies">
+            <div class="static-section-header">
+              <div class="static-section-icon"><i class="fa fa-cookie-bite"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 03</div>
+                <h2 class="static-section-title">Cookies</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <p class="static-text">Мы используем cookies только для:</p>
+              <ul class="static-list">
+                <li><span class="li-icon"><i class="fa fa-key"></i></span><span>Хранения сессии авторизации.</span></li>
+                <li><span class="li-icon"><i class="fa fa-sliders"></i></span><span>Запоминания пользовательских настроек (тема, режим чтения).</span></li>
+                <li><span class="li-icon"><i class="fa fa-chart-simple"></i></span><span>Анонимной аналитики посещаемости (без передачи личных данных).</span></li>
+              </ul>
+              <p class="static-text">Рекламных и трекинговых cookies сторонних сервисов мы <strong>не используем</strong>.</p>
+            </div>
+          </div>
+          <div class="static-section" id="priv-rights">
+            <div class="static-section-header">
+              <div class="static-section-icon teal"><i class="fa fa-user-shield"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 04</div>
+                <h2 class="static-section-title">Ваши права</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <ul class="static-list">
+                <li><span class="li-icon teal"><i class="fa fa-eye"></i></span><span><strong>Доступ:</strong> вы можете запросить копию ваших данных.</span></li>
+                <li><span class="li-icon teal"><i class="fa fa-pen"></i></span><span><strong>Исправление:</strong> вы можете обновить данные в профиле.</span></li>
+                <li><span class="li-icon teal"><i class="fa fa-trash"></i></span><span><strong>Удаление:</strong> вы можете удалить аккаунт и все данные.</span></li>
+                <li><span class="li-icon teal"><i class="fa fa-envelope"></i></span><span><strong>Запросы:</strong> пишите на privacy@Mangoria.ru.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ══════════════════ TERMS ══════════════════ -->
+<div id="page-terms" class="static-page-content" style="display:none;">
+  <div class="static-hero">
+    <div class="static-hero-bg"></div>
+    <div class="static-hero-stripes"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="static-hero-kanji">約款</div>
+    <div class="container static-hero-content">
+      <div class="static-breadcrumb">
+        <a href="index.html"><i class="fa fa-house fa-xs"></i> Главная</a>
+        <span class="sep">/</span><span class="current">Пользовательское соглашение</span>
+      </div>
+      <p class="static-hero-eyebrow">Юридические условия</p>
+      <h1 class="static-hero-title">Пользовательское <span class="accent">соглашение</span></h1>
+      <p class="static-hero-sub">Условия использования платформы Mangoria.</p>
+      <div class="static-updated"><i class="fa fa-calendar-alt"></i> Редакция от 1 мая 2025 · v1.2</div>
+    </div>
+  </div>
+  <section class="static-body">
+    <div class="container">
+      <div class="static-layout">
+        <nav class="static-toc">
+          <div class="static-toc-card">
+            <div class="static-toc-header">Содержание</div>
+            <div class="static-toc-nav">
+              <a href="#terms-accept"  class="toc-item active"><span class="toc-num">1</span> Принятие условий</a>
+              <a href="#terms-license" class="toc-item"><span class="toc-num">2</span> Лицензия на контент</a>
+              <a href="#terms-limit"   class="toc-item"><span class="toc-num">3</span> Ограничение ответственности</a>
+              <a href="#terms-changes" class="toc-item"><span class="toc-num">4</span> Изменения соглашения</a>
+            </div>
+          </div>
+        </nav>
+        <div class="static-content">
+          <div class="static-section" id="terms-accept">
+            <div class="static-section-header">
+              <div class="static-section-icon"><i class="fa fa-file-signature"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 01</div>
+                <h2 class="static-section-title">Принятие условий</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <p class="static-text">Использование платформы Mangoria означает автоматическое согласие с настоящим соглашением. Если вы не согласны — пожалуйста, не используйте платформу.</p>
+              <div class="static-highlight">
+                <i class="fa fa-circle-info"></i>
+                Соглашение регулируется законодательством.
+              </div>
+              <p class="static-text">Платформа предоставляется «как есть». Мы не гарантируем бесперебойную работу, но обязуемся прилагать все усилия для поддержания доступности сервиса.</p>
+            </div>
+          </div>
+          <div class="static-section" id="terms-license">
+            <div class="static-section-header">
+              <div class="static-section-icon gold"><i class="fa fa-copyright"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 02</div>
+                <h2 class="static-section-title">Лицензия на контент</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <p class="static-text">Публикуя произведение, вы <strong>не передаёте</strong> Mangoria авторские права. Вы предоставляете платформе неисключительную лицензию на отображение, хранение и распространение контента в рамках платформы.</p>
+              <ul class="static-list">
+                <li><span class="li-icon teal"><i class="fa fa-check"></i></span><span>Вы в любой момент можете удалить своё произведение с платформы.</span></li>
+                <li><span class="li-icon teal"><i class="fa fa-check"></i></span><span>Mangoria не вправе продавать ваш контент третьим лицам.</span></li>
+                <li><span class="li-icon teal"><i class="fa fa-check"></i></span><span>Использование контента в промо-материалах платформы — только с вашего согласия.</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="static-section" id="terms-limit">
+            <div class="static-section-header">
+              <div class="static-section-icon" style="background:rgba(212,160,23,0.1);color:var(--gold);"><i class="fa fa-shield-halved"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 03</div>
+                <h2 class="static-section-title">Ограничение ответственности</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <p class="static-text">Mangoria не несёт ответственности за:</p>
+              <ul class="static-list">
+                <li><span class="li-icon"><i class="fa fa-minus"></i></span><span>Содержание произведений, публикуемых пользователями.</span></li>
+                <li><span class="li-icon"><i class="fa fa-minus"></i></span><span>Ущерб, вызванный временной недоступностью сервиса.</span></li>
+                <li><span class="li-icon"><i class="fa fa-minus"></i></span><span>Действия третьих лиц в отношении пользователей платформы.</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="static-section" id="terms-changes">
+            <div class="static-section-header">
+              <div class="static-section-icon teal"><i class="fa fa-rotate"></i></div>
+              <div class="static-section-title-wrap">
+                <div class="static-section-num">Раздел 04</div>
+                <h2 class="static-section-title">Изменения соглашения</h2>
+              </div>
+            </div>
+            <div class="static-divider"></div>
+            <div class="static-section-body">
+              <p class="static-text">Мы вправе обновлять соглашение в любое время. О существенных изменениях мы уведомим пользователей по email и через уведомление на сайте не менее чем за <strong>14 дней</strong>.</p>
+              <p class="static-text">Продолжение использования платформы после вступления изменений в силу означает принятие новых условий.</p>
+              <div class="static-version-tag"><i class="fa fa-code-branch fa-xs"></i> Текущая версия: v1.2 от 01.05.2025</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer>
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <p class="footer-brand">Mang<span class="brand-oni">oria</span> <small style="font-family:'Sawarabi Mincho';color:var(--muted);font-weight:300;font-size:0.8rem;">鬼</small></p>
+        <p class="footer-tagline">Манга и Ранобэ — открытая платформа</p>
+        <p class="mt-3" style="font-size:0.78rem; color:var(--muted); line-height:1.75;">Сообщество художников и писателей. Публикуй, читай, вдохновляйся.</p>
+        <div class="d-flex gap-2 mt-3">
+          <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-discord"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+      <div class="col-6 col-lg-2 offset-lg-1 footer-links">
+        <h6>Платформа</h6>
+        <a href="index.html"><i class="fa fa-image me-1" style="color:var(--red);font-size:0.7rem;"></i> Манга</a>
+        <a href="index.html#ranobe"><i class="fa fa-book me-1" style="color:var(--teal);font-size:0.7rem;"></i> Ранобэ</a>
+        <a href="#">Новинки</a>
+        <a href="#">Рейтинг</a>
+      </div>
+      <div class="col-6 col-lg-2 footer-links">
+        <h6>О платформе</h6>
+        <a href="static.html" onclick="switchPage('about')">О нас</a>
+        <a href="static.html" onclick="switchPage('rules')">Правила</a>
+        <a href="static.html" onclick="switchPage('faq')">FAQ</a>
+        <a href="static.html" onclick="switchPage('privacy')">Политика</a>
+        <a href="static.html" onclick="switchPage('terms')">Соглашение</a>
+      </div>
+      <div class="col-6 col-lg-2 footer-links">
+        <h6>Авторам</h6>
+        <a href="publish.html">Опубликовать мангу</a>
+        <a href="publish.html">Написать ранобэ</a>
+        <a href="#">Помощь</a>
+      </div>
+    </div>
+    <div class="footer-bottom d-flex justify-content-between flex-wrap gap-2">
+      <span><span class="footer-copy">© 2025 Mangoria. Все права защищены.</span></span>
+      <span style="color:rgba(94,94,94,0.6);">Сделано с <i class="fa fa-heart" style="color:var(--red);"></i> для авторов</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/main.js"></script>
+<script src="js/navbar.js"></script>
+<script>
+/* ── Переключение страниц ── */
+var pageMap = {
+  about:   'page-about',
+  rules:   'page-rules',
+  faq:     'page-faq',
+  privacy: 'page-privacy',
+  terms:   'page-terms'
+};
+
+function switchPage(key) {
+  Object.values(pageMap).forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  var target = document.getElementById(pageMap[key]);
+  if (target) target.style.display = 'block';
+
+  document.querySelectorAll('.subnav-link').forEach(function(l) {
+    l.classList.toggle('active', l.dataset.target === key);
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* Subnav клики */
+document.querySelectorAll('.subnav-link').forEach(function(link) {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    switchPage(this.dataset.target);
+  });
+});
+
+/* Проверить hash при загрузке */
+(function() {
+  var hash = window.location.hash.replace('#','');
+  if (pageMap[hash]) switchPage(hash);
+})();
+
+/* ── TOC highlight при скролле ── */
+document.addEventListener('scroll', function() {
+  var sections = document.querySelectorAll('.static-section[id]');
+  var fromTop  = window.scrollY + 120;
+  sections.forEach(function(sec) {
+    if (sec.offsetTop <= fromTop && sec.offsetTop + sec.offsetHeight > fromTop) {
+      document.querySelectorAll('.toc-item').forEach(function(t) {
+        t.classList.toggle('active', t.getAttribute('href') === '#' + sec.id);
+      });
+    }
+  });
+});
+
+/* ── FAQ аккордион ── */
+function toggleFaq(el) {
+  var answer = el.nextElementSibling;
+  var isOpen = el.classList.contains('open');
+  var parent = el.closest('.static-section');
+  parent.querySelectorAll('.faq-question.open').forEach(function(q) {
+    q.classList.remove('open');
+    q.nextElementSibling.classList.remove('open');
+  });
+  if (!isOpen) {
+    el.classList.add('open');
+    answer.classList.add('open');
+  }
+}
+</script>
+</body>
+</html>

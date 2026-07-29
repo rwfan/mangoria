@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="ru" id="htmlRoot">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mangoria — Вход и регистрация</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&family=Dela+Gothic+One&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ink:     #0d0d0d;
+      --paper:   #f0ebe0;
+      --red:     #c0392b;
+      --red-dim: #8b1e14;
+      --gold:    #d4a017;
+      --teal:    #1a9b8a;
+      --card:    #161616;
+      --card2:   #1e1e1e;
+      --field:   #0f0f0f;
+      --r:       14px;
+      --r-sm:    9px;
+      --r-pill:  50px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; height: 100%; }
+
+    body {
+      background: var(--ink);
+      color: #ddd6c8;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Noise */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+      background-size: 180px; pointer-events: none; z-index: 0; opacity: 0.4;
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #090909; }
+    ::-webkit-scrollbar-thumb { background: #252525; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--red); }
+
+    /* ── Анимации ── */
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
+    @keyframes floatY   { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-12px); } }
+    @keyframes glowPulse{ 0%,100% { opacity:0.4; } 50% { opacity:0.75; } }
+    @keyframes lineGrow { from { width:0; } to { width:100%; } }
+    @keyframes spin     { to { transform:rotate(360deg); } }
+
+    /* ════════════════════════════════════════════════
+       MINI NAVBAR
+    ════════════════════════════════════════════════ */
+    .auth-nav {
+      position: relative; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 2rem;
+      background: rgba(8,8,8,0.7);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .auth-brand {
+      font-family: 'Dela Gothic One', sans-serif;
+      font-size: 1.4rem; color: var(--paper);
+      text-decoration: none; display: flex; align-items: center; gap: 0.45rem;
+    }
+    .auth-brand-icon {
+      width: 30px; height: 30px; background: var(--red); border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; color: #fff;
+      box-shadow: 0 3px 10px rgba(192,57,43,0.45);
+    }
+    .auth-brand-oni { color: var(--red); }
+    .auth-nav-back {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(221,214,200,0.4); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .auth-nav-back:hover { color: var(--paper); }
+
+    /* ════════════════════════════════════════════════
+       MAIN LAYOUT
+    ════════════════════════════════════════════════ */
+    .auth-main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative; z-index: 1;
+      min-height: calc(100vh - 62px);
+    }
+
+    /* ════════════════════════════════════════════════
+       LEFT PANEL — визуальная часть
+    ════════════════════════════════════════════════ */
+    .auth-visual {
+      position: relative;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      padding: 3rem;
+    }
+
+    /* ── Коллаж манга-панелей (CSS-сетка вместо фото) ── */
+    .auth-visual-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background: #0a0a0a;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      gap: 3px;
+      padding: 3px;
+    }
+    .manga-panel {
+      background: linear-gradient(135deg, #1c1c1c 0%, #141414 100%);
+      position: relative; overflow: hidden;
+      filter: grayscale(1) contrast(0.95) brightness(0.68);
+    }
+    .manga-panel img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      opacity: 0.68;
+      mix-blend-mode: luminosity;
+    }
+    /* Сетка спанов — формируем неравномерный коллаж */
+    .mp-1  { grid-column: 1 / 3; grid-row: 1 / 3; }
+    .mp-2  { grid-column: 3 / 5; grid-row: 1 / 2; }
+    .mp-3  { grid-column: 5 / 7; grid-row: 1 / 3; }
+    .mp-4  { grid-column: 3 / 4; grid-row: 2 / 4; }
+    .mp-5  { grid-column: 4 / 5; grid-row: 2 / 3; }
+    .mp-6  { grid-column: 1 / 2; grid-row: 3 / 5; }
+    .mp-7  { grid-column: 2 / 4; grid-row: 4 / 6; }
+    .mp-8  { grid-column: 4 / 6; grid-row: 3 / 5; }
+    .mp-9  { grid-column: 6 / 7; grid-row: 3 / 4; }
+    .mp-10 { grid-column: 5 / 7; grid-row: 5 / 6; }
+    .mp-11 { grid-column: 6 / 7; grid-row: 4 / 5; }
+    .mp-12 { grid-column: 1 / 2; grid-row: 5 / 6; }
+
+    /* Манга-style halftone текстура поверх каждой панели */
+    .manga-panel::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 4px 4px;
+      pointer-events: none;
+    }
+    /* Speed-lines на некоторых панелях для динамики */
+    .manga-panel.mp-1::after,
+    .manga-panel.mp-7::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        100deg,
+        transparent 0px, transparent 8px,
+        rgba(255,255,255,0.04) 8px, rgba(255,255,255,0.04) 9px
+      );
+      pointer-events: none;
+    }
+
+    /* Затемняющий градиент поверх всей сетки */
+    .auth-visual-bg-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background:
+        linear-gradient(to right, rgba(13,13,13,0.25) 0%, rgba(13,13,13,0.92) 100%),
+        linear-gradient(to bottom, rgba(13,13,13,0.52) 0%, rgba(13,13,13,0.15) 35%, rgba(13,13,13,0.68) 100%),
+        rgba(13,13,13,0.35);
+    }
+
+    /* Декоративные полосы */
+    .visual-stripes {
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 6px; display: flex; flex-direction: column; gap: 3px;
+      opacity: 1; z-index: 3;
+    }
+    .visual-stripes span { flex: 1; }
+    .visual-stripes span:nth-child(1) { background: var(--red); }
+    .visual-stripes span:nth-child(2) { background: var(--gold); }
+    .visual-stripes span:nth-child(3) { background: var(--teal); }
+
+    /* Большой иероглиф */
+    .visual-kanji {
+      position: absolute; z-index: 2;
+      font-family: 'Sawarabi Mincho', serif;
+      font-size: clamp(10rem, 20vw, 18rem);
+      color: rgba(245,240,232,0.04);
+      writing-mode: vertical-rl;
+      user-select: none; pointer-events: none;
+      animation: floatY 8s ease-in-out infinite;
+      right: 10%; top: 50%; transform: translateY(-50%);
+    }
+
+    /* Плавающие карточки-превью работ */
+    .visual-cards {
+      position: absolute; z-index: 2;
+      display: flex; flex-direction: column; gap: 0.75rem;
+      left: 2.5rem; top: 50%; transform: translateY(-50%);
+      animation: floatY 6s ease-in-out infinite;
+    }
+    .visual-mini-card {
+      background: rgba(15,15,15,0.92);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--r-sm);
+      padding: 0.65rem 0.85rem;
+      display: flex; align-items: center; gap: 0.65rem;
+      width: 200px;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.65);
+      transition: transform 0.3s;
+    }
+    .visual-mini-card:nth-child(2) { animation-delay: 0.3s; margin-left: 1.2rem; }
+    .visual-mini-card:nth-child(3) { margin-left: 0.5rem; }
+    .visual-mini-cover {
+      width: 36px; height: 50px; border-radius: 5px; overflow: hidden; flex-shrink: 0;
+      background: var(--card2);
+    }
+    .visual-mini-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .visual-mini-title { font-size: 0.78rem; color: var(--paper); font-weight: 400; line-height: 1.3; margin-bottom: 2px; }
+    .visual-mini-meta  { font-size: 0.62rem; color: rgba(221,214,200,0.5); }
+    .visual-mini-badge {
+      font-size: 0.52rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.1rem 0.4rem; border-radius: var(--r-pill); margin-top: 3px; display: inline-block;
+    }
+    .visual-mini-badge.manga  { background: rgba(192,57,43,0.2); color: #e8726a; }
+    .visual-mini-badge.ranobe { background: rgba(26,155,138,0.18); color: #5dcfc2; }
+
+    /* Контент панели */
+    .auth-visual-content {
+      position: relative; z-index: 3;
+      text-align: right;
+      max-width: 420px;
+      margin-left: auto;
+      padding: 2rem 0;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .visual-eyebrow {
+      display: flex; align-items: center; justify-content: flex-end; gap: 0.6rem;
+      font-size: 0.66rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: #ff6f5e; margin-bottom: 1.2rem;
+      text-shadow: 0 0 1px rgba(0,0,0,0.9), 0 1px 3px rgba(0,0,0,0.8), 0 2px 10px rgba(0,0,0,0.6);
+    }
+    .visual-eyebrow::after { content: ''; width: 22px; height: 1px; background: var(--red); }
+
+    .visual-headline {
+      font-family: 'Dela Gothic One', sans-serif;
+      font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+      color: var(--paper); line-height: 1.15;
+      margin-bottom: 2rem;
+      text-shadow: 0 0 2px rgba(0,0,0,0.95), 0 2px 6px rgba(0,0,0,0.85), 0 4px 24px rgba(0,0,0,0.6);
+    }
+    .visual-headline .line {
+      display: block; overflow: hidden;
+      animation: fadeUp 0.7s ease both;
+    }
+    .visual-headline .line:nth-child(1) { animation-delay: 0.15s; }
+    .visual-headline .line:nth-child(2) { animation-delay: 0.28s; }
+    .visual-headline .line:nth-child(3) { animation-delay: 0.42s; color: var(--red); }
+
+    /* Три фичи */
+    .visual-features {
+      display: flex; flex-direction: column; gap: 0.9rem;
+      align-items: flex-end;
+    }
+    .visual-feature {
+      display: flex; align-items: center; gap: 0.7rem; justify-content: flex-end;
+      animation: fadeUp 0.6s ease both;
+    }
+    .visual-feature:nth-child(1) { animation-delay: 0.5s; }
+    .visual-feature:nth-child(2) { animation-delay: 0.65s; }
+    .visual-feature:nth-child(3) { animation-delay: 0.8s; }
+    .visual-feature-text { font-size: 0.85rem; color: #f0ece4; line-height: 1.5; text-align: right; text-shadow: 0 0 1px rgba(0,0,0,0.95), 0 1px 4px rgba(0,0,0,0.85), 0 2px 14px rgba(0,0,0,0.6); }
+    .visual-feature-icon {
+      width: 32px; height: 32px; border-radius: var(--r-sm); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
+    }
+    .visual-feature-icon.red  { background: rgba(192,57,43,0.28); color: #ff7a68; backdrop-filter: blur(6px); box-shadow: 0 2px 12px rgba(0,0,0,0.5); }
+    .visual-feature-icon.gold { background: rgba(212,160,23,0.24); color: #f0c350; backdrop-filter: blur(6px); box-shadow: 0 2px 12px rgba(0,0,0,0.5); }
+    .visual-feature-icon.teal { background: rgba(26,155,138,0.24); color: #3ce0c5; backdrop-filter: blur(6px); box-shadow: 0 2px 12px rgba(0,0,0,0.5); }
+
+    /* Счётчик пользователей */
+    .visual-users {
+      display: flex; align-items: center; gap: 0.75rem; justify-content: flex-end;
+      margin-top: 2.2rem;
+      animation: fadeUp 0.6s 0.95s ease both; opacity: 0;
+      animation-fill-mode: both;
+    }
+    .visual-avatars {
+      display: flex;
+    }
+    .visual-avatar-item {
+      width: 26px; height: 26px; border-radius: 50%;
+      border: 2px solid var(--ink); overflow: hidden;
+      margin-left: -7px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.55);
+    }
+    .visual-avatar-item:first-child { margin-left: 0; }
+    .visual-avatar-item img { width: 100%; height: 100%; object-fit: cover; }
+    .visual-users-text { font-size: 0.76rem; color: rgba(232,226,216,0.7); line-height: 1.4; text-shadow: 0 0 1px rgba(0,0,0,0.9), 0 1px 4px rgba(0,0,0,0.8), 0 2px 10px rgba(0,0,0,0.5); }
+    .visual-users-num  { font-size: 0.85rem; color: var(--paper); font-weight: 500; text-shadow: 0 0 1px rgba(0,0,0,0.9), 0 1px 4px rgba(0,0,0,0.85), 0 2px 12px rgba(0,0,0,0.55); }
+
+    /* ════════════════════════════════════════════════
+       RIGHT PANEL — форма
+    ════════════════════════════════════════════════ */
+    .auth-form-panel {
+      display: flex; align-items: center; justify-content: center;
+      padding: 3rem 2rem;
+      background: linear-gradient(135deg, rgba(22,22,22,0.98) 0%, rgba(18,18,18,0.99) 100%);
+      border-left: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+    }
+
+    /* Фоновый акцент */
+    .auth-form-panel::before {
+      content: '';
+      position: absolute; bottom: -100px; right: -100px;
+      width: 400px; height: 400px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(192,57,43,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .auth-form-wrap {
+      width: 100%; max-width: 400px;
+      position: relative; z-index: 1;
+      animation: fadeUp 0.6s 0.1s ease both; opacity: 0;
+      animation-fill-mode: both;
+    }
+
+    /* Заголовок формы */
+    .auth-form-title {
+      font-family: 'Dela Gothic One', sans-serif;
+      font-size: 1.6rem; color: var(--paper);
+      margin-bottom: 0.3rem;
+    }
+    .auth-form-sub {
+      font-size: 0.82rem; color: rgba(221,214,200,0.38);
+      margin-bottom: 2rem; line-height: 1.6;
+    }
+    .auth-form-sub a { color: var(--red); text-decoration: none; }
+    .auth-form-sub a:hover { text-decoration: underline; }
+
+    /* ── Переключатель Вход / Регистрация ── */
+    .auth-switcher {
+      display: flex;
+      background: rgba(255,255,255,0.04);
+      border-radius: var(--r-pill);
+      padding: 3px; gap: 2px;
+      margin-bottom: 2rem;
+    }
+    .auth-switch-btn {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+      padding: 0.5rem; border-radius: var(--r-pill);
+      font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(221,214,200,0.45); cursor: pointer;
+      transition: all 0.22s; border: none; background: transparent;
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+    .auth-switch-btn.active {
+      background: var(--red); color: #fff;
+      box-shadow: 0 2px 12px rgba(192,57,43,0.4);
+    }
+    .auth-switch-btn:hover:not(.active) {
+      background: rgba(255,255,255,0.07); color: var(--paper);
+    }
+
+    /* ── Шаги регистрации ── */
+    .reg-steps {
+      display: flex; align-items: center; gap: 0;
+      margin-bottom: 1.8rem;
+    }
+    .reg-step {
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
+      flex: 1; cursor: pointer;
+    }
+    .reg-step-node {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.68rem; font-weight: 600;
+      background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.1);
+      color: rgba(221,214,200,0.3); transition: all 0.25s;
+    }
+    .reg-step.active   .reg-step-node { background: var(--red); border-color: var(--red); color: #fff; box-shadow: 0 0 0 4px rgba(192,57,43,0.18); }
+    .reg-step.done     .reg-step-node { background: rgba(192,57,43,0.18); border-color: rgba(192,57,43,0.4); color: var(--red); }
+    .reg-step-label {
+      font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase;
+      color: rgba(221,214,200,0.25); white-space: nowrap; transition: color 0.2s;
+    }
+    .reg-step.active .reg-step-label { color: rgba(221,214,200,0.6); }
+    .reg-step.done   .reg-step-label { color: var(--red); opacity: 0.7; }
+    .reg-step-line {
+      flex: 1; height: 1px; background: rgba(255,255,255,0.07);
+      margin-bottom: 18px; transition: background 0.3s;
+    }
+    .reg-step-line.done { background: rgba(192,57,43,0.4); }
+
+    /* ── Поля формы ── */
+    .field-group { margin-bottom: 1.1rem; }
+    .field-group:last-of-type { margin-bottom: 0; }
+    .field-label {
+      font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase;
+      color: rgba(221,214,200,0.42); margin-bottom: 0.45rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .field-label a { color: var(--red); text-decoration: none; font-size: 0.68rem; letter-spacing: 0; text-transform: none; }
+    .field-label a:hover { text-decoration: underline; }
+
+    .field-input-wrap { position: relative; }
+    .field-input {
+      width: 100%; background: var(--field);
+      border: 1px solid rgba(255,255,255,0.09); border-radius: var(--r-sm);
+      color: var(--paper); font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.9rem; font-weight: 300;
+      padding: 0.72rem 1rem 0.72rem 2.6rem;
+      outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+    }
+    .field-input::placeholder { color: rgba(221,214,200,0.18); }
+    .field-input:focus { border-color: rgba(192,57,43,0.5); box-shadow: 0 0 0 3px rgba(192,57,43,0.1); }
+    .field-input.valid   { border-color: rgba(34,197,94,0.4);  }
+    .field-input.invalid { border-color: rgba(224,94,80,0.45); }
+
+    .field-icon {
+      position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%);
+      color: rgba(221,214,200,0.25); font-size: 0.82rem; pointer-events: none;
+      transition: color 0.2s;
+    }
+    .field-input-wrap:focus-within .field-icon { color: var(--red); }
+
+    .field-toggle-pass {
+      position: absolute; right: 0.85rem; top: 50%; transform: translateY(-50%);
+      color: rgba(221,214,200,0.28); font-size: 0.82rem; cursor: pointer;
+      transition: color 0.2s; background: none; border: none; padding: 0;
+    }
+    .field-toggle-pass:hover { color: rgba(221,214,200,0.65); }
+
+    /* Индикатор силы пароля */
+    .password-strength {
+      display: flex; gap: 4px; margin-top: 0.45rem;
+    }
+    .strength-bar {
+      flex: 1; height: 3px; border-radius: 2px;
+      background: rgba(255,255,255,0.07); transition: background 0.3s;
+    }
+    .strength-bar.weak   { background: #e05a50; }
+    .strength-bar.medium { background: var(--gold); }
+    .strength-bar.strong { background: #22c55e; }
+    .strength-label {
+      font-size: 0.65rem; color: rgba(221,214,200,0.28); margin-top: 3px;
+      text-align: right;
+    }
+
+    /* Подсказка валидации */
+    .field-hint {
+      font-size: 0.68rem; color: rgba(221,214,200,0.28); margin-top: 0.35rem; line-height: 1.5;
+    }
+    .field-hint.error { color: #e07060; }
+    .field-hint.ok    { color: #4ade80; }
+
+    /* Выбор роли */
+    .role-picker {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 0.5rem;
+    }
+    .role-option {
+      position: relative;
+    }
+    .role-option input { position: absolute; opacity: 0; }
+    .role-option-label {
+      display: flex; flex-direction: column; align-items: center; gap: 0.45rem;
+      padding: 0.85rem 0.5rem;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--r-sm); cursor: pointer;
+      transition: background 0.18s, border-color 0.18s;
+      text-align: center;
+    }
+    .role-option-label:hover { background: rgba(255,255,255,0.06); }
+    .role-option input:checked + .role-option-label {
+      background: rgba(192,57,43,0.12); border-color: rgba(192,57,43,0.35);
+    }
+    .role-icon { font-size: 1.2rem; }
+    .role-name { font-size: 0.73rem; color: rgba(221,214,200,0.65); letter-spacing: 0.04em; }
+    .role-option input:checked + .role-option-label .role-name { color: var(--paper); }
+    .role-check {
+      position: absolute; top: 0.4rem; right: 0.4rem;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--red); border: none;
+      display: none; align-items: center; justify-content: center;
+      font-size: 0.5rem; color: #fff;
+    }
+    .role-option input:checked ~ .role-check { display: flex; }
+
+    /* Согласие */
+    .agree-row {
+      display: flex; align-items: flex-start; gap: 0.65rem;
+      margin-top: 0.3rem;
+    }
+    .custom-check { position: relative; width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
+    .custom-check input { opacity: 0; position: absolute; }
+    .check-box {
+      position: absolute; inset: 0; border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.04);
+      transition: all 0.18s; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .custom-check input:checked + .check-box { background: var(--red); border-color: var(--red); }
+    .check-box .fa { color: #fff; font-size: 0.58rem; display: none; }
+    .custom-check input:checked + .check-box .fa { display: block; }
+    .agree-text { font-size: 0.78rem; color: rgba(221,214,200,0.45); line-height: 1.6; }
+    .agree-text a { color: var(--red); text-decoration: none; }
+    .agree-text a:hover { text-decoration: underline; }
+
+    /* Разделитель «или» */
+    .auth-or {
+      display: flex; align-items: center; gap: 0.8rem;
+      margin: 1.4rem 0;
+      font-size: 0.7rem; color: rgba(221,214,200,0.25); letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .auth-or::before, .auth-or::after {
+      content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.07);
+    }
+
+    /* Кнопки соцсетей */
+    .social-btns { display: flex; gap: 8px; }
+    .social-btn {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.45rem;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09);
+      border-radius: var(--r-sm); padding: 0.62rem 0.5rem;
+      font-size: 0.77rem; color: rgba(221,214,200,0.55); cursor: pointer;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+    .social-btn:hover { background: rgba(255,255,255,0.08); color: var(--paper); border-color: rgba(255,255,255,0.15); }
+    .social-btn.vk:hover { border-color: rgba(41,121,196,0.4); color: #5b9bd5; }
+    .social-btn.google:hover { border-color: rgba(234,67,53,0.35); color: #ea4335; }
+    .social-btn.discord:hover { border-color: rgba(114,137,218,0.4); color: #7289da; }
+
+    /* ── Главная кнопка ── */
+    .btn-auth-submit {
+      width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      background: var(--red); color: #fff; border: none; border-radius: var(--r-sm);
+      padding: 0.88rem; font-size: 0.87rem; letter-spacing: 0.1em; text-transform: uppercase;
+      cursor: pointer; font-family: 'Noto Sans JP', sans-serif;
+      box-shadow: 0 4px 18px rgba(192,57,43,0.4);
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      margin-top: 1.4rem;
+    }
+    .btn-auth-submit:hover { background: var(--red-dim); transform: translateY(-1px); box-shadow: 0 6px 22px rgba(192,57,43,0.5); }
+    .btn-auth-submit:active { transform: translateY(0); }
+    .btn-auth-submit.loading .btn-text { display: none; }
+    .btn-auth-submit .btn-spinner { display: none; }
+    .btn-auth-submit.loading .btn-spinner { display: block; animation: spin 0.9s linear infinite; }
+
+    /* Кнопки «Назад» / «Далее» */
+    .btn-row { display: flex; gap: 8px; margin-top: 1.4rem; }
+    .btn-back {
+      flex: 0 0 auto; display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09);
+      color: rgba(221,214,200,0.55); border-radius: var(--r-sm);
+      padding: 0.88rem 1.2rem; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase;
+      cursor: pointer; font-family: 'Noto Sans JP', sans-serif; transition: background 0.2s, color 0.2s;
+    }
+    .btn-back:hover { background: rgba(255,255,255,0.09); color: var(--paper); }
+    .btn-next {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      background: var(--red); color: #fff; border: none; border-radius: var(--r-sm);
+      padding: 0.88rem; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase;
+      cursor: pointer; font-family: 'Noto Sans JP', sans-serif;
+      box-shadow: 0 4px 16px rgba(192,57,43,0.35);
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-next:hover { background: var(--red-dim); transform: translateY(-1px); }
+
+    /* ── Контент шагов ── */
+    .auth-step { display: none; animation: fadeUp 0.28s ease; }
+    .auth-step.active { display: block; }
+
+    /* ── Успех регистрации ── */
+    .auth-success {
+      text-align: center; padding: 1.5rem 0;
+      animation: fadeUp 0.4s ease;
+    }
+    .success-icon {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(34,197,94,0.12); border: 2px solid rgba(34,197,94,0.3);
+      color: #22c55e; font-size: 1.5rem;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.2rem;
+      box-shadow: 0 0 0 8px rgba(34,197,94,0.06);
+    }
+    .success-title {
+      font-family: 'Dela Gothic One', sans-serif;
+      font-size: 1.5rem; color: var(--paper); margin-bottom: 0.5rem;
+    }
+    .success-text { font-size: 0.85rem; color: rgba(221,214,200,0.5); line-height: 1.7; margin-bottom: 1.5rem; }
+
+    /* ── Форма-контент (переключаемые) ── */
+    .auth-form-content { display: none; }
+    .auth-form-content.active { display: block; animation: fadeUp 0.28s ease; }
+
+    /* ══ RESPONSIVE ══ */
+    @media (max-width: 900px) {
+      .auth-main { grid-template-columns: 1fr; }
+      .auth-visual {
+        min-height: 300px; padding: 2rem;
+        align-items: flex-end;
+      }
+      .auth-visual-content { text-align: left; margin: 0; }
+      .visual-eyebrow { justify-content: flex-start; }
+      .visual-eyebrow::after { display: none; }
+      .visual-eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--red); }
+      .visual-features { align-items: flex-start; }
+      .visual-feature { justify-content: flex-start; }
+      .visual-feature-text { text-align: left; }
+      .visual-users { justify-content: flex-start; }
+      .visual-cards { display: none; }
+      .auth-form-panel { padding: 2.5rem 1.5rem; }
+    }
+    @media (max-width: 480px) {
+      .auth-nav { padding: 0.9rem 1.2rem; }
+      .role-picker { grid-template-columns: repeat(2, 1fr); }
+      .social-btns { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════ NAVBAR ══════════════════ -->
+<nav class="auth-nav">
+  <a class="auth-brand" href="index.html">
+    <span class="auth-brand-icon"><i class="fa-solid fa-torii-gate"></i></span>
+    Mang<span class="auth-brand-oni">oria</span>
+  </a>
+  <a class="auth-nav-back" href="index.html">
+    <i class="fa fa-arrow-left fa-xs"></i> На главную
+  </a>
+</nav>
+
+<!-- ══════════════════ MAIN ══════════════════ -->
+<div class="auth-main">
+
+  <!-- ══ ЛЕВАЯ ПАНЕЛЬ — визуал ══ -->
+  <div class="auth-visual">
+
+    <div class="auth-visual-bg">
+      <div class="manga-panel mp-1"><img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=400&q=70&fit=crop" alt=""/></div>
+      <div class="manga-panel mp-2"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400&q=70&fit=crop" alt=""/></div>
+      <div class="manga-panel mp-3"><img src="https://images.unsplash.com/photo-1601850494422-3cf14624b0b3?w=400&q=70&fit=crop" alt=""/></div>
+      <div class="manga-panel mp-4"><img src="https://images.unsplash.com/photo-1612036782180-6f0822045d23?w=400&q=70&fit=crop" alt=""/></div>
+      <div class="manga-panel mp-5"><img src="https://images.unsplash.com/photo-1614583225154-5fcdda07019e?w=400&q=70&fit=crop" alt=""/></div>
+      <div class="manga-panel mp-6"><img src="https://images.unsplash.com/photo-1560169897-fc0cdbdfa4d5?w=400&q=70&fit=crop" alt=""/></div>
+      <div class="manga-panel mp-7"><img src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=400&q=70&fit=crop" alt=""/></div>
+      <div class="manga-panel mp-8"><img src="https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=400&q=70&fit=crop" alt=""/></div>
+      <div class="manga-panel mp-9"><img src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400&q=70&fit=crop" alt=""/></div>
+      <div class="manga-panel mp-10"><img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&q=70&fit=crop" alt=""/></div>
+      <div class="manga-panel mp-11"><img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=300&q=70&fit=crop" alt=""/></div>
+      <div class="manga-panel mp-12"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=300&q=70&fit=crop" alt=""/></div>
+    </div>
+    <div class="auth-visual-bg-overlay"></div>
+
+    <!-- Цветные полосы слева -->
+    <div class="visual-stripes">
+      <span></span><span></span><span></span>
+    </div>
+
+    <!-- Большой иероглиф -->
+    <div class="visual-kanji">創</div>
+
+    <!-- Плавающие карточки работ -->
+    <div class="visual-cards">
+      <div class="visual-mini-card">
+        <div class="visual-mini-cover">
+          <img src="https://images.unsplash.com/photo-1601850494422-3cf14624b0b3?w=80&q=70&fit=crop" alt=""/>
+        </div>
+        <div>
+          <div class="visual-mini-title">Демонический Клинок</div>
+          <div class="visual-mini-meta">ShadowBrush · 42.8k</div>
+          <span class="visual-mini-badge manga">Манга</span>
+        </div>
+      </div>
+      <div class="visual-mini-card">
+        <div class="visual-mini-cover">
+          <img src="https://images.unsplash.com/photo-1560169897-fc0cdbdfa4d5?w=80&q=70&fit=crop" alt=""/>
+        </div>
+        <div>
+          <div class="visual-mini-title">Путь Демона</div>
+          <div class="visual-mini-meta">VoidWriter · 55k</div>
+          <span class="visual-mini-badge ranobe">Ранобэ</span>
+        </div>
+      </div>
+      <div class="visual-mini-card">
+        <div class="visual-mini-cover">
+          <img src="https://images.unsplash.com/photo-1614583225154-5fcdda07019e?w=80&q=70&fit=crop" alt=""/>
+        </div>
+        <div>
+          <div class="visual-mini-title">Звёздный Бог</div>
+          <div class="visual-mini-meta">StarPen · 29k</div>
+          <span class="visual-mini-badge ranobe">Ранобэ</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Основной текст -->
+    <div class="auth-visual-content">
+
+      <p class="visual-eyebrow">Открытая платформа</p>
+
+      <h2 class="visual-headline">
+        <span class="line">Публикуйте мангу</span>
+        <span class="line">и ранобэ.</span>
+        <span class="line">Создавайте вместе.</span>
+      </h2>
+
+      <div class="visual-features">
+        <div class="visual-feature">
+          <div class="visual-feature-text">Публикуйте мангу и ранобэ<br>без барьеров и цензуры</div>
+          <div class="visual-feature-icon red"><i class="fa fa-book-open"></i></div>
+        </div>
+        <div class="visual-feature">
+          <div class="visual-feature-text">Находите художников,<br>авторов и переводчиков</div>
+          <div class="visual-feature-icon gold"><i class="fa fa-users"></i></div>
+        </div>
+        <div class="visual-feature">
+          <div class="visual-feature-text">Создавайте проекты<br>и развивайте их вместе</div>
+          <div class="visual-feature-icon teal"><i class="fa fa-wand-magic-sparkles"></i></div>
+        </div>
+      </div>
+
+      <div class="visual-users">
+        <div class="visual-avatars">
+          <div class="visual-avatar-item"><img src="img/avatar/ava_1.jpg" alt=""/></div>
+          <div class="visual-avatar-item"><img src="img/avatar/ava_2.jpg" alt=""/></div>
+          <div class="visual-avatar-item"><img src="img/avatar/ava_3.jpg" alt=""/></div>
+          <div class="visual-avatar-item"><img src="img/avatar/ava_4.jpg" alt=""/></div>
+          <div class="visual-avatar-item"><img src="img/avatar/ava_5.jpg" alt=""/></div>
+        </div>
+        <div class="visual-users-text">
+          <div class="visual-users-num">890+ авторов</div>
+          уже публикуют на Mangoria
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ ПРАВАЯ ПАНЕЛЬ — форма ══ -->
+  <div class="auth-form-panel">
+    <div class="auth-form-wrap">
+
+      <!-- Переключатель -->
+      <div class="auth-switcher">
+        <button class="auth-switch-btn active" id="btnLogin" onclick="switchMode('login')">
+          <i class="fa fa-right-to-bracket"></i> Вход
+        </button>
+        <button class="auth-switch-btn" id="btnRegister" onclick="switchMode('register')">
+          <i class="fa fa-user-plus"></i> Регистрация
+        </button>
+      </div>
+
+      <!-- ══ ФОРМА ВХОДА ══ -->
+      <div class="auth-form-content active" id="form-login">
+
+        <h2 class="auth-form-title">С возвращением</h2>
+        <p class="auth-form-sub">Войдите, чтобы продолжить читать и публиковать.</p>
+
+        <div class="field-group">
+          <div class="field-label">Email</div>
+          <div class="field-input-wrap">
+            <i class="fa fa-at field-icon"></i>
+            <input type="email" class="field-input" placeholder="your@email.com" id="loginEmail"
+              oninput="validateLoginEmail(this)"/>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">
+            Пароль
+            <a href="#" onclick="showForgot(event)">Забыли пароль?</a>
+          </div>
+          <div class="field-input-wrap">
+            <i class="fa fa-lock field-icon"></i>
+            <input type="password" class="field-input" placeholder="••••••••" id="loginPass"/>
+            <button class="field-toggle-pass" onclick="togglePass('loginPass', this)" type="button">
+              <i class="fa fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="agree-row" style="margin-top:0.8rem;">
+          <label class="custom-check">
+            <input type="checkbox" checked/>
+            <span class="check-box"><i class="fa fa-check"></i></span>
+          </label>
+          <span class="agree-text">Запомнить меня на этом устройстве</span>
+        </div>
+
+        <button class="btn-auth-submit" id="loginSubmitBtn" onclick="handleLogin()">
+          <i class="fa fa-right-to-bracket btn-text"></i>
+          <span class="btn-text">Войти</span>
+          <i class="fa fa-circle-notch btn-spinner"></i>
+        </button>
+
+        <div class="auth-or">или войти через</div>
+
+        <div class="social-btns">
+          <button class="social-btn google"><i class="fab fa-google"></i> Google</button>
+          <button class="social-btn discord"><i class="fab fa-discord"></i> Discord</button>
+        </div>
+
+      </div>
+
+      <!-- ══ ФОРМА РЕГИСТРАЦИИ ══ -->
+      <div class="auth-form-content" id="form-register">
+
+        <h2 class="auth-form-title">Создать аккаунт</h2>
+        <p class="auth-form-sub">Три шага — и вы в сообществе.</p>
+
+        <!-- Степпер регистрации -->
+        <div class="reg-steps" id="regSteps">
+          <div class="reg-step active" data-step="1">
+            <div class="reg-step-node">1</div>
+            <div class="reg-step-label">Аккаунт</div>
+          </div>
+          <div class="reg-step-line" id="line-1-2"></div>
+          <div class="reg-step" data-step="2">
+            <div class="reg-step-node">2</div>
+            <div class="reg-step-label">Профиль</div>
+          </div>
+          <div class="reg-step-line" id="line-2-3"></div>
+          <div class="reg-step" data-step="3">
+            <div class="reg-step-node">3</div>
+            <div class="reg-step-label">Роль</div>
+          </div>
+        </div>
+
+        <!-- ШАГ 1 -->
+        <div class="auth-step active" id="reg-step-1">
+
+          <div class="field-group">
+            <div class="field-label">Email <span style="color:var(--red);font-size:0.6rem;">*</span></div>
+            <div class="field-input-wrap">
+              <i class="fa fa-at field-icon"></i>
+              <input type="email" class="field-input" placeholder="your@email.com"
+                id="regEmail" oninput="validateEmail(this)"/>
+            </div>
+            <div class="field-hint" id="emailHint"></div>
+          </div>
+
+          <div class="field-group">
+            <div class="field-label">Пароль <span style="color:var(--red);font-size:0.6rem;">*</span></div>
+            <div class="field-input-wrap">
+              <i class="fa fa-lock field-icon"></i>
+              <input type="password" class="field-input" placeholder="Минимум 8 символов"
+                id="regPass" oninput="checkStrength(this)"/>
+              <button class="field-toggle-pass" onclick="togglePass('regPass', this)" type="button">
+                <i class="fa fa-eye"></i>
+              </button>
+            </div>
+            <div class="password-strength">
+              <div class="strength-bar" id="s1"></div>
+              <div class="strength-bar" id="s2"></div>
+              <div class="strength-bar" id="s3"></div>
+              <div class="strength-bar" id="s4"></div>
+            </div>
+            <div class="strength-label" id="strengthLabel"></div>
+          </div>
+
+          <div class="field-group">
+            <div class="field-label">Повторите пароль <span style="color:var(--red);font-size:0.6rem;">*</span></div>
+            <div class="field-input-wrap">
+              <i class="fa fa-lock field-icon"></i>
+              <input type="password" class="field-input" placeholder="••••••••"
+                id="regPassConfirm" oninput="checkPassMatch(this)"/>
+            </div>
+            <div class="field-hint" id="passMatchHint"></div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn-next" onclick="goRegStep(2)">
+              Далее <i class="fa fa-arrow-right"></i>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- ШАГ 2 -->
+        <div class="auth-step" id="reg-step-2">
+
+          <div class="field-group">
+            <div class="field-label">Никнейм <span style="color:var(--red);font-size:0.6rem;">*</span></div>
+            <div class="field-input-wrap">
+              <i class="fa fa-user field-icon"></i>
+              <input type="text" class="field-input" placeholder="Ваш никнейм"
+                id="regNick" oninput="validateNick(this)"/>
+            </div>
+            <div class="field-hint" id="nickHint">Только латиница, цифры и _ · 3–20 символов</div>
+          </div>
+
+          <div class="field-group">
+            <div class="field-label">О себе <span style="color:rgba(221,214,200,0.28);font-size:0.65rem;font-style:italic;text-transform:none;letter-spacing:0;">(необязательно)</span></div>
+            <div class="field-input-wrap" style="position:relative;">
+              <i class="fa fa-comment field-icon" style="top:1rem;transform:none;"></i>
+              <textarea class="field-input" placeholder="Пара слов о себе…" rows="3"
+                style="padding-left:2.6rem; resize:none;" id="regBio"></textarea>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn-back" onclick="goRegStep(1)"><i class="fa fa-arrow-left"></i></button>
+            <button class="btn-next" onclick="goRegStep(3)">Далее <i class="fa fa-arrow-right"></i></button>
+          </div>
+
+        </div>
+
+        <!-- ШАГ 3 -->
+        <div class="auth-step" id="reg-step-3">
+
+          <div class="field-group">
+            <div class="field-label" style="margin-bottom:0.3rem;">Кто вы на платформе? <span style="color:var(--red);font-size:0.6rem;">*</span></div>
+            <p style="font-size:0.75rem;color:rgba(221,214,200,0.35);margin-bottom:0.8rem;line-height:1.55;">Можно выбрать несколько. Роли можно изменить позже.</p>
+
+            <div class="role-picker">
+              <div class="role-option">
+                <input type="checkbox" id="role-author" name="role" value="author"/>
+                <label class="role-option-label" for="role-author">
+                  <span class="role-icon">✍️</span>
+                  <span class="role-name">Автор</span>
+                </label>
+                <div class="role-check"><i class="fa fa-check"></i></div>
+              </div>
+              <div class="role-option">
+                <input type="checkbox" id="role-artist" name="role" value="artist"/>
+                <label class="role-option-label" for="role-artist">
+                  <span class="role-icon">🎨</span>
+                  <span class="role-name">Художник</span>
+                </label>
+                <div class="role-check"><i class="fa fa-check"></i></div>
+              </div>
+              <div class="role-option">
+                <input type="checkbox" id="role-translator" name="role" value="translator"/>
+                <label class="role-option-label" for="role-translator">
+                  <span class="role-icon">🌐</span>
+                  <span class="role-name">Переводчик</span>
+                </label>
+                <div class="role-check"><i class="fa fa-check"></i></div>
+              </div>
+              <div class="role-option">
+                <input type="checkbox" id="role-reader" name="role" value="reader" checked/>
+                <label class="role-option-label" for="role-reader">
+                  <span class="role-icon">📖</span>
+                  <span class="role-name">Читатель</span>
+                </label>
+                <div class="role-check"><i class="fa fa-check"></i></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="agree-row" style="margin-top:1rem;">
+            <label class="custom-check">
+              <input type="checkbox" id="agreeTerms"/>
+              <span class="check-box"><i class="fa fa-check"></i></span>
+            </label>
+            <span class="agree-text">Принимаю <a href="static.html">Пользовательское соглашение</a> и <a href="static.html">Политику конфиденциальности</a></span>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn-back" onclick="goRegStep(2)"><i class="fa fa-arrow-left"></i></button>
+            <button class="btn-next" id="regSubmitBtn" onclick="handleRegister()"
+              style="background:var(--teal);box-shadow:0 4px 16px rgba(26,155,138,0.35);">
+              <i class="fa fa-check"></i> Создать аккаунт
+            </button>
+          </div>
+
+        </div>
+
+        <!-- УСПЕХ -->
+        <div class="auth-step" id="reg-success">
+          <div class="auth-success">
+            <div class="success-icon"><i class="fa fa-check"></i></div>
+            <h3 class="success-title">Добро пожаловать!</h3>
+            <p class="success-text">
+              Аккаунт успешно создан. На ваш email отправлено письмо для подтверждения.
+            </p>
+            <a href="index.html" style="display:inline-flex;align-items:center;gap:0.45rem;background:var(--red);color:#fff;border-radius:var(--r-sm);padding:0.75rem 1.8rem;font-size:0.85rem;letter-spacing:0.09em;text-transform:uppercase;text-decoration:none;box-shadow:0 4px 16px rgba(192,57,43,0.4);">
+              <i class="fa fa-book-open"></i> Перейти на главную
+            </a>
+          </div>
+        </div>
+
+        <div class="auth-or" id="regOr" style="margin-bottom:0;">или войти через</div>
+        <div class="social-btns" id="regSocial" style="margin-top:0.8rem;">
+          <button class="social-btn google"><i class="fab fa-google"></i> Google</button>
+          <button class="social-btn discord"><i class="fab fa-discord"></i> Discord</button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  /* ── Переключение Вход / Регистрация ── */
+  function switchMode(mode) {
+    document.getElementById('btnLogin').classList.toggle('active', mode === 'login');
+    document.getElementById('btnRegister').classList.toggle('active', mode === 'register');
+    document.getElementById('form-login').classList.toggle('active', mode === 'login');
+    document.getElementById('form-register').classList.toggle('active', mode === 'register');
+  }
+
+  /* ── Шаги регистрации ── */
+  var currentRegStep = 1;
+
+  function goRegStep(n) {
+    if (n > currentRegStep && !validateStep(currentRegStep)) return;
+
+    document.querySelectorAll('.auth-step[id^="reg-step-"]').forEach(function (el) {
+      el.classList.remove('active');
+    });
+    var el = document.getElementById('reg-step-' + n);
+    if (el) el.classList.add('active');
+
+    document.querySelectorAll('.reg-step').forEach(function (s, i) {
+      s.classList.remove('active', 'done');
+      if (i + 1 < n) s.classList.add('done');
+      if (i + 1 === n) s.classList.add('active');
+      var node = s.querySelector('.reg-step-node');
+      node.innerHTML = i + 1 < n
+        ? '<i class="fa fa-check" style="font-size:0.6rem;"></i>'
+        : (i + 1).toString();
+    });
+
+    var line12 = document.getElementById('line-1-2');
+    var line23 = document.getElementById('line-2-3');
+    if (line12) line12.classList.toggle('done', n >= 2);
+    if (line23) line23.classList.toggle('done', n >= 3);
+
+    currentRegStep = n;
+  }
+
+  function validateStep(step) {
+    if (step === 1) {
+      var email = document.getElementById('regEmail');
+      var pass  = document.getElementById('regPass');
+      var conf  = document.getElementById('regPassConfirm');
+      if (!email.value.trim() || !email.value.includes('@')) {
+        email.classList.add('invalid'); return false;
+      }
+      if (pass.value.length < 8) {
+        pass.classList.add('invalid'); return false;
+      }
+      if (pass.value !== conf.value) {
+        conf.classList.add('invalid'); return false;
+      }
+      return true;
+    }
+    if (step === 2) {
+      var nick = document.getElementById('regNick');
+      if (!/^[a-zA-Z0-9_]{3,20}$/.test(nick.value)) {
+        nick.classList.add('invalid'); return false;
+      }
+      return true;
+    }
+    return true;
+  }
+
+  /* ── Регистрация: финал ── */
+  function handleRegister() {
+    if (!document.getElementById('agreeTerms').checked) {
+      document.getElementById('agreeTerms').closest('.custom-check').style.outline = '2px solid var(--red)';
+      return;
+    }
+    var btn = document.getElementById('regSubmitBtn');
+    btn.innerHTML = '<i class="fa fa-circle-notch fa-spin"></i> Создаём...';
+    btn.disabled = true;
+
+    setTimeout(function () {
+      document.querySelectorAll('.auth-step').forEach(function (s) { s.classList.remove('active'); });
+      document.getElementById('reg-success').classList.add('active');
+      var or = document.getElementById('regOr');
+      var social = document.getElementById('regSocial');
+      if (or) or.style.display = 'none';
+      if (social) social.style.display = 'none';
+      document.querySelectorAll('.reg-steps, .auth-form-sub').forEach(function (el) { el.style.opacity = '0.3'; });
+    }, 1500);
+  }
+
+  /* ── Вход ── */
+  function handleLogin() {
+    var email = document.getElementById('loginEmail').value.trim();
+    var pass  = document.getElementById('loginPass').value;
+    var btn   = document.getElementById('loginSubmitBtn');
+    if (!email || !pass) return;
+    btn.classList.add('loading');
+    setTimeout(function () {
+      btn.classList.remove('loading');
+      window.location.href = 'index.html';
+    }, 1400);
+  }
+
+  /* ── Показать поле восстановления ── */
+  function showForgot(e) {
+    e.preventDefault();
+    var group = document.getElementById('loginEmail').closest('.field-group');
+    group.querySelector('.field-label').textContent = 'Ваш email для восстановления';
+    document.getElementById('loginEmail').placeholder = 'Введите email…';
+    document.getElementById('loginSubmitBtn').innerHTML =
+      '<i class="fa fa-paper-plane btn-text"></i><span class="btn-text"> Отправить ссылку</span><i class="fa fa-circle-notch btn-spinner"></i>';
+  }
+
+  /* ── Переключить видимость пароля ── */
+  function togglePass(id, btn) {
+    var input = document.getElementById(id);
+    var isPass = input.type === 'password';
+    input.type = isPass ? 'text' : 'password';
+    btn.querySelector('i').className = isPass ? 'fa fa-eye-slash' : 'fa fa-eye';
+  }
+
+  /* ── Сила пароля ── */
+  function checkStrength(input) {
+    var val = input.value;
+    var score = 0;
+    if (val.length >= 8)  score++;
+    if (/[A-Z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+
+    var bars   = ['s1','s2','s3','s4'];
+    var labels = ['', 'Слабый', 'Средний', 'Хороший', 'Надёжный'];
+    var classes = ['','weak','medium','strong','strong'];
+    bars.forEach(function (id, i) {
+      var el = document.getElementById(id);
+      el.className = 'strength-bar' + (i < score ? ' ' + classes[score] : '');
+    });
+    document.getElementById('strengthLabel').textContent = labels[score] || '';
+
+    if (val.length < 8) { input.classList.remove('valid'); input.classList.add('invalid'); }
+    else { input.classList.remove('invalid'); input.classList.add('valid'); }
+  }
+
+  /* ── Совпадение паролей ── */
+  function checkPassMatch(input) {
+    var pass = document.getElementById('regPass').value;
+    var hint = document.getElementById('passMatchHint');
+    if (input.value && input.value !== pass) {
+      input.classList.add('invalid'); input.classList.remove('valid');
+      hint.textContent = 'Пароли не совпадают'; hint.className = 'field-hint error';
+    } else if (input.value === pass && input.value) {
+      input.classList.add('valid'); input.classList.remove('invalid');
+      hint.textContent = 'Пароли совпадают ✓'; hint.className = 'field-hint ok';
+    } else {
+      input.className = 'field-input'; hint.textContent = '';
+    }
+  }
+
+  /* ── Email валидация ── */
+  function validateEmail(input) {
+    var hint = document.getElementById('emailHint');
+    if (!input.value) { input.className = 'field-input'; hint.textContent = ''; return; }
+    var ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value);
+    input.classList.toggle('valid',   ok);
+    input.classList.toggle('invalid', !ok);
+    hint.textContent = ok ? '' : 'Введите корректный email';
+    hint.className   = ok ? 'field-hint' : 'field-hint error';
+  }
+
+  function validateLoginEmail(input) {
+    if (input.value.length > 2) {
+      input.classList.add('valid'); input.classList.remove('invalid');
+    } else {
+      input.classList.remove('valid');
+    }
+  }
+
+  /* ── Никнейм ── */
+  function validateNick(input) {
+    var hint = document.getElementById('nickHint');
+    var ok = /^[a-zA-Z0-9_]{3,20}$/.test(input.value);
+    input.classList.toggle('valid',   ok);
+    input.classList.toggle('invalid', !ok && input.value.length > 0);
+    hint.textContent = ok ? 'Никнейм доступен ✓' : 'Только латиница, цифры и _ · 3–20 символов';
+    hint.className   = ok ? 'field-hint ok' : 'field-hint';
+  }
+</script>
+</body>
+</html>

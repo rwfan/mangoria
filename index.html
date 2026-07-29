@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="ru" id="htmlRoot">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mangoria — Манга і Ранобе</title>
+  <!-- External -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&family=Dela+Gothic+One&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <!-- Project -->
+  <link rel="stylesheet" href="css/main.css"/>
+</head>
+<body>
+
+<!-- ══════════════════ NAVBAR ══════════════════ -->
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-inner">
+
+      <a class="navbar-brand" href="index.html">
+        <span class="brand-icon"><i class="fa-solid fa-torii-gate"></i></span>
+        Mang<span class="brand-oni">oria</span>
+      </a>
+
+      <button class="navbar-toggler-custom" id="navToggle">
+        <i class="fa fa-bars"></i>
+      </button>
+
+      <div class="nav-center" id="navCenter">
+        <div class="nav-type-switcher">
+          <a href="#catalog" class="nav-type-btn active">
+            <i class="fa fa-image"></i>
+            <span data-i18n="nav_manga">Манга</span>
+          </a>
+          <a href="#ranobe" class="nav-type-btn">
+            <i class="fa fa-book"></i>
+            <span data-i18n="nav_ranobe">Ранобэ</span>
+          </a>
+        </div>
+        <div class="nav-item-custom">
+          <a href="#catalog" class="nav-link-custom active">
+            <i class="fa fa-compass"></i>
+            <span data-i18n="nav_catalog">Каталог</span>
+          </a>
+        </div>
+        <div class="nav-item-custom">
+          <a href="#" class="nav-link-custom">
+            <i class="fa fa-layer-group"></i>
+            <span data-i18n="nav_genres">Жанры</span>
+          </a>
+        </div>
+        <div class="nav-item-custom">
+          <a href="#" class="nav-link-custom">
+            <i class="fa fa-star"></i>
+            <span data-i18n="nav_rating">Рейтинг</span>
+          </a>
+        </div>
+        <div class="nav-item-custom">
+          <a href="#" class="nav-link-custom">
+            <i class="fa fa-users"></i>
+            <span data-i18n="nav_authors">Авторы</span>
+          </a>
+        </div>
+        <div class="nav-item-custom">
+          <a href="#" class="nav-link-custom">
+            <i class="fa fa-fire"></i>
+            <span data-i18n="nav_new">Новинки</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-right" id="navRight">
+
+        <div class="lang-dropdown" id="langDropdownWrap">
+          <button class="lang-dropdown-btn" id="langDropdownBtn">
+            <i class="fa fa-globe"></i>
+            <span id="langDropdownLabel">РУ</span>
+            <i class="fa fa-chevron-down lang-chevron"></i>
+          </button>
+          <div class="lang-dropdown-menu" id="langDropdownMenu">
+            <button class="lang-option" data-lang="uk">
+              <span class="lang-flag">🇺🇦</span>
+              <span class="lang-name">Українська</span>
+              <span class="lang-code">УК</span>
+            </button>
+            <button class="lang-option active" data-lang="ru">
+              <span class="lang-flag">🇷🇺</span>
+              <span class="lang-name">Русский</span>
+              <span class="lang-code">РУ</span>
+            </button>
+            <button class="lang-option" data-lang="en">
+              <span class="lang-flag">🇬🇧</span>
+              <span class="lang-name">English</span>
+              <span class="lang-code">EN</span>
+            </button>
+          </div>
+        </div>
+
+        <button class="nav-icon-btn nav-search-btn" data-action="search" title="Поиск (Ctrl+K)">
+          <i class="fa fa-search"></i>
+        </button>
+
+        
+        <a href="publish.html" class="btn-publish ms-1">
+          <i class="fa fa-upload"></i>
+          <span data-i18n="nav_publish">Публиковать</span>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-stripes" id="heroStripes">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="hero-kanji">漫画創作</div>
+
+  <div class="container hero-content">
+    <div class="row align-items-center">
+      <div class="col-lg-7">
+        <p class="hero-eyebrow fade-up">Открытая творческая платформа</p>
+        <h1 class="hero-title fade-up delay-1">
+          Твои истории<br>
+          заслуживают<br>
+          <span class="accent">страниц.</span>
+        </h1>
+        <div class="hero-types fade-up delay-2">
+          <a href="#catalog" class="hero-type-pill manga active">
+            <i class="fa fa-image"></i> Манга
+          </a>
+          <a href="#ranobe" class="hero-type-pill ranobe">
+            <i class="fa fa-book"></i> Ранобэ
+          </a>
+        </div>
+        <p class="hero-sub fade-up delay-2">
+          Mangoria — место, где художники публикуют мангу, а авторы — ранобэ. Никаких барьеров, только творчество и сообщество.
+        </p>
+        <div class="d-flex flex-wrap gap-3 fade-up delay-3">
+          <a href="#catalog" class="btn-hero-primary">
+            <i class="fa fa-book-open"></i> Читать мангу
+          </a>
+          <a href="#ranobe" class="btn-hero-ghost">
+            <i class="fa fa-book"></i> Читать ранобэ
+          </a>
+        </div>
+        <div class="hero-stats fade-up delay-4">
+          <div>
+            <div class="stat-num">2 400+</div>
+            <div class="stat-label">Произведений</div>
+          </div>
+          <div>
+            <div class="stat-num">18 k+</div>
+            <div class="stat-label">Читателей</div>
+          </div>
+          <div>
+            <div class="stat-num">890+</div>
+            <div class="stat-label">Авторов</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ GENRES ══════════════════ -->
+<section class="genres-section">
+  <div class="container">
+    <div class="d-flex flex-wrap gap-2 justify-content-center">
+      <a href="#" class="genre-pill active"><i class="fa fa-star fa-xs"></i> Все жанры</a>
+      <a href="#" class="genre-pill"><i class="fa fa-fire fa-xs"></i> Сёнэн</a>
+      <a href="#" class="genre-pill"><i class="fa fa-heart fa-xs"></i> Сёдзё</a>
+      <a href="#" class="genre-pill"><i class="fa fa-ghost fa-xs"></i> Хоррор</a>
+      <a href="#" class="genre-pill"><i class="fa fa-dragon fa-xs"></i> Фэнтези</a>
+      <a href="#" class="genre-pill"><i class="fa fa-robot fa-xs"></i> Меха</a>
+      <a href="#" class="genre-pill"><i class="fa fa-bolt fa-xs"></i> Экшен</a>
+      <a href="#" class="genre-pill"><i class="fa fa-brain fa-xs"></i> Психологическое</a>
+      <a href="#" class="genre-pill"><i class="fa fa-wand-magic-sparkles fa-xs"></i> Исэкай</a>
+      <a href="#" class="genre-pill"><i class="fa fa-mask fa-xs"></i> Детектив</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ FEATURED MANGA ══════════════════ -->
+<section class="featured-section" id="catalog">
+  <div class="container">
+    <p class="section-label">Манга · Рекомендуем</p>
+    <h2 class="section-title">Выбор редакции</h2>
+    <div class="section-divider"></div>
+
+    <div class="featured-card">
+      <div class="featured-cover cover-v5">
+        <img src="img/posters/poster_2.webp" alt="Призыватель Бездны"/>
+      </div>
+      <div class="featured-badge"><i class="fa fa-crown me-1"></i>Топ недели</div>
+      <div class="featured-info">
+        <p class="featured-genre"><i class="fa fa-fire me-1"></i> Сёнэн · Экшен · Фэнтези</p>
+        <h3 class="featured-title">Демонический Клинок</h3>
+        <p class="featured-desc">
+          Юный кузнец обнаруживает, что его руки способны ковать оружие из самой тьмы. Отвергнутый людьми и преследуемый демонами, он идёт по тонкой грани между двумя мирами.
+        </p>
+        <div class="manga-meta">
+          <span><i class="fa fa-eye"></i> 42 800</span>
+          <span><i class="fa fa-heart"></i> 3 200</span>
+          <span><i class="fa fa-book"></i> 34 главы</span>
+          <span><i class="fa fa-user"></i> ShadowBrush</span>
+        </div>
+        <div class="d-flex gap-3">
+          <a href="#" class="btn-hero-primary" style="font-size:0.77rem; padding:0.6rem 1.4rem;">
+            <i class="fa fa-book-open"></i> Читать
+          </a>
+          <a href="#" class="btn-hero-ghost" style="font-size:0.77rem; padding:0.6rem 1.4rem;">
+            <i class="fa-regular fa-bookmark"></i> В закладки
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ MANGA GRID ══════════════════ -->
+<section class="manga-grid-section">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-1">
+      <div>
+        <p class="section-label">Манга</p>
+        <h2 class="section-title">Популярное</h2>
+      </div>
+      <a href="catalog.html?type=manga" style="font-size:0.76rem; color:var(--red); text-decoration:none; letter-spacing:0.1em; text-transform:uppercase;">
+        Все работы <i class="fa fa-arrow-right ms-1"></i>
+      </a>
+    </div>
+    <div class="section-divider"></div>
+
+    <div class="manga-grid-5">
+
+      <a href="title.html" class="manga-card">
+        <div class="manga-cover">
+          <img src="img/posters/poster_1.webp" alt="Призрачная Ночь"/>
+          <div class="manga-cover-overlay"></div>
+          <span class="manga-type-badge manga">Манга</span>
+          <div class="manga-cover-chapters"><i class="fa fa-book-open"></i>12 гл.</div>
+        </div>
+        <div class="manga-info">
+          <p class="manga-card-genre">Фэнтези</p>
+          <p class="manga-card-title">Призрачная Ночь</p>
+          <div class="manga-card-meta">
+            <span class="manga-card-stars">★★★★☆</span>
+            <span><i class="fa fa-eye me-1"></i>8.2k</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="manga-card">
+        <div class="manga-cover">
+          <img src="img/posters/poster_3.webp" alt="Сакура в Бою"/>
+          <div class="manga-cover-overlay"></div>
+          <span class="manga-type-badge manga">Манга</span>
+          <span class="manga-new-badge">NEW</span>
+          <div class="manga-cover-chapters"><i class="fa fa-book-open"></i>28 гл.</div>
+        </div>
+        <div class="manga-info">
+          <p class="manga-card-genre">Сёнэн</p>
+          <p class="manga-card-title">Сакура в Бою</p>
+          <div class="manga-card-meta">
+            <span class="manga-card-stars">★★★★★</span>
+            <span><i class="fa fa-eye me-1"></i>21k</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="manga-card">
+        <div class="manga-cover">
+          <img src="img/posters/poster_11.jpg" alt="Лесной Дух"/>
+          <div class="manga-cover-overlay"></div>
+          <span class="manga-type-badge manga">Манга</span>
+          <div class="manga-cover-chapters"><i class="fa fa-book-open"></i>7 гл.</div>
+        </div>
+        <div class="manga-info">
+          <p class="manga-card-genre">Хоррор</p>
+          <p class="manga-card-title">Лесной Дух</p>
+          <div class="manga-card-meta">
+            <span class="manga-card-stars">★★★★☆</span>
+            <span><i class="fa fa-eye me-1"></i>5.6k</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="manga-card">
+        <div class="manga-cover">
+          <img src="img/posters/poster_4.jpg" alt="Звёздная Пыль"/>
+          <div class="manga-cover-overlay"></div>
+          <span class="manga-type-badge manga">Манга</span>
+          <div class="manga-cover-chapters"><i class="fa fa-book-open"></i>19 гл.</div>
+        </div>
+        <div class="manga-info">
+          <p class="manga-card-genre">Меха</p>
+          <p class="manga-card-title">Звёздная Пыль</p>
+          <div class="manga-card-meta">
+            <span class="manga-card-stars">★★★★☆</span>
+            <span><i class="fa fa-eye me-1"></i>14k</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="manga-card">
+        <div class="manga-cover">
+          <img src="img/posters/poster_5.jpg" alt="Виновный"/>
+          <div class="manga-cover-overlay"></div>
+          <span class="manga-type-badge manga">Манга</span>
+          <div class="manga-cover-chapters"><i class="fa fa-book-open"></i>41 гл.</div>
+        </div>
+        <div class="manga-info">
+          <p class="manga-card-genre">Детектив</p>
+          <p class="manga-card-title">Виновный</p>
+          <div class="manga-card-meta">
+            <span class="manga-card-stars">★★★★★</span>
+            <span><i class="fa fa-eye me-1"></i>33k</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="manga-card">
+        <div class="manga-cover">
+          <img src="img/posters/poster_6.jpg" alt="Лабиринт"/>
+          <div class="manga-cover-overlay"></div>
+          <span class="manga-type-badge manga">Манга</span>
+          <span class="manga-new-badge">NEW</span>
+          <div class="manga-cover-chapters"><i class="fa fa-book-open"></i>5 гл.</div>
+        </div>
+        <div class="manga-info">
+          <p class="manga-card-genre">Психология</p>
+          <p class="manga-card-title">Лабиринт</p>
+          <div class="manga-card-meta">
+            <span class="manga-card-stars">★★★☆☆</span>
+            <span><i class="fa fa-eye me-1"></i>3.1k</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="manga-card">
+        <div class="manga-cover">
+          <img src="img/posters/poster_7.jpg" alt="Огненный Властелин"/>
+          <div class="manga-cover-overlay"></div>
+          <span class="manga-type-badge manga">Манга</span>
+          <div class="manga-cover-chapters"><i class="fa fa-book-open"></i>22 гл.</div>
+        </div>
+        <div class="manga-info">
+          <p class="manga-card-genre">Экшен</p>
+          <p class="manga-card-title">Огненный Властелин</p>
+          <div class="manga-card-meta">
+            <span class="manga-card-stars">★★★★★</span>
+            <span><i class="fa fa-eye me-1"></i>27k</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="manga-card">
+        <div class="manga-cover">
+          <img src="img/posters/poster_8.jpg" alt="Лунный Свет"/>
+          <div class="manga-cover-overlay"></div>
+          <span class="manga-type-badge manga">Манга</span>
+          <div class="manga-cover-chapters"><i class="fa fa-book-open"></i>15 гл.</div>
+        </div>
+        <div class="manga-info">
+          <p class="manga-card-genre">Сёдзё</p>
+          <p class="manga-card-title">Лунный Свет</p>
+          <div class="manga-card-meta">
+            <span class="manga-card-stars">★★★★☆</span>
+            <span><i class="fa fa-eye me-1"></i>11k</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="manga-card">
+        <div class="manga-cover">
+          <img src="img/posters/poster_9.jpg" alt="Змеиный Король"/>
+          <div class="manga-cover-overlay"></div>
+          <span class="manga-type-badge manga">Манга</span>
+          <div class="manga-cover-chapters"><i class="fa fa-book-open"></i>9 гл.</div>
+        </div>
+        <div class="manga-info">
+          <p class="manga-card-genre">Исэкай</p>
+          <p class="manga-card-title">Змеиный Король</p>
+          <div class="manga-card-meta">
+            <span class="manga-card-stars">★★★☆☆</span>
+            <span><i class="fa fa-eye me-1"></i>6.8k</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="manga-card">
+        <div class="manga-cover">
+          <img src="img/posters/poster_10.jpg" alt="Чёрный Клинок"/>
+          <div class="manga-cover-overlay"></div>
+          <span class="manga-type-badge manga">Манга</span>
+          <div class="manga-cover-chapters"><i class="fa fa-book-open"></i>56 гл.</div>
+        </div>
+        <div class="manga-info">
+          <p class="manga-card-genre">Сёнэн</p>
+          <p class="manga-card-title">Чёрный Клинок</p>
+          <div class="manga-card-meta">
+            <span class="manga-card-stars">★★★★★</span>
+            <span><i class="fa fa-eye me-1"></i>48k</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="text-center mt-5">
+      <a href="catalog.html?type=manga" class="btn-hero-ghost">
+        <i class="fa fa-th-large me-2"></i> Весь каталог манги
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ RANOBE SECTION ══════════════════ -->
+<section class="ranobe-section" id="ranobe">
+  <div class="container">
+
+    <div class="d-flex justify-content-between align-items-end mb-1">
+      <div>
+        <p class="section-label ranobe-label"><i class="fa fa-book me-1"></i>Ранобэ · Рекомендуем</p>
+        <h2 class="section-title">Выбор редакции</h2>
+      </div>
+    </div>
+    <div class="section-divider ranobe-div"></div>
+
+    <div class="ranobe-featured mb-5">
+      <div class="ranobe-featured-spine"></div>
+      <div class="ranobe-featured-cover">
+        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=420&q=80&fit=crop" alt="Призыватель Бездны"/>
+      </div>
+      <div class="ranobe-featured-badge"><i class="fa fa-feather-alt me-1"></i>Ранобэ</div>
+      <div class="ranobe-featured-info">
+        <p class="ranobe-featured-genre"><i class="fa fa-wand-magic-sparkles me-1"></i> Исэкай · Тёмное фэнтези · Магия</p>
+        <h3 class="ranobe-featured-title">Призыватель Бездны</h3>
+        <p class="ranobe-featured-desc">
+          Студент, случайно вызвавший древнее существо из другого мира, становится его носителем. Теперь сила бездны течёт в его венах, а грань между ним и тьмой стирается с каждой главой.
+        </p>
+        <div class="ranobe-meta-row">
+          <span><i class="fa fa-eye"></i> 61 400</span>
+          <span><i class="fa fa-heart"></i> 4 900</span>
+          <span><i class="fa fa-file-alt"></i> 112 глав</span>
+          <span><i class="fa fa-user"></i> VoidWriter</span>
+        </div>
+        <div class="d-flex gap-3">
+          <a href="#" class="btn-teal-primary"><i class="fa fa-book-open"></i> Читать</a>
+          <a href="#" class="btn-teal-ghost"><i class="fa-regular fa-bookmark"></i> В закладки</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-end mb-1">
+      <div>
+        <p class="section-label ranobe-label">Ранобэ</p>
+        <h2 class="section-title">Популярное</h2>
+      </div>
+      <a href="#" style="font-size:0.76rem; color:var(--teal); text-decoration:none; letter-spacing:0.1em; text-transform:uppercase;">
+        Все ранобэ <i class="fa fa-arrow-right ms-1"></i>
+      </a>
+    </div>
+    <div class="section-divider ranobe-div"></div>
+
+    <div class="row g-3">
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="ranobe-card">
+          <div class="ranobe-spine spine-1"></div>
+          <div class="ranobe-cover-col">
+            <img src="https://images.unsplash.com/photo-1614583225154-5fcdda07019e?w=200&q=78&fit=crop" alt="Звёздный Бог"/>
+          </div>
+          <div class="ranobe-info">
+            <div>
+              <p class="ranobe-genre"><i class="fa fa-star me-1"></i>Фэнтези</p>
+              <p class="ranobe-title">Звёздный Бог</p>
+              <p class="ranobe-desc">Мальчик, рождённый в ночь затмения, несёт в себе осколок угасшей звезды.</p>
+            </div>
+            <div class="ranobe-meta">
+              <span><i class="fa fa-file-alt"></i> 88 гл.</span>
+              <span><i class="fa fa-eye"></i> 29k</span>
+              <span class="manga-card-stars" style="font-size:0.58rem;">★★★★★</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="ranobe-card">
+          <div class="ranobe-spine spine-2"></div>
+          <div class="ranobe-cover-col">
+            <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=200&q=78&fit=crop" alt="Пурпурное Пламя"/>
+          </div>
+          <div class="ranobe-info">
+            <div>
+              <p class="ranobe-genre"><i class="fa fa-ghost me-1"></i>Хоррор</p>
+              <p class="ranobe-title">Пурпурное Пламя</p>
+              <p class="ranobe-desc">Город, где каждую ночь исчезают люди, а утром находят их пепел в форме цветка.</p>
+            </div>
+            <div class="ranobe-meta">
+              <span><i class="fa fa-file-alt"></i> 54 гл.</span>
+              <span><i class="fa fa-eye"></i> 17k</span>
+              <span class="manga-card-stars" style="font-size:0.58rem;">★★★★☆</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="ranobe-card">
+          <div class="ranobe-spine spine-3"></div>
+          <div class="ranobe-cover-col">
+            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&q=78&fit=crop" alt="Ледяной Дворец"/>
+          </div>
+          <div class="ranobe-info">
+            <div>
+              <p class="ranobe-genre"><i class="fa fa-snowflake me-1"></i>Романтика</p>
+              <p class="ranobe-title">Ледяной Дворец</p>
+              <p class="ranobe-desc">Принцесса, чьё прикосновение убивает, встречает того, кто не боится холода.</p>
+            </div>
+            <div class="ranobe-meta">
+              <span><i class="fa fa-file-alt"></i> 33 гл.</span>
+              <span><i class="fa fa-eye"></i> 22k</span>
+              <span class="manga-card-stars" style="font-size:0.58rem;">★★★★★</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="ranobe-card">
+          <div class="ranobe-spine" style="background:linear-gradient(180deg,#c0392b,#8b1e14);"></div>
+          <div class="ranobe-cover-col">
+            <img src="https://images.unsplash.com/photo-1560169897-fc0cdbdfa4d5?w=200&q=78&fit=crop&sat=-20" alt="Путь Демона"/>
+          </div>
+          <div class="ranobe-info">
+            <div>
+              <p class="ranobe-genre"><i class="fa fa-fire me-1"></i>Боевик</p>
+              <p class="ranobe-title">Путь Демона</p>
+              <p class="ranobe-desc">Бывший экзорцист принимает силу демона, чтобы уничтожить собственный клан.</p>
+            </div>
+            <div class="ranobe-meta">
+              <span><i class="fa fa-file-alt"></i> 145 гл.</span>
+              <span><i class="fa fa-eye"></i> 55k</span>
+              <span class="manga-card-stars" style="font-size:0.58rem;">★★★★★</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="ranobe-card">
+          <div class="ranobe-spine" style="background:linear-gradient(180deg,#b8860b,#7a5b08);"></div>
+          <div class="ranobe-cover-col">
+            <img src="https://images.unsplash.com/photo-1601850494422-3cf14624b0b3?w=200&q=78&fit=crop&sat=-20" alt="Золото Пустыни"/>
+          </div>
+          <div class="ranobe-info">
+            <div>
+              <p class="ranobe-genre"><i class="fa fa-scroll me-1"></i>Приключения</p>
+              <p class="ranobe-title">Золото Пустыни</p>
+              <p class="ranobe-desc">Торговец-авантюрист ищет легендарный город, исчезнувший тысячу лет назад.</p>
+            </div>
+            <div class="ranobe-meta">
+              <span><i class="fa fa-file-alt"></i> 67 гл.</span>
+              <span><i class="fa fa-eye"></i> 13k</span>
+              <span class="manga-card-stars" style="font-size:0.58rem;">★★★☆☆</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="ranobe-card">
+          <div class="ranobe-spine" style="background:linear-gradient(180deg,#3a7fc1,#1a5a9a);"></div>
+          <div class="ranobe-cover-col">
+            <img src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=200&q=78&fit=crop&sat=-10" alt="Серебряные Крылья"/>
+          </div>
+          <div class="ranobe-info">
+            <div>
+              <p class="ranobe-genre"><i class="fa fa-robot me-1"></i>Sci-Fi</p>
+              <p class="ranobe-title">Серебряные Крылья</p>
+              <p class="ranobe-desc">В мире, где люди и андроиды неотличимы, один детектив ищет свою память.</p>
+            </div>
+            <div class="ranobe-meta">
+              <span><i class="fa fa-file-alt"></i> 41 гл.</span>
+              <span><i class="fa fa-eye"></i> 18k</span>
+              <span class="manga-card-stars" style="font-size:0.58rem;">★★★★☆</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-5">
+      <a href="#" class="btn-teal-ghost">
+        <i class="fa fa-book me-2"></i> Весь каталог ранобэ
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ UPLOAD CTA ══════════════════ -->
+<section class="upload-section" id="upload">
+  <div class="container">
+    <div class="upload-card">
+      <div class="upload-card-kanji">描</div>
+      <div class="position-relative">
+        <div class="upload-icon"><i class="fa fa-pen-nib"></i></div>
+        <h2 class="upload-title">Поделитесь своим творчеством</h2>
+        <p class="upload-desc">
+          Публикуй мангу или пиши ранобэ — MangaOni открыт для художников и авторов любого уровня. Главное — история.
+        </p>
+        <div class="upload-tabs">
+          <a href="publish.html" class="upload-tab manga"><i class="fa fa-image"></i> Загрузить мангу</a>
+          <a href="publish.html" class="upload-tab ranobe"><i class="fa fa-feather-alt"></i> Написать ранобэ</a>
+        </div>
+        <div class="upload-features">
+          <span class="upload-feat"><i class="fa fa-check-circle"></i> Бесплатная публикация</span>
+          <span class="upload-feat"><i class="fa fa-check-circle"></i> JPG / PNG / PDF / текст</span>
+          <span class="upload-feat"><i class="fa fa-check-circle"></i> Комментарии читателей</span>
+          <span class="upload-feat"><i class="fa fa-check-circle"></i> Статистика просмотров</span>
+          <span class="upload-feat"><i class="fa fa-check-circle"></i> Встроенный редактор</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer>
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <p class="footer-brand">Mang<span class="brand-oni">oria</span> <small style="font-family:'Sawarabi Mincho';color:var(--muted);font-weight:300;font-size:0.8rem;">鬼</small></p>
+        <p class="footer-tagline">Манга і Ранобе — відкрита платформа</p>
+        <p class="mt-3" style="font-size:0.78rem; color:var(--muted); line-height:1.75;">
+          Сообщество художников и писателей. Публикуй, читай, вдохновляйся.
+        </p>
+        <div class="d-flex gap-2 mt-3">
+          <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-discord"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+      <div class="col-6 col-lg-2 offset-lg-1 footer-links">
+        <h6>Платформа</h6>
+        <a href="#"><i class="fa fa-image me-1" style="color:var(--red);font-size:0.7rem;"></i> Манга</a>
+        <a href="#ranobe"><i class="fa fa-book me-1" style="color:var(--teal);font-size:0.7rem;"></i> Ранобэ</a>
+        <a href="#">Новинки</a>
+        <a href="#">Рейтинг</a>
+        <a href="#">Жанры</a>
+      </div>
+      <div class="col-6 col-lg-2 footer-links">
+        <h6>Авторам</h6>
+        <a href="publish.html">Публикация манги</a>
+        <a href="publish.html">Написать ранобэ</a>
+        <a href="#">Правила</a>
+        <a href="#">FAQ</a>
+      </div>
+      <div class="col-6 col-lg-2 footer-links">
+        <h6>О нас</h6>
+        <a href="#">О платформе</a>
+        <a href="#">Политика</a>
+        <a href="#">Контакты</a>
+      </div>
+    </div>
+    <div class="footer-bottom d-flex justify-content-between flex-wrap gap-2">
+      <span><span class="footer-copy">© 2025 Mangoria. Все права защищены.</span></span>
+      <span style="color:rgba(94,94,94,0.6);">Сделано с <i class="fa fa-heart" style="color:var(--red);"></i> для авторов</span>
+    </div>
+  </div>
+</footer>
+
+<!-- External JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<!-- Project JS -->
+<script src="js/main.js"></script>
+<script src="js/navbar.js"></script>
+
+
+</html>
